@@ -12,13 +12,14 @@ import { LPT_DECIMALS } from 'app/configs/farmstat.config'
 import util from 'helpers/util'
 import { useDebt } from 'app/hooks/useDebt'
 import useReward from 'app/hooks/useReward'
+import Management from '../management'
 
 const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
   const { farms } = useSelector((state: AppState) => state)
   const { data } = useDebt(farmAddress)
   const reward = useReward(farmAddress)
   const [activeKey, setActiveKey] = useState<string>()
-  
+
   const onActive = () => {
     if (!activeKey) return setActiveKey('extra-card-item')
     return setActiveKey(undefined)
@@ -121,6 +122,7 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
                 </Col>
                 <Col>
                   <Space>
+                    <Management />
                     <Button icon={<IonIcon name="add-outline" />}>Stake</Button>
                     <Button
                       type="primary"
