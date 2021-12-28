@@ -1,4 +1,5 @@
 import { Fragment, useState } from 'react'
+import CopyToClipboard from 'react-copy-to-clipboard'
 
 import {
   Modal,
@@ -19,7 +20,6 @@ import FreezeOrThaw from './freezeOrThaw'
 import Close from './close'
 
 import { asyncWait, explorer } from 'shared/util'
-import CopyToClipboard from 'react-copy-to-clipboard'
 
 const ExtraTypography = ({
   label = '',
