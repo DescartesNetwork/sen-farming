@@ -39,7 +39,7 @@ const SearchAccount = ({
           />
         }
         onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-          setKeyword(e.target.value || '')
+          setKeyword(e.target.value)
         }
       />
     </Card>

@@ -9,7 +9,7 @@ const Page = () => {
       <Col xs={24} lg={18}>
         <Banner />
       </Col>
-      <Col span={24}>
+      <Col xs={24} lg={18}>
         <FarmWatcher>
           <FarmingDetails />
         </FarmWatcher>
