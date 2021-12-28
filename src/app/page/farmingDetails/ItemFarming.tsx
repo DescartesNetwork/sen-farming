@@ -9,9 +9,12 @@ import { MintAvatar, MintSymbol } from 'app/shared/components/mint'
 import { AppState } from 'app/model'
 import { utils } from '@senswap/sen-js'
 import { LPT_DECIMALS } from 'app/configs/farmstat.config'
+import util from 'helpers/util'
+import { useDebt } from 'app/hooks/useDebt'
 
 const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
   const { farms } = useSelector((state: AppState) => state)
+  const debtData = useDebt(farmAddress)
   const [activeKey, setActiveKey] = useState<string>()
   const onActive = () => {
     if (!activeKey) return setActiveKey('extra-card-item')
@@ -23,6 +26,13 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
     ttl = Number(
       utils.undecimalize(farms[farmAddress].total_shares, LPT_DECIMALS),
     )
+  }
+
+  console.log(debtData, 'sksksks')
+
+  let amountLptShared = '0'
+  if (debtData) {
+    amountLptShared = utils.undecimalize(debtData.shares, LPT_DECIMALS)
   }
 
   const iconCardCollapse = activeKey
@@ -66,7 +76,10 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
                 <Content label="Liquidity" value={ttl.toString()} />
               </Col>
               <Col span={5}>
-                <Content label="Your staked LPT" value="20" />
+                <Content
+                  label="Your staked LPT"
+                  value={util.Numberic(amountLptShared).format('0,0.00[00]')}
+                />
               </Col>
               <Col span={5}>
                 <Content
