@@ -11,10 +11,12 @@ import { utils } from '@senswap/sen-js'
 import { LPT_DECIMALS } from 'app/configs/farmstat.config'
 import util from 'helpers/util'
 import { useDebt } from 'app/hooks/useDebt'
+import useReward from 'app/hooks/useReward'
 
 const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
   const { farms } = useSelector((state: AppState) => state)
-  const debtData = useDebt(farmAddress)
+  const { data } = useDebt(farmAddress)
+  const reward = useReward(farmAddress)
   const [activeKey, setActiveKey] = useState<string>()
   const onActive = () => {
     if (!activeKey) return setActiveKey('extra-card-item')
@@ -28,11 +30,9 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
     )
   }
 
-  console.log(debtData, 'sksksks')
-
   let amountLptShared = '0'
-  if (debtData) {
-    amountLptShared = utils.undecimalize(debtData.shares, LPT_DECIMALS)
+  if (data) {
+    amountLptShared = utils.undecimalize(data.shares, LPT_DECIMALS)
   }
 
   const iconCardCollapse = activeKey
@@ -85,7 +85,7 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
                 <Content
                   avatarAddress={'2adP8T26nMuXbxKUf79C2YR5ZPwK8vuWeu6Up6pzsmTC'}
                   label="Reward"
-                  value="0"
+                  value={util.Numberic(reward).format('0,0.00[00]')}
                   symbol="SEN"
                 />
               </Col>
