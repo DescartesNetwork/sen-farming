@@ -1,4 +1,4 @@
-import { Fragment, useCallback, useEffect } from 'react'
+import { useCallback, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { account } from '@senswap/sen-js'
 
@@ -16,7 +16,7 @@ const {
 let watchId = 0
 let prevLamports: bigint = BigInt(0)
 
-const DebtWatcher = () => {
+const DebtWatcher = ({ children }: { children: JSX.Element }) => {
   const dispatch = useDispatch<AppDispatch>()
   const {
     wallet: { address: walletAddress, lamports },
@@ -72,7 +72,7 @@ const DebtWatcher = () => {
     }
   }, [fetchData, watchData])
 
-  return <Fragment />
+  return children
 }
 
 export default DebtWatcher

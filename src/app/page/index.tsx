@@ -10,9 +10,10 @@ const Page = () => {
         <Banner />
       </Col>
       <Col span={24}>
-        <FarmingDetails />
+        <FarmWatcher>
+          <FarmingDetails />
+        </FarmWatcher>
       </Col>
-      <FarmWatcher />
     </Row>
   )
 }
