@@ -1,13 +1,13 @@
 import { Fragment, useState } from 'react'
 import { useSelector } from 'react-redux'
-
+import { utils } from '@senswap/sen-js'
 import { Button, Card, Col, Collapse, Row, Space, Tooltip } from 'antd'
 import Content from './content'
 import IonIcon from 'shared/antd/ionicon'
 
 import { MintAvatar, MintSymbol } from 'app/shared/components/mint'
 import { AppState } from 'app/model'
-import { utils } from '@senswap/sen-js'
+
 import { LPT_DECIMALS } from 'app/configs/farmstat.config'
 import util from 'helpers/util'
 import { useDebt } from 'app/hooks/useDebt'
@@ -18,6 +18,7 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
   const { data } = useDebt(farmAddress)
   const reward = useReward(farmAddress)
   const [activeKey, setActiveKey] = useState<string>()
+  
   const onActive = () => {
     if (!activeKey) return setActiveKey('extra-card-item')
     return setActiveKey(undefined)
