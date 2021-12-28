@@ -1,35 +1,37 @@
-import { useDispatch } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { useCallback, useEffect, useState } from 'react'
 import { account, DebtData } from '@senswap/sen-js'
 
 import { useWallet } from 'senhub/providers'
 
 import configs from 'app/configs'
-import { AppDispatch } from 'app/model'
-import { getDebt } from 'app/model/debts.controller'
+import { AppState } from 'app/model'
 
 const {
   sol: { farming },
 } = configs
 
-export const useDebt = (farmAddress: string) => {
+export const useDebt = (
+  farmAddress: string,
+): { address: string; data: DebtData } => {
   const { wallet } = useWallet()
-  const dispatch = useDispatch<AppDispatch>()
-  const [debtData, setDebtData] = useState<DebtData>()
+  const [debtAddress, setDebtAddress] = useState('')
+  const debtData: DebtData = useSelector(
+    (state: AppState) => state.debts[debtAddress],
+  )
 
-  const fetchDebtData = useCallback(async () => {
+  const fetchDebtAddress = useCallback(async () => {
     if (!account.isAddress(farmAddress)) return
     const debtAddr = await farming.deriveDebtAddress(
       wallet.address,
       farmAddress,
     )
-    const debtData = await dispatch(getDebt({ address: debtAddr })).unwrap()
-    setDebtData(debtData[debtAddr])
-  }, [dispatch, farmAddress, wallet.address])
+    setDebtAddress(debtAddr)
+  }, [farmAddress, wallet.address])
 
   useEffect(() => {
-    fetchDebtData()
-  }, [fetchDebtData])
+    fetchDebtAddress()
+  }, [fetchDebtAddress])
 
-  return debtData
+  return { address: debtAddress, data: debtData }
 }
