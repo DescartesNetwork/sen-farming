@@ -1,62 +1,28 @@
 import { Fragment, useState } from 'react'
+import { useSelector } from 'react-redux'
 
-import {
-  Button,
-  Card,
-  Col,
-  Collapse,
-  Row,
-  Space,
-  Tooltip,
-  Typography,
-} from 'antd'
-import { MintAvatar, MintSymbol } from 'app/shared/components/mint'
+import { Button, Card, Col, Collapse, Row, Space, Tooltip } from 'antd'
+import Content from './content'
 import IonIcon from 'shared/antd/ionicon'
 
-const Content = ({
-  label = '',
-  tooltip,
-  value = '',
-  symbol,
-  avatarAddress,
-}: {
-  label?: string
-  tooltip?: string
-  value?: string
-  symbol?: string
-  avatarAddress?: string
-}) => {
-  return (
-    <Space direction="vertical" size={4}>
-      <Space size={4}>
-        <Space size={4}>
-          {avatarAddress && <MintAvatar mintAddress={avatarAddress} />}
-          <Typography.Text type="secondary">{label}</Typography.Text>
-        </Space>
-        {tooltip && (
-          <Tooltip title={tooltip}>
-            <Button
-              type="text"
-              shape="circle"
-              size="small"
-              icon={<IonIcon name="alert-circle-outline" />}
-            />
-          </Tooltip>
-        )}
-      </Space>
-      <Space>
-        <Typography.Title level={5}>{value}</Typography.Title>
-        {symbol && <Typography.Title level={5}>{symbol}</Typography.Title>}
-      </Space>
-    </Space>
-  )
-}
+import { MintAvatar, MintSymbol } from 'app/shared/components/mint'
+import { AppState } from 'app/model'
+import { utils } from '@senswap/sen-js'
+import { LPT_DECIMALS } from 'app/configs/farmstat.config'
 
 const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
+  const { farms } = useSelector((state: AppState) => state)
   const [activeKey, setActiveKey] = useState<string>()
   const onActive = () => {
     if (!activeKey) return setActiveKey('extra-card-item')
     return setActiveKey(undefined)
+  }
+
+  let ttl = 0
+  if (farms[farmAddress]) {
+    ttl = Number(
+      utils.undecimalize(farms[farmAddress].total_shares, LPT_DECIMALS),
+    )
   }
 
   const iconCardCollapse = activeKey
@@ -81,13 +47,8 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
             <Row align="middle">
               <Col span={5}>
                 <Space size={4}>
-                  <MintAvatar
-                    mintAddress={'FLbvKzAs89FoWsrEyis2N2D9QhujF6cKnakqqTah6Bek'}
-                    size={24}
-                  />
-                  <MintSymbol
-                    mintAddress={'FLbvKzAs89FoWsrEyis2N2D9QhujF6cKnakqqTah6Bek'}
-                  />
+                  <MintAvatar mintAddress={farmAddress} size={24} />
+                  <MintSymbol mintAddress={farmAddress} />
                   <Tooltip title={farmAddress}>
                     <Button
                       type="text"
@@ -102,7 +63,7 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
                 <Content label="APR" tooltip={farmAddress} value="19%" />
               </Col>
               <Col span={5}>
-                <Content label="Liquidity" value="$1,231" />
+                <Content label="Liquidity" value={ttl.toString()} />
               </Col>
               <Col span={5}>
                 <Content label="Your staked LPT" value="20" />
