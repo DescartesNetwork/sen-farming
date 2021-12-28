@@ -141,20 +141,16 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
       </Row>
       <Modal
         onCancel={() => setVisible(false)}
-        footer={
-          <Button block type="primary">
-            Stake
-          </Button>
-        }
+        footer={null}
         title={null}
         visible={visible}
       >
         <Tabs>
           <Tabs.TabPane tab="Stake" key="stake">
-            <Stake />
+            <Stake farmAddress={farmAddress} />
           </Tabs.TabPane>
           <Tabs.TabPane tab="Unstake" key="unstake">
-            <Unstake />
+            <Unstake farmAddress={farmAddress} />
           </Tabs.TabPane>
         </Tabs>
       </Modal>
