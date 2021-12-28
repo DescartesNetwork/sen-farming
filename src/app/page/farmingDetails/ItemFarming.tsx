@@ -82,10 +82,9 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
               </Col>
               <Col span={5}>
                 <Content
-                  avatarAddress={farmData.mint_stake}
+                  mintAddress={farmData.mint_reward}
                   label="Reward"
                   value={util.Numberic(reward).format('0,0.00[00]')}
-                  symbol="SEN"
                 />
               </Col>
             </Row>
