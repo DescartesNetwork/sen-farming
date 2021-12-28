@@ -12,11 +12,13 @@ import { LPT_DECIMALS } from 'app/configs/farmstat.config'
 import util from 'helpers/util'
 import { useDebt } from 'app/hooks/useDebt'
 import { useReward } from 'app/hooks/useReward'
+import { useFarmLiquidity } from 'app/hooks/useFarmLiquidity'
 
 const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
   const farmData = useSelector((state: AppState) => state.farms[farmAddress])
   const { data } = useDebt(farmAddress)
   const reward = useReward(farmAddress)
+  const liquidity = useFarmLiquidity(farmAddress)
   const [activeKey, setActiveKey] = useState<string>()
 
   const onActive = () => {
