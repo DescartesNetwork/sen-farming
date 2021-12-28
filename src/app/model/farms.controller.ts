@@ -1,6 +1,6 @@
 import { AccountInfo, PublicKey } from '@solana/web3.js'
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { FarmData } from '@senswap/sen-js'
+import { account, FarmData } from '@senswap/sen-js'
 
 import config from '../configs'
 
@@ -35,29 +35,29 @@ export const getFarms = createAsyncThunk(`${NAME}/getFarms`, async () => {
   return bulk
 })
 
-// export const getFarm = createAsyncThunk<
-//   State,
-//   { address: string },
-//   { state: any }
-// >(`${NAME}/getFarm`, async ({ address }, { getState }) => {
-//   if (!account.isAddress(address)) throw new Error('Invalid farm address')
-//   const {
-//     farms: { [address]: data },
-//   } = getState()
-//   if (data) return { [address]: data }
-//   const raw = await farming.getFarmData(address)
-//   return { [address]: raw }
-// })
+export const getFarm = createAsyncThunk<
+  State,
+  { address: string },
+  { state: any }
+>(`${NAME}/getFarm`, async ({ address }, { getState }) => {
+  if (!account.isAddress(address)) throw new Error('Invalid farm address')
+  const {
+    farms: { [address]: data },
+  } = getState()
+  if (data) return { [address]: data }
+  const raw = await farming.getFarmData(address)
+  return { [address]: raw }
+})
 
-// export const upsetFarm = createAsyncThunk<
-//   State,
-//   { address: string; data: FarmData },
-//   { state: any }
-// >(`${NAME}/upsetFarm`, async ({ address, data }) => {
-//   if (!account.isAddress(address)) throw new Error('Invalid farm address')
-//   if (!data) throw new Error('Data is empty')
-//   return { [address]: data }
-// })
+export const upsetFarm = createAsyncThunk<
+  State,
+  { address: string; data: FarmData },
+  { state: any }
+>(`${NAME}/upsetFarm`, async ({ address, data }) => {
+  if (!account.isAddress(address)) throw new Error('Invalid farm address')
+  if (!data) throw new Error('Data is empty')
+  return { [address]: data }
+})
 
 /**
  * Usual procedure

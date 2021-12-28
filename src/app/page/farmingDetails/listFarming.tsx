@@ -7,23 +7,15 @@ import ItemFarming from './ItemFarming'
 
 import { getFarms } from '../../model/farms.controller'
 import { AppState } from 'app/model'
-import { Farming } from '@senswap/sen-js'
 
 const ListFarmings = () => {
   const dispatch = useDispatch()
   const { farms } = useSelector((state: AppState) => state)
-  console.log(farms, 'sksksksksk')
   const [search, setSearch] = useState('')
 
   useEffect(() => {
-    ;(async () => {
-      try {
-        await dispatch(getFarms())
-      } catch (er) {
-        //do nothong
-      }
-    })()
-  }, [])
+    dispatch(getFarms())
+  }, [dispatch])
 
   return (
     <Row gutter={[16, 16]}>
