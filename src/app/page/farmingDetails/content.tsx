@@ -1,25 +1,23 @@
 import { Button, Space, Tooltip, Typography } from 'antd'
-import { MintAvatar } from 'app/shared/components/mint'
+import { MintAvatar, MintSymbol } from 'app/shared/components/mint'
 import IonIcon from 'shared/antd/ionicon'
 
 const Content = ({
   label = '',
   tooltip,
   value = '',
-  symbol,
-  avatarAddress,
+  mintAddress,
 }: {
   label?: string
   tooltip?: string
   value?: string
-  symbol?: string
-  avatarAddress?: string
+  mintAddress?: string
 }) => {
   return (
     <Space direction="vertical" size={4}>
       <Space size={4}>
         <Space size={4}>
-          {avatarAddress && <MintAvatar mintAddress={avatarAddress} />}
+          {mintAddress && <MintAvatar mintAddress={mintAddress} />}
           <Typography.Text type="secondary">{label}</Typography.Text>
         </Space>
         {tooltip && (
@@ -35,7 +33,7 @@ const Content = ({
       </Space>
       <Space>
         <Typography.Title level={5}>{value}</Typography.Title>
-        {symbol && <Typography.Title level={5}>{symbol}</Typography.Title>}
+        {mintAddress && <MintSymbol mintAddress={mintAddress} />}
       </Space>
     </Space>
   )

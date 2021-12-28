@@ -11,24 +11,22 @@ import { AppState } from 'app/model'
 import { LPT_DECIMALS } from 'app/configs/farmstat.config'
 import util from 'helpers/util'
 import { useDebt } from 'app/hooks/useDebt'
-import useReward from 'app/hooks/useReward'
+import { useReward } from 'app/hooks/useReward'
 
 const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
-  const { farms } = useSelector((state: AppState) => state)
+  const farmData = useSelector((state: AppState) => state.farms[farmAddress])
   const { data } = useDebt(farmAddress)
   const reward = useReward(farmAddress)
   const [activeKey, setActiveKey] = useState<string>()
-  
+
   const onActive = () => {
     if (!activeKey) return setActiveKey('extra-card-item')
     return setActiveKey(undefined)
   }
 
   let ttl = 0
-  if (farms[farmAddress]) {
-    ttl = Number(
-      utils.undecimalize(farms[farmAddress].total_shares, LPT_DECIMALS),
-    )
+  if (farmData) {
+    ttl = Number(utils.undecimalize(farmData.total_shares, LPT_DECIMALS))
   }
 
   let amountLptShared = '0'
@@ -58,7 +56,7 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
             <Row align="middle">
               <Col span={5}>
                 <Space size={4}>
-                  <MintAvatar mintAddress={farmAddress} size={24} />
+                  <MintAvatar mintAddress={farmData.mint_stake} size={24} />
                   <MintSymbol mintAddress={farmAddress} />
                   <Tooltip title={farmAddress}>
                     <Button
@@ -84,10 +82,9 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
               </Col>
               <Col span={5}>
                 <Content
-                  avatarAddress={'2adP8T26nMuXbxKUf79C2YR5ZPwK8vuWeu6Up6pzsmTC'}
+                  mintAddress={farmData.mint_reward}
                   label="Reward"
                   value={util.Numberic(reward).format('0,0.00[00]')}
-                  symbol="SEN"
                 />
               </Col>
             </Row>
