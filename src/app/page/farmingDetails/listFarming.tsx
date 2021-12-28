@@ -1,21 +1,16 @@
-import { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useState } from 'react'
+import { useSelector } from 'react-redux'
+import LazyLoad from '@senswap/react-lazyload'
 
 import { Button, Col, Input, Row } from 'antd'
 import IonIcon from 'shared/antd/ionicon'
 import ItemFarming from './ItemFarming'
 
-import { getFarms } from '../../model/farms.controller'
 import { AppState } from 'app/model'
 
 const ListFarmings = () => {
-  const dispatch = useDispatch()
   const { farms } = useSelector((state: AppState) => state)
   const [search, setSearch] = useState('')
-
-  useEffect(() => {
-    dispatch(getFarms())
-  }, [dispatch])
 
   return (
     <Row gutter={[16, 16]}>
@@ -37,7 +32,9 @@ const ListFarmings = () => {
       </Col>
       {Object.keys(farms).map((farmAddress, idx) => (
         <Col span={24} key={idx}>
-          <ItemFarming farmAddress={farmAddress} />
+          <LazyLoad height={84}>
+            <ItemFarming farmAddress={farmAddress} />
+          </LazyLoad>
         </Col>
       ))}
     </Row>
