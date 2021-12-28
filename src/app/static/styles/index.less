@@ -31,7 +31,7 @@
     background-image: url('../images/bg-left-banner.png');
     background-repeat: no-repeat;
     background-position: 90% bottom;
-    background-size: 30%;
+    background-size: 45%;
     bottom: 0;
     right: 0;
   }
@@ -53,5 +53,22 @@
   }
   & *:not(button) {
     background-color: transparent !important;
+  }
+}
+// display list item
+.list-type-items {
+  padding-left: 20px;
+  & span {
+    display: list-item;
+    list-style-type: disc;
+  }
+}
+// Selector
+.custom-selector {
+  .sentre-select-selector {
+    padding-left: 0 !important;
+    .sentre-select-selection-item {
+      line-height: normal !important;
+    }
   }
 }

@@ -1,14 +1,11 @@
-import { Fragment } from 'react'
-
 import DebtWatcher from './debtWatcher'
 import FarmWatcher from './farmWatcher'
 
-const FarmWatch = () => {
+const FarmWatch = ({ children }: { children: JSX.Element }) => {
   return (
-    <Fragment>
-      <DebtWatcher />
-      <FarmWatcher />
-    </Fragment>
+    <FarmWatcher>
+      <DebtWatcher>{children}</DebtWatcher>
+    </FarmWatcher>
   )
 }
 
