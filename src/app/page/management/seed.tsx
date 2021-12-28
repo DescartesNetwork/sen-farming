@@ -15,7 +15,6 @@ const Seed = ({
 }) => {
   const [value, setValue] = useState('')
   const [balance, setBalance] = useState('0')
-  const [loading, setLoading] = useState(false)
 
   return (
     <Row gutter={[16, 16]}>
@@ -73,10 +72,9 @@ const Seed = ({
         <Button
           type="primary"
           icon={<IonIcon name="add-outline" />}
-          onClick={() => {}}
+          onClick={() => setBalance}
           block
           disabled={!value}
-          loading={loading}
         >
           Seed
         </Button>
