@@ -52,7 +52,7 @@ const StepAddFarm = ({
   const [stepTwo, setStepTwo] = useState(false)
   const [stepThree, setStepThree] = useState(false)
 
-  const disabled = !stepOne && !stepTwo && !stepThree
+  const disabled = !stepOne || !stepTwo || !stepThree
 
   return (
     <Row gutter={[16, 16]}>

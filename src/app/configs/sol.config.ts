@@ -27,7 +27,7 @@ const conf: Record<Net, Conf> = {
     get farming() {
       return new Farming(
         this.farmingAddress,
-        this.splataAddress,
+        this.spltAddress,
         this.splataAddress,
         this.node,
       )

@@ -22,7 +22,6 @@ const Page = () => {
               onChange={(e) => setSearch(e.target.value)}
               prefix={<IonIcon name="search-outline" />}
               bordered
-              style={{ maxWidth: 300 }}
             />
           </Col>
           <Col span={24}>
