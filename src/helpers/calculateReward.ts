@@ -1,6 +1,6 @@
-import { utils } from '@senswap/sen-js'
+import { FarmData, utils, DebtData } from '@senswap/sen-js'
 
-const calculateReward = (debt, farm) => {
+const calculateReward = (debt: DebtData, farm: FarmData): number => {
   if (debt === null || Object.keys(debt).length === 0) return 0
   if (farm === null || Object.keys(farm).length === 0) return 0
   if (!farm.total_shares) return 0
