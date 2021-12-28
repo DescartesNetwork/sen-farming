@@ -1,9 +1,21 @@
 import { Fragment, useState } from 'react'
 import { useSelector } from 'react-redux'
 
-import { Button, Card, Col, Collapse, Row, Space, Tooltip } from 'antd'
+import {
+  Button,
+  Card,
+  Col,
+  Collapse,
+  Modal,
+  Row,
+  Space,
+  Tabs,
+  Tooltip,
+} from 'antd'
 import Content from './content'
 import IonIcon from 'shared/antd/ionicon'
+import Unstake from './modalStake/unstake'
+import Stake from './modalStake/stake'
 
 import { MintAvatar, MintSymbol } from 'app/shared/components/mint'
 import { AppState } from 'app/model'
@@ -13,6 +25,7 @@ import { LPT_DECIMALS } from 'app/configs/farmstat.config'
 const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
   const { farms } = useSelector((state: AppState) => state)
   const [activeKey, setActiveKey] = useState<string>()
+  const [visible, setVisible] = useState(false)
   const onActive = () => {
     if (!activeKey) return setActiveKey('extra-card-item')
     return setActiveKey(undefined)
@@ -107,7 +120,12 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
                 </Col>
                 <Col>
                   <Space>
-                    <Button icon={<IonIcon name="add-outline" />}>Stake</Button>
+                    <Button
+                      onClick={() => setVisible(true)}
+                      icon={<IonIcon name="add-outline" />}
+                    >
+                      Stake
+                    </Button>
                     <Button
                       type="primary"
                       icon={<IonIcon name="leaf-outline" />}
@@ -121,6 +139,25 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
           </Collapse>
         </Col>
       </Row>
+      <Modal
+        onCancel={() => setVisible(false)}
+        footer={
+          <Button block type="primary">
+            Stake
+          </Button>
+        }
+        title={null}
+        visible={visible}
+      >
+        <Tabs>
+          <Tabs.TabPane tab="Stake" key="stake">
+            <Stake />
+          </Tabs.TabPane>
+          <Tabs.TabPane tab="Unstake" key="unstake">
+            <Unstake />
+          </Tabs.TabPane>
+        </Tabs>
+      </Modal>
     </Fragment>
   )
 }
