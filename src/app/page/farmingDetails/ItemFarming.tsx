@@ -1,18 +1,24 @@
 import { Fragment, useState } from 'react'
 import { useSelector } from 'react-redux'
-
+import { utils } from '@senswap/sen-js'
 import { Button, Card, Col, Collapse, Row, Space, Tooltip } from 'antd'
 import Content from './content'
 import IonIcon from 'shared/antd/ionicon'
 
 import { MintAvatar, MintSymbol } from 'app/shared/components/mint'
 import { AppState } from 'app/model'
-import { utils } from '@senswap/sen-js'
+
 import { LPT_DECIMALS } from 'app/configs/farmstat.config'
+import util from 'helpers/util'
+import { useDebt } from 'app/hooks/useDebt'
+import useReward from 'app/hooks/useReward'
 
 const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
   const { farms } = useSelector((state: AppState) => state)
+  const { data } = useDebt(farmAddress)
+  const reward = useReward(farmAddress)
   const [activeKey, setActiveKey] = useState<string>()
+  
   const onActive = () => {
     if (!activeKey) return setActiveKey('extra-card-item')
     return setActiveKey(undefined)
@@ -23,6 +29,11 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
     ttl = Number(
       utils.undecimalize(farms[farmAddress].total_shares, LPT_DECIMALS),
     )
+  }
+
+  let amountLptShared = '0'
+  if (data) {
+    amountLptShared = utils.undecimalize(data.shares, LPT_DECIMALS)
   }
 
   const iconCardCollapse = activeKey
@@ -66,13 +77,16 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
                 <Content label="Liquidity" value={ttl.toString()} />
               </Col>
               <Col span={5}>
-                <Content label="Your staked LPT" value="20" />
+                <Content
+                  label="Your staked LPT"
+                  value={util.Numberic(amountLptShared).format('0,0.00[00]')}
+                />
               </Col>
               <Col span={5}>
                 <Content
                   avatarAddress={'2adP8T26nMuXbxKUf79C2YR5ZPwK8vuWeu6Up6pzsmTC'}
                   label="Reward"
-                  value="0"
+                  value={util.Numberic(reward).format('0,0.00[00]')}
                   symbol="SEN"
                 />
               </Col>
