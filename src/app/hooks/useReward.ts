@@ -5,7 +5,7 @@ import { AppState } from 'app/model'
 import { useDebt } from 'app/hooks/useDebt'
 import calculateReward from 'helpers/calculateReward'
 
-function useReward(farmAddress: string): number {
+export const useReward = (farmAddress: string): number => {
   const farmData = useSelector((state: AppState) => state.farms[farmAddress])
   const { data } = useDebt(farmAddress)
   const [reward, setReward] = useState(0)
@@ -22,5 +22,3 @@ function useReward(farmAddress: string): number {
 
   return reward
 }
-
-export { useReward }

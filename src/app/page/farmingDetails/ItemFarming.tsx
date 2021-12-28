@@ -13,12 +13,14 @@ import util from 'helpers/util'
 import { useDebt } from 'app/hooks/useDebt'
 import { useReward } from 'app/hooks/useReward'
 import { useFarmLiquidity } from 'app/hooks/useFarmLiquidity'
+import { useFarmRoi } from 'app/hooks/useFarmRoi'
 
 const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
   const farmData = useSelector((state: AppState) => state.farms[farmAddress])
   const { data } = useDebt(farmAddress)
   const reward = useReward(farmAddress)
   const liquidity = useFarmLiquidity(farmAddress)
+  const { apr } = useFarmRoi(farmAddress)
   const [activeKey, setActiveKey] = useState<string>()
 
   const onActive = () => {
@@ -66,7 +68,11 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
                 </Space>
               </Col>
               <Col span={4}>
-                <Content label="APR" tooltip={farmAddress} value="19%" />
+                <Content
+                  label="APR"
+                  tooltip={farmAddress}
+                  value={util.Numberic(apr).format('0,0.[00]a%')}
+                />
               </Col>
               <Col span={5}>
                 <Content
