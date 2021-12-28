@@ -26,11 +26,6 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
     return setActiveKey(undefined)
   }
 
-  let ttl = 0
-  if (farmData) {
-    ttl = Number(utils.undecimalize(farmData.total_shares, LPT_DECIMALS))
-  }
-
   let amountLptShared = '0'
   if (data) {
     amountLptShared = utils.undecimalize(data.shares, LPT_DECIMALS)
@@ -74,7 +69,10 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
                 <Content label="APR" tooltip={farmAddress} value="19%" />
               </Col>
               <Col span={5}>
-                <Content label="Liquidity" value={ttl.toString()} />
+                <Content
+                  label="Liquidity"
+                  value={util.Numberic(liquidity).format('0,0.00[00]a$')}
+                />
               </Col>
               <Col span={5}>
                 <Content
