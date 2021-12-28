@@ -19,14 +19,16 @@ import Unstake from './stakeAndUnstake/unstake'
 import Stake from './stakeAndUnstake/stake'
 
 import { MintAvatar, MintSymbol } from 'app/shared/components/mint'
-import { AppState } from 'app/model'
-import { LPT_DECIMALS } from 'app/configs/farmstat.config'
-import util from 'helpers/util'
-import { useDebt } from 'app/hooks/useDebt'
 import Management from '../management'
+
+import { useDebt } from 'app/hooks/useDebt'
 import { useReward } from 'app/hooks/useReward'
 import { useFarmLiquidity } from 'app/hooks/useFarmLiquidity'
 import { useFarmRoi } from 'app/hooks/useFarmRoi'
+import { AppState } from 'app/model'
+import util from 'helpers/util'
+import { LPT_DECIMALS } from 'app/configs/farmstat.config'
+import { useUI } from 'senhub/providers'
 
 const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
   const farmData = useSelector((state: AppState) => state.farms[farmAddress])
@@ -36,6 +38,9 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
   const { apr } = useFarmRoi(farmAddress)
   const [activeKey, setActiveKey] = useState<string>()
   const [visible, setVisible] = useState(false)
+  const {
+    ui: { width },
+  } = useUI()
 
   const onActive = () => {
     if (!activeKey) return setActiveKey('extra-card-item')
@@ -46,10 +51,15 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
   if (data) {
     amountLptShared = utils.undecimalize(data.shares, LPT_DECIMALS)
   }
-
-  const iconCardCollapse = activeKey
+  const desktop = width > 768
+  const icoDesktopCollapse = activeKey
     ? 'chevron-down-outline'
     : 'chevron-forward-outline'
+  const icoMobileCollapse = activeKey
+    ? 'chevron-up-outline'
+    : 'chevron-down-outline'
+
+  const icon = !desktop ? icoMobileCollapse : icoDesktopCollapse
 
   return (
     <Fragment>
@@ -64,11 +74,11 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
           zIndex: 1,
         }}
       >
-        <Row gutter={[16, 16]} align="middle">
+        <Row gutter={[16, 16]} justify="center" align="middle">
           <Col flex="auto">
-            <Row align="middle">
-              <Col span={5}>
-                <Space size={4}>
+            <Row gutter={[16, 16]} align="middle">
+              <Col xs={24} md={5}>
+                <Space>
                   <MintAvatar mintAddress={farmData.mint_stake} size={24} />
                   <MintSymbol mintAddress={farmAddress} />
                   <Tooltip title={farmAddress}>
@@ -81,26 +91,26 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
                   </Tooltip>
                 </Space>
               </Col>
-              <Col span={4}>
+              <Col xs={12} md={4}>
                 <Content
                   label="APR"
                   tooltip={farmAddress}
                   value={util.Numberic(apr).format('0,0.[00]a%')}
                 />
               </Col>
-              <Col span={5}>
+              <Col xs={12} md={5}>
                 <Content
                   label="Liquidity"
                   value={util.Numberic(liquidity).format('0,0.00[00]a$')}
                 />
               </Col>
-              <Col span={5}>
+              <Col xs={12} md={5}>
                 <Content
                   label="Your staked LPT"
                   value={util.Numberic(amountLptShared).format('0,0.00[00]')}
                 />
               </Col>
-              <Col span={5}>
+              <Col xs={12} md={5}>
                 <Content
                   mintAddress={farmData.mint_reward}
                   label="Reward"
@@ -112,7 +122,7 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
           <Col>
             <Button
               type="text"
-              icon={<IonIcon name={iconCardCollapse} />}
+              icon={<IonIcon name={icon} />}
               onClick={onActive}
             />
           </Col>
@@ -127,7 +137,7 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
               showArrow={false}
             >
               <Row gutter={[16, 16]}>
-                <Col flex="auto">
+                <Col xs={{ order: 2 }} md={{ order: 1 }} flex="auto">
                   <Button
                     type="text"
                     style={{ padding: 0, background: 'transparent' }}
@@ -136,10 +146,9 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
                     <IonIcon name="chevron-forward-outline" />
                   </Button>
                 </Col>
-                <Col>
+                <Col xs={{ order: 1 }} md={{ order: 2 }}>
                   <Space>
                     <Management />
-                    <Button icon={<IonIcon name="add-outline" />}>Stake</Button>
                     <Button
                       onClick={() => setVisible(true)}
                       icon={<IonIcon name="add-outline" />}
