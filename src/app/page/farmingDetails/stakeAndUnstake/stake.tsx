@@ -72,7 +72,7 @@ const Stake = ({
 
   const onAmount = useCallback(async (val) => {
     await setAmount(val)
-    if (!val || Math.sign(val) < 1) return await setDisable(true)
+    if (!val) return await setDisable(true)
     return await setDisable(false)
   }, [])
 
