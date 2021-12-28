@@ -1,5 +1,7 @@
-import { Fragment, useCallback, useEffect } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
+
+import { Spin } from 'antd'
 
 import { notifyError } from 'app/helper'
 import { getFarms, upsetFarm } from 'app/model/farms.controller'
@@ -12,14 +14,18 @@ const {
 // Watch id
 let watchId = 0
 
-const FarmWatcher = () => {
+const FarmWatcher = ({ children }: { children: JSX.Element }) => {
   const dispatch = useDispatch()
+  const [isLoading, setIsLoading] = useState(false)
 
   const fetchData = useCallback(async () => {
     try {
+      setIsLoading(true)
       await dispatch(getFarms())
     } catch (er) {
       await notifyError(er)
+    } finally {
+      setIsLoading(false)
     }
   }, [dispatch])
 
@@ -50,7 +56,11 @@ const FarmWatcher = () => {
     }
   }, [fetchData, watchData])
 
-  return <Fragment />
+  return (
+    <Spin spinning={isLoading} tip="Loading...">
+      {children}
+    </Spin>
+  )
 }
 
 export default FarmWatcher
