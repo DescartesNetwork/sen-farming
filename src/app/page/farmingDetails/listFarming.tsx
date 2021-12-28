@@ -12,17 +12,10 @@ import { Farming } from '@senswap/sen-js'
 const ListFarmings = () => {
   const dispatch = useDispatch()
   const { farms } = useSelector((state: AppState) => state)
-  console.log(farms, 'sksksksksk')
   const [search, setSearch] = useState('')
 
   useEffect(() => {
-    ;(async () => {
-      try {
-        await dispatch(getFarms())
-      } catch (er) {
-        //do nothong
-      }
-    })()
+    dispatch(getFarms())
   }, [])
 
   return (
