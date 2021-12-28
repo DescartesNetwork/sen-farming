@@ -11,6 +11,7 @@ import { numeric } from 'shared/util'
 import { notifyError, notifySuccess } from 'app/helper'
 import { useAccountStake } from 'app/hooks/useAccountStake'
 import configs from 'app/configs'
+import { LPT_DECIMALS } from 'app/configs/farmstat.config'
 
 const {
   sol: { senAddress, farming },
@@ -18,10 +19,10 @@ const {
 
 const Unstake = ({
   farmAddress,
-  onHandleModal,
+  onClose,
 }: {
   farmAddress: string
-  onHandleModal: (visible: boolean) => void
+  onClose: (visible: boolean) => void
 }) => {
   const {
     wallet: { address: walletAddress },
@@ -38,7 +39,7 @@ const Unstake = ({
       const { splt, wallet } = window.sentre
       if (!wallet) throw Error('Please connect wallet first')
       if (!amount || !accountStake) return
-      const ammount = utils.decimalize(amount, 9)
+      const ammount = utils.decimalize(amount, LPT_DECIMALS)
       const senWallet = await splt.deriveAssociatedAddress(
         walletAddress,
         senAddress,
@@ -54,7 +55,7 @@ const Unstake = ({
         farmAddress,
         wallet,
       )
-      onHandleModal(false)
+      onClose(false)
       return notifySuccess('Unstaked', txId)
     } catch (er) {
       return notifyError(er)
@@ -69,7 +70,7 @@ const Unstake = ({
     return await setDisable(false)
   }, [])
 
-  const stakedValue = utils.undecimalize(debtData?.shares, 9)
+  const stakedValue = utils.undecimalize(debtData?.shares, LPT_DECIMALS)
   return (
     <Row gutter={[16, 16]}>
       <Col span={24}>

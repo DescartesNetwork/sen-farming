@@ -159,10 +159,10 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
       >
         <Tabs>
           <Tabs.TabPane tab="Stake" key="stake">
-            <Stake farmAddress={farmAddress} onHandleModal={setVisible} />
+            <Stake farmAddress={farmAddress} onClose={setVisible} />
           </Tabs.TabPane>
           <Tabs.TabPane tab="Unstake" key="unstake">
-            <Unstake farmAddress={farmAddress} onHandleModal={setVisible} />
+            <Unstake farmAddress={farmAddress} onClose={setVisible} />
           </Tabs.TabPane>
         </Tabs>
       </Modal>

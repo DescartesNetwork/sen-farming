@@ -11,6 +11,7 @@ import { numeric } from 'shared/util'
 import { notifyError, notifySuccess } from 'app/helper'
 import { useAccountStake } from 'app/hooks/useAccountStake'
 import configs from 'app/configs'
+import { LPT_DECIMALS } from 'app/configs/farmstat.config'
 
 const {
   sol: { senAddress, farming },
@@ -18,10 +19,10 @@ const {
 
 const Stake = ({
   farmAddress,
-  onHandleModal,
+  onClose,
 }: {
   farmAddress: string
-  onHandleModal: (visible: boolean) => void
+  onClose: (visible: boolean) => void
 }) => {
   const {
     wallet: { address: walletAddress },
@@ -54,13 +55,13 @@ const Stake = ({
       //   await harvestValidator.validate(farmAddress)
 
       const { txId } = await farming.stake(
-        utils.decimalize(amount, 9),
+        utils.decimalize(amount, LPT_DECIMALS),
         accountStake.address,
         senWalletAddr,
         farmAddress,
         wallet,
       )
-      onHandleModal(false)
+      onClose(false)
       return notifySuccess('Staked', txId)
     } catch (er) {
       return notifyError(er)
@@ -77,7 +78,7 @@ const Stake = ({
 
   const available = utils.undecimalize(
     BigInt(accountStake?.data.amount || 0),
-    9,
+    LPT_DECIMALS,
   )
   return (
     <Row gutter={[16, 16]}>
