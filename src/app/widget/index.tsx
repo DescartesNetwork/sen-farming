@@ -5,6 +5,7 @@ import { Button, Tabs } from 'antd'
 import IonIcon from 'shared/antd/ionicon'
 import SearchBar from './searchBar'
 import Stacked from './stacked'
+import FarmWatcher from 'app/components/watcher'
 
 const Widget = () => {
   const [toggle, setToggle] = useState(true)
@@ -17,15 +18,18 @@ const Widget = () => {
         icon={<IonIcon name={toggle ? 'search-outline' : 'close-outline'} />}
         onClick={() => setToggle(!toggle)}
       />
+
       <SearchBar isHidden={toggle} />
-      <Tabs className={toggle ? '' : 'hidden-tab'} defaultActiveKey="1">
-        <Tabs.TabPane tab="Stacked farms" key="stacked-farm">
-          <Stacked />
-        </Tabs.TabPane>
-        <Tabs.TabPane tab="Your farms" key="your-farm">
-          Content of Tab Pane 2
-        </Tabs.TabPane>
-      </Tabs>
+      <FarmWatcher>
+        <Tabs className={toggle ? '' : 'hidden-tab'} defaultActiveKey="1">
+          <Tabs.TabPane tab="Stacked farms" key="stacked-farm">
+            <Stacked />
+          </Tabs.TabPane>
+          <Tabs.TabPane tab="Your farms" key="your-farm">
+            Content of Tab Pane 2
+          </Tabs.TabPane>
+        </Tabs>
+      </FarmWatcher>
     </Fragment>
   )
 }
