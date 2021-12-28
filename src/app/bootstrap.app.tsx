@@ -2,8 +2,8 @@ import { Provider } from 'react-redux'
 import {
   WalletProvider,
   UIProvider,
-  MintProvider,
   PoolProvider,
+  MintProvider,
   AccountProvider,
 } from 'senhub/providers'
 
@@ -12,6 +12,9 @@ import WidgetView from 'app/widget'
 
 import model from 'app/model'
 import configs from 'app/configs'
+import './static/styles/index.less'
+import './static/styles/dark.less'
+import './static/styles/light.less'
 
 import 'app/static/styles/index.less'
 
@@ -22,8 +25,8 @@ const {
 export const Page = () => {
   return (
     <UIProvider appId={appId} antd>
-      <MintProvider>
-        <PoolProvider>
+      <PoolProvider>
+        <MintProvider>
           <AccountProvider>
             <WalletProvider>
               <Provider store={model}>
@@ -31,8 +34,8 @@ export const Page = () => {
               </Provider>
             </WalletProvider>
           </AccountProvider>
-        </PoolProvider>
-      </MintProvider>
+        </MintProvider>
+      </PoolProvider>
     </UIProvider>
   )
 }
@@ -44,9 +47,9 @@ export const widgetConfig: WidgetConfig = {
 
 export const Widget = () => {
   return (
-    <MintProvider>
-      <UIProvider appId={appId} antd>
-        <PoolProvider>
+    <UIProvider appId={appId} antd>
+      <PoolProvider>
+        <MintProvider>
           <AccountProvider>
             <WalletProvider>
               <Provider store={model}>
@@ -54,8 +57,8 @@ export const Widget = () => {
               </Provider>
             </WalletProvider>
           </AccountProvider>
-        </PoolProvider>
-      </UIProvider>
-    </MintProvider>
+        </MintProvider>
+      </PoolProvider>
+    </UIProvider>
   )
 }

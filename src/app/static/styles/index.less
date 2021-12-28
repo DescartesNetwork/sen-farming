@@ -17,3 +17,41 @@
   box-shadow: none !important;
   background: #fff !important;
 }
+.banner-farming {
+  position: relative;
+  background-image: url('../images/bg-banner.png') !important;
+  background-repeat: no-repeat !important;
+  background-size: cover !important;
+  background-position: center !important;
+  &::after {
+    content: '';
+    position: absolute;
+    width: 45%;
+    height: 100%;
+    background-image: url('../images/bg-left-banner.png');
+    background-repeat: no-repeat;
+    background-position: 90% bottom;
+    background-size: 30%;
+    bottom: 0;
+    right: 0;
+  }
+}
+// farm card
+.expand-card {
+  position: relative;
+  top: -8px;
+  background-color: #f4f4f5 !important;
+  border: none !important;
+  border-radius: 0 0 8px 8px !important;
+  z-index: 0;
+  .sentre-collapse-header {
+    padding: 0 !important;
+    border: none !important;
+  }
+  .sentre-collapse-content-box {
+    padding: 32px 16px 16px 16px !important;
+  }
+  & *:not(button) {
+    background-color: transparent !important;
+  }
+}
