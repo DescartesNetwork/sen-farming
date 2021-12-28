@@ -1,7 +1,7 @@
 import { Row, Col } from 'antd'
 import Banner from './banner'
 import FarmingDetails from './farmingDetails'
-import SearchFarm from './searchFarm'
+import FarmWatcher from 'app/components/watcher'
 
 const Page = () => {
   return (
@@ -9,11 +9,10 @@ const Page = () => {
       <Col xs={24} lg={18}>
         <Banner />
       </Col>
-      <Col xs={24} lg={18}>
-        <SearchFarm />
-      </Col>
-      <Col xs={24} lg={18}>
-        <FarmingDetails />
+      <Col span={24}>
+        <FarmWatcher>
+          <FarmingDetails />
+        </FarmWatcher>
       </Col>
     </Row>
   )

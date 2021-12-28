@@ -1,42 +1,32 @@
-import { useCallback } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { Fragment, useState } from 'react'
 
-import { Row, Col, Typography, Space, Button } from 'antd'
+import { Button, Tabs } from 'antd'
+
 import IonIcon from 'shared/antd/ionicon'
-
-import { AppDispatch, AppState } from 'app/model'
-import { increaseCounter } from 'app/model/main.controller'
-import { env } from 'shared/runtime'
-import { useUI } from 'senhub/providers'
+import SearchBar from './searchBar'
+import Stacked from './stacked'
 
 const Widget = () => {
-  const {
-    ui: { width, infix },
-  } = useUI()
-  const dispatch = useDispatch<AppDispatch>()
-  const { counter } = useSelector((state: AppState) => state.main)
-  const increase = useCallback(() => dispatch(increaseCounter()), [dispatch])
+  const [toggle, setToggle] = useState(true)
 
   return (
-    <Row gutter={[24, 24]}>
-      <Col span={24}>
-        <Space align="center">
-          <IonIcon name="apps-outline" />
-          <Typography.Title level={4}>Widget</Typography.Title>
-        </Space>
-      </Col>
-      <Col span={24}>
-        <Typography.Text>
-          Env: {env} - {width}px - {infix}
-        </Typography.Text>
-      </Col>
-      <Col>
-        <Typography.Text>Counter: {counter}</Typography.Text>
-      </Col>
-      <Col>
-        <Button onClick={increase}>Increase</Button>
-      </Col>
-    </Row>
+    <Fragment>
+      <Button
+        className="button-search"
+        type="text"
+        icon={<IonIcon name={toggle ? 'search-outline' : 'close-outline'} />}
+        onClick={() => setToggle(!toggle)}
+      />
+      <SearchBar isHidden={toggle} />
+      <Tabs className={toggle ? '' : 'hidden-tab'} defaultActiveKey="1">
+        <Tabs.TabPane tab="Stacked farms" key="stacked-farm">
+          <Stacked />
+        </Tabs.TabPane>
+        <Tabs.TabPane tab="Your farms" key="your-farm">
+          Content of Tab Pane 2
+        </Tabs.TabPane>
+      </Tabs>
+    </Fragment>
   )
 }
 
