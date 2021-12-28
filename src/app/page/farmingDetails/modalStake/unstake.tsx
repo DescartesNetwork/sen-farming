@@ -5,10 +5,11 @@ import NumericInput from 'shared/antd/numericInput'
 import { useDebt } from 'app/hooks/useDebt'
 import { useCallback, useState } from 'react'
 import { utils } from '@senswap/sen-js'
-import { useAccount, useWallet } from 'senhub/providers'
+import { useWallet } from 'senhub/providers'
 import configs from 'app/configs'
-import { explorer, numeric } from 'shared/util'
+import { numeric } from 'shared/util'
 import { notifyError, notifySuccess } from 'app/helper'
+import { useAccountStake } from 'app/hooks/useAccountStake'
 
 const {
   sol: { senAddress, farming },
@@ -16,19 +17,20 @@ const {
 
 const Unstake = ({ farmAddress }: { farmAddress: string }) => {
   const { data: debtData } = useDebt(farmAddress)
-  const { accounts } = useAccount()
   const [amount, setAmount] = useState()
   const [disable, setDisable] = useState(true)
   const [isLoading, setIsLoading] = useState(false)
   const {
     wallet: { address: walletAddress },
   } = useWallet()
+  const accountStake = useAccountStake(farmAddress)
+  const lptWalletAddress = accountStake?.address
 
   const handleUnstake = async () => {
     setIsLoading(true)
     const { splt, wallet } = window.sentre
     if (!wallet) throw Error('Please connect wallet first')
-    if (!amount) return
+    if (!amount || !lptWalletAddress) return
     const ammount = utils.decimalize(amount, 9)
     const senWallet = await splt.deriveAssociatedAddress(
       walletAddress,
@@ -39,15 +41,15 @@ const Unstake = ({ farmAddress }: { farmAddress: string }) => {
       // Validate farming seed balance
       // const harvestValidator = new HarvestValidator()
       //  await harvestValidator.validate(farmAddress)
-      // const { txId } = await farming.unstake(
-      //   ammount,
-      //   lptWalletAddress,
-      //   senWallet,
-      //   farmAddress,
-      //   wallet,
-      // )
+      const { txId } = await farming.unstake(
+        ammount,
+        lptWalletAddress,
+        senWallet,
+        farmAddress,
+        wallet,
+      )
       // if (onClose) onClose()
-      // return notifySuccess("Unstaked",txId)
+      return notifySuccess('Unstaked', txId)
     } catch (er) {
       return notifyError(er)
     } finally {
@@ -62,7 +64,8 @@ const Unstake = ({ farmAddress }: { farmAddress: string }) => {
   }, [])
 
   //Calculate Data for Rende[]
-  // const availableStake = utils.undecimalize(lptWalletData?.amount, 9)
+  const stakedValue = utils.undecimalize(debtData?.shares, 9)
+
   return (
     <Row gutter={[16, 16]}>
       <Col span={24}>
@@ -83,9 +86,9 @@ const Unstake = ({ farmAddress }: { farmAddress: string }) => {
               <Col>
                 <Space size={6}>
                   <Typography.Text type="secondary">Available:</Typography.Text>
-                  {/* <Typography.Text>
+                  <Typography.Text>
                     {numeric(stakedValue).format('0,0.[00]')}
-                  </Typography.Text> */}
+                  </Typography.Text>
                   <Typography.Text type="secondary">LPT</Typography.Text>
                 </Space>
               </Col>
@@ -101,12 +104,12 @@ const Unstake = ({ farmAddress }: { farmAddress: string }) => {
                 <Button
                   type="text"
                   style={{ marginRight: -7 }}
-                  //   onClick={() => onAmount(balance)}
+                  onClick={() => onAmount(stakedValue)}
                 >
                   MAX
                 </Button>
               }
-              max={100}
+              max={stakedValue}
             />
           </Space>
         </Card>
