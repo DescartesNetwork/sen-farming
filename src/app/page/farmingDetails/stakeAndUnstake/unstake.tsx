@@ -1,54 +1,60 @@
-import { Button, Card, Col, Row, Space, Typography } from 'antd'
-
-import IonIcon from 'shared/antd/ionicon'
-import NumericInput from 'shared/antd/numericInput'
-import { useDebt } from 'app/hooks/useDebt'
 import { useCallback, useState } from 'react'
 import { utils } from '@senswap/sen-js'
+
+import { Button, Card, Col, Row, Space, Typography } from 'antd'
+import IonIcon from 'shared/antd/ionicon'
+import NumericInput from 'shared/antd/numericInput'
+
+import { useDebt } from 'app/hooks/useDebt'
 import { useWallet } from 'senhub/providers'
-import configs from 'app/configs'
 import { numeric } from 'shared/util'
 import { notifyError, notifySuccess } from 'app/helper'
 import { useAccountStake } from 'app/hooks/useAccountStake'
+import configs from 'app/configs'
 
 const {
   sol: { senAddress, farming },
 } = configs
 
-const Unstake = ({ farmAddress }: { farmAddress: string }) => {
-  const { data: debtData } = useDebt(farmAddress)
-  const [amount, setAmount] = useState()
-  const [disable, setDisable] = useState(true)
-  const [isLoading, setIsLoading] = useState(false)
+const Unstake = ({
+  farmAddress,
+  onHandleModal,
+}: {
+  farmAddress: string
+  onHandleModal: (visible: boolean) => void
+}) => {
   const {
     wallet: { address: walletAddress },
   } = useWallet()
+  const { data: debtData } = useDebt(farmAddress)
   const accountStake = useAccountStake(farmAddress)
-  const lptWalletAddress = accountStake?.address
+  const [amount, setAmount] = useState()
+  const [disable, setDisable] = useState(true)
+  const [isLoading, setIsLoading] = useState(false)
 
   const handleUnstake = async () => {
     setIsLoading(true)
-    const { splt, wallet } = window.sentre
-    if (!wallet) throw Error('Please connect wallet first')
-    if (!amount || !lptWalletAddress) return
-    const ammount = utils.decimalize(amount, 9)
-    const senWallet = await splt.deriveAssociatedAddress(
-      walletAddress,
-      senAddress,
-    )
-
     try {
+      const { splt, wallet } = window.sentre
+      if (!wallet) throw Error('Please connect wallet first')
+      if (!amount || !accountStake) return
+      const ammount = utils.decimalize(amount, 9)
+      const senWallet = await splt.deriveAssociatedAddress(
+        walletAddress,
+        senAddress,
+      )
+
       // Validate farming seed balance
       // const harvestValidator = new HarvestValidator()
       //  await harvestValidator.validate(farmAddress)
       const { txId } = await farming.unstake(
         ammount,
-        lptWalletAddress,
+        accountStake.address,
         senWallet,
         farmAddress,
         wallet,
       )
-      // if (onClose) onClose()
+      onHandleModal(false)
       return notifySuccess('Unstaked', txId)
     } catch (er) {
       return notifyError(er)
@@ -63,9 +69,7 @@ const Unstake = ({ farmAddress }: { farmAddress: string }) => {
     return await setDisable(false)
   }, [])
 
-  //Calculate Data for Rende[]
   const stakedValue = utils.undecimalize(debtData?.shares, 9)
-
   return (
     <Row gutter={[16, 16]}>
       <Col span={24}>
@@ -117,7 +121,7 @@ const Unstake = ({ farmAddress }: { farmAddress: string }) => {
       <Col span={24}>
         <Button
           type="primary"
-          //icon={<Icon name="remove" />}
+          icon={<IonIcon name="remove-outline" />}
           onClick={handleUnstake}
           block
           disabled={disable}

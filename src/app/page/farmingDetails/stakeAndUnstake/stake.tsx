@@ -1,21 +1,28 @@
-import { Button, Card, Col, Row, Space, Typography } from 'antd'
-
-import IonIcon from 'shared/antd/ionicon'
-import NumericInput from 'shared/antd/numericInput'
-import { useDebt } from 'app/hooks/useDebt'
 import { useCallback, useState } from 'react'
 import { utils } from '@senswap/sen-js'
+
+import { Button, Card, Col, Row, Space, Typography } from 'antd'
+import IonIcon from 'shared/antd/ionicon'
+import NumericInput from 'shared/antd/numericInput'
+
+import { useDebt } from 'app/hooks/useDebt'
 import { useAccount, useWallet } from 'senhub/providers'
-import configs from 'app/configs'
 import { numeric } from 'shared/util'
 import { notifyError, notifySuccess } from 'app/helper'
 import { useAccountStake } from 'app/hooks/useAccountStake'
+import configs from 'app/configs'
 
 const {
   sol: { senAddress, farming },
 } = configs
 
-const Stake = ({ farmAddress }: { farmAddress: string }) => {
+const Stake = ({
+  farmAddress,
+  onHandleModal,
+}: {
+  farmAddress: string
+  onHandleModal: (visible: boolean) => void
+}) => {
   const {
     wallet: { address: walletAddress },
   } = useWallet()
@@ -53,6 +60,7 @@ const Stake = ({ farmAddress }: { farmAddress: string }) => {
         farmAddress,
         wallet,
       )
+      onHandleModal(false)
       return notifySuccess('Staked', txId)
     } catch (er) {
       return notifyError(er)
@@ -123,6 +131,7 @@ const Stake = ({ farmAddress }: { farmAddress: string }) => {
       <Col span={24}>
         <Button
           type="primary"
+          icon={<IonIcon name="add-outline" />}
           onClick={handleStake}
           block
           disabled={disable}

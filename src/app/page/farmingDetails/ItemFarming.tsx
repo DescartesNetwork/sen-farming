@@ -1,4 +1,5 @@
 import { Fragment, useState } from 'react'
+import { utils } from '@senswap/sen-js'
 import { useSelector } from 'react-redux'
 
 import {
@@ -14,12 +15,11 @@ import {
 } from 'antd'
 import Content from './content'
 import IonIcon from 'shared/antd/ionicon'
-import Unstake from './modalStake/unstake'
-import Stake from './modalStake/stake'
+import Unstake from './stakeAndUnstake/unstake'
+import Stake from './stakeAndUnstake/stake'
 
 import { MintAvatar, MintSymbol } from 'app/shared/components/mint'
 import { AppState } from 'app/model'
-import { utils } from '@senswap/sen-js'
 import { LPT_DECIMALS } from 'app/configs/farmstat.config'
 
 const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
@@ -30,7 +30,6 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
     if (!activeKey) return setActiveKey('extra-card-item')
     return setActiveKey(undefined)
   }
-
   let ttl = 0
   if (farms[farmAddress]) {
     ttl = Number(
@@ -147,10 +146,10 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
       >
         <Tabs>
           <Tabs.TabPane tab="Stake" key="stake">
-            <Stake farmAddress={farmAddress} />
+            <Stake farmAddress={farmAddress} onHandleModal={setVisible} />
           </Tabs.TabPane>
           <Tabs.TabPane tab="Unstake" key="unstake">
-            <Unstake farmAddress={farmAddress} />
+            <Unstake farmAddress={farmAddress} onHandleModal={setVisible} />
           </Tabs.TabPane>
         </Tabs>
       </Modal>
