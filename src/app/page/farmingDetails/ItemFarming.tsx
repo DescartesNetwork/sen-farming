@@ -23,25 +23,24 @@ import { AppState } from 'app/model'
 import { LPT_DECIMALS } from 'app/configs/farmstat.config'
 import util from 'helpers/util'
 import { useDebt } from 'app/hooks/useDebt'
-import useReward from 'app/hooks/useReward'
+import { useReward } from 'app/hooks/useReward'
+import { useFarmLiquidity } from 'app/hooks/useFarmLiquidity'
+import { useFarmRoi } from 'app/hooks/useFarmRoi'
 
 const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
-  const { farms } = useSelector((state: AppState) => state)
+  const farmData = useSelector((state: AppState) => state.farms[farmAddress])
   const { data } = useDebt(farmAddress)
   const reward = useReward(farmAddress)
+  const liquidity = useFarmLiquidity(farmAddress)
+  const { apr } = useFarmRoi(farmAddress)
   const [activeKey, setActiveKey] = useState<string>()
   const [visible, setVisible] = useState(false)
+  
   const onActive = () => {
     if (!activeKey) return setActiveKey('extra-card-item')
     return setActiveKey(undefined)
   }
-  let ttl = 0
-  if (farms[farmAddress]) {
-    ttl = Number(
-      utils.undecimalize(farms[farmAddress].total_shares, LPT_DECIMALS),
-    )
-  }
-
+          
   let amountLptShared = '0'
   if (data) {
     amountLptShared = utils.undecimalize(data.shares, LPT_DECIMALS)
@@ -69,7 +68,7 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
             <Row align="middle">
               <Col span={5}>
                 <Space size={4}>
-                  <MintAvatar mintAddress={farmAddress} size={24} />
+                  <MintAvatar mintAddress={farmData.mint_stake} size={24} />
                   <MintSymbol mintAddress={farmAddress} />
                   <Tooltip title={farmAddress}>
                     <Button
@@ -82,10 +81,17 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
                 </Space>
               </Col>
               <Col span={4}>
-                <Content label="APR" tooltip={farmAddress} value="19%" />
+                <Content
+                  label="APR"
+                  tooltip={farmAddress}
+                  value={util.Numberic(apr).format('0,0.[00]a%')}
+                />
               </Col>
               <Col span={5}>
-                <Content label="Liquidity" value={ttl.toString()} />
+                <Content
+                  label="Liquidity"
+                  value={util.Numberic(liquidity).format('0,0.00[00]a$')}
+                />
               </Col>
               <Col span={5}>
                 <Content
@@ -95,10 +101,9 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
               </Col>
               <Col span={5}>
                 <Content
-                  avatarAddress={'2adP8T26nMuXbxKUf79C2YR5ZPwK8vuWeu6Up6pzsmTC'}
+                  mintAddress={farmData.mint_reward}
                   label="Reward"
                   value={util.Numberic(reward).format('0,0.00[00]')}
-                  symbol="SEN"
                 />
               </Col>
             </Row>
