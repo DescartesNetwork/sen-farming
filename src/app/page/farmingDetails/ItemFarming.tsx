@@ -1,3 +1,5 @@
+import { Fragment, useState } from 'react'
+
 import {
   Button,
   Card,
@@ -9,7 +11,6 @@ import {
   Typography,
 } from 'antd'
 import { MintAvatar, MintSymbol } from 'app/shared/components/mint'
-import { Fragment, useState } from 'react'
 import IonIcon from 'shared/antd/ionicon'
 
 const Content = ({
