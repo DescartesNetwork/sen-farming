@@ -23,6 +23,7 @@ import { AppState } from 'app/model'
 import { LPT_DECIMALS } from 'app/configs/farmstat.config'
 import util from 'helpers/util'
 import { useDebt } from 'app/hooks/useDebt'
+import Management from '../management'
 import { useReward } from 'app/hooks/useReward'
 import { useFarmLiquidity } from 'app/hooks/useFarmLiquidity'
 import { useFarmRoi } from 'app/hooks/useFarmRoi'
@@ -35,12 +36,12 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
   const { apr } = useFarmRoi(farmAddress)
   const [activeKey, setActiveKey] = useState<string>()
   const [visible, setVisible] = useState(false)
-  
+
   const onActive = () => {
     if (!activeKey) return setActiveKey('extra-card-item')
     return setActiveKey(undefined)
   }
-          
+
   let amountLptShared = '0'
   if (data) {
     amountLptShared = utils.undecimalize(data.shares, LPT_DECIMALS)
@@ -137,6 +138,8 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
                 </Col>
                 <Col>
                   <Space>
+                    <Management />
+                    <Button icon={<IonIcon name="add-outline" />}>Stake</Button>
                     <Button
                       onClick={() => setVisible(true)}
                       icon={<IonIcon name="add-outline" />}

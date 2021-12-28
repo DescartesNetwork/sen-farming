@@ -39,11 +39,11 @@ const Banner = () => {
               <Divider type="vertical" style={{ height: '100%' }} />
             </Col>
             <Col>
-              <Space direction="vertical" size={0}>
+              <Space direction="vertical" size={0} align="center">
                 <Typography.Title level={4} style={{ color: '#212433' }}>
                   1 SEN
                 </Typography.Title>
-                <IonIcon name="pause-outline" />
+                <IonIcon style={{ color: '#212433' }} name="pause-outline" />
                 <Typography.Title level={4} style={{ color: '#F9575E' }}>
                   $1.8924
                 </Typography.Title>
