@@ -16,67 +16,48 @@ const {
 } = configs
 
 const Stake = ({ farmAddress }: { farmAddress: string }) => {
-  const { data: debtData } = useDebt(farmAddress)
-  const { accounts } = useAccount()
-  const [amount, setAmount] = useState()
-  const [disable, setDisable] = useState(true)
-  const [isLoading, setIsLoading] = useState(false)
   const {
     wallet: { address: walletAddress },
   } = useWallet()
+  const { accounts } = useAccount()
+  const { data: debtData } = useDebt(farmAddress)
   const accountStake = useAccountStake(farmAddress)
-  const lptWalletAddress = accountStake?.address
-  const lptWalletData = accountStake?.data
+  const [amount, setAmount] = useState()
+  const [disable, setDisable] = useState(true)
+  const [isLoading, setIsLoading] = useState(false)
 
   const handleStake = async () => {
     setIsLoading(true)
-    const { splt, wallet } = window.sentre
-    if (!wallet) throw Error('Please connect wallet first')
-    if (!amount || !lptWalletAddress) return
-
-    const ammount = utils.decimalize(amount, 9)
-    const senWalletAddr = await splt.deriveAssociatedAddress(
-      walletAddress,
-      senAddress,
-    )
-    console.log(debtData)
-
-    if (debtData?.shares === undefined) {
-      try {
-        await farming.initializeAccounts(farmAddress, walletAddress, wallet)
-      } catch (er) {
-        setIsLoading(false)
-        return notifyError(er)
-      }
-    }
-
-    if (!accounts[senWalletAddr]) {
-      await splt.initializeAccount(senAddress, walletAddress, wallet)
-    }
-
     try {
+      const { splt, wallet } = window.sentre
+      if (!wallet) throw Error('Please connect wallet first')
+      if (!amount || !accountStake) return
+
+      const senWalletAddr = await splt.deriveAssociatedAddress(
+        walletAddress,
+        senAddress,
+      )
+      if (debtData?.shares === undefined)
+        await farming.initializeAccounts(farmAddress, walletAddress, wallet)
+      if (!accounts[senWalletAddr])
+        await splt.initializeAccount(senAddress, walletAddress, wallet)
+
       // Validate farming seed balance
       //   const harvestValidator = new HarvestValidator()
       //   await harvestValidator.validate(farmAddress)
-      console.log('ammount: ', ammount)
-      console.log('lptWalletAddress: ', lptWalletAddress)
-      console.log('senWalletAddr: ', senWalletAddr)
-      console.log('farmAddress: ', farmAddress)
-      console.log('wallet: ', wallet)
 
       const { txId } = await farming.stake(
-        ammount,
-        lptWalletAddress,
+        utils.decimalize(amount, 9),
+        accountStake.address,
         senWalletAddr,
         farmAddress,
         wallet,
       )
-      setIsLoading(false)
-      //  if (onClose) onClose()
       return notifySuccess('Staked', txId)
     } catch (er) {
-      setIsLoading(false)
       return notifyError(er)
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -86,9 +67,8 @@ const Stake = ({ farmAddress }: { farmAddress: string }) => {
     return await setDisable(false)
   }, [])
 
-  //Calculate Data for Rende[]
-  const availableStake = utils.undecimalize(
-    BigInt(lptWalletData?.amount || 0),
+  const available = utils.undecimalize(
+    BigInt(accountStake?.data.amount || 0),
     9,
   )
   return (
@@ -113,7 +93,7 @@ const Stake = ({ farmAddress }: { farmAddress: string }) => {
                 <Space size={6}>
                   <Typography.Text type="secondary">Available:</Typography.Text>
                   <Typography.Text>
-                    {numeric(availableStake).format('0,0.[00]')}
+                    {numeric(available).format('0,0.[00]')}
                   </Typography.Text>
                   <Typography.Text type="secondary">LPT</Typography.Text>
                 </Space>
@@ -130,12 +110,12 @@ const Stake = ({ farmAddress }: { farmAddress: string }) => {
                 <Button
                   type="text"
                   style={{ marginRight: -15 }}
-                  onClick={() => onAmount(availableStake)}
+                  onClick={() => onAmount(available)}
                 >
                   MAX
                 </Button>
               }
-              max={availableStake}
+              max={available}
             />
           </Space>
         </Card>
