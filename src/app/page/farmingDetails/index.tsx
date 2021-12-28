@@ -1,9 +1,10 @@
 import { Tabs } from 'antd'
+import NewFarm from '../newFarm'
 import ListFarmings from './listFarming'
 
 const FarmingDetails = () => {
   return (
-    <Tabs>
+    <Tabs tabBarExtraContent={<NewFarm />}>
       <Tabs.TabPane tab="All" key="all-farms">
         <ListFarmings />
       </Tabs.TabPane>
