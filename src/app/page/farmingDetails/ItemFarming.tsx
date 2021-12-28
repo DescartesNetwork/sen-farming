@@ -1,13 +1,25 @@
 import { Fragment, useState } from 'react'
-import { useSelector } from 'react-redux'
 import { utils } from '@senswap/sen-js'
-import { Button, Card, Col, Collapse, Row, Space, Tooltip } from 'antd'
+import { useSelector } from 'react-redux'
+
+import {
+  Button,
+  Card,
+  Col,
+  Collapse,
+  Modal,
+  Row,
+  Space,
+  Tabs,
+  Tooltip,
+} from 'antd'
 import Content from './content'
 import IonIcon from 'shared/antd/ionicon'
+import Unstake from './stakeAndUnstake/unstake'
+import Stake from './stakeAndUnstake/stake'
 
 import { MintAvatar, MintSymbol } from 'app/shared/components/mint'
 import { AppState } from 'app/model'
-
 import { LPT_DECIMALS } from 'app/configs/farmstat.config'
 import util from 'helpers/util'
 import { useDebt } from 'app/hooks/useDebt'
@@ -22,12 +34,13 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
   const liquidity = useFarmLiquidity(farmAddress)
   const { apr } = useFarmRoi(farmAddress)
   const [activeKey, setActiveKey] = useState<string>()
-
+  const [visible, setVisible] = useState(false)
+  
   const onActive = () => {
     if (!activeKey) return setActiveKey('extra-card-item')
     return setActiveKey(undefined)
   }
-
+          
   let amountLptShared = '0'
   if (data) {
     amountLptShared = utils.undecimalize(data.shares, LPT_DECIMALS)
@@ -124,7 +137,12 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
                 </Col>
                 <Col>
                   <Space>
-                    <Button icon={<IonIcon name="add-outline" />}>Stake</Button>
+                    <Button
+                      onClick={() => setVisible(true)}
+                      icon={<IonIcon name="add-outline" />}
+                    >
+                      Stake
+                    </Button>
                     <Button
                       type="primary"
                       icon={<IonIcon name="leaf-outline" />}
@@ -138,6 +156,21 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
           </Collapse>
         </Col>
       </Row>
+      <Modal
+        onCancel={() => setVisible(false)}
+        footer={null}
+        title={null}
+        visible={visible}
+      >
+        <Tabs>
+          <Tabs.TabPane tab="Stake" key="stake">
+            <Stake farmAddress={farmAddress} onClose={setVisible} />
+          </Tabs.TabPane>
+          <Tabs.TabPane tab="Unstake" key="unstake">
+            <Unstake farmAddress={farmAddress} onClose={setVisible} />
+          </Tabs.TabPane>
+        </Tabs>
+      </Modal>
     </Fragment>
   )
 }
