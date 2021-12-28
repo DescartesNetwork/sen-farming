@@ -7,7 +7,6 @@ import ItemFarming from './ItemFarming'
 
 import { getFarms } from '../../model/farms.controller'
 import { AppState } from 'app/model'
-import { Farming } from '@senswap/sen-js'
 
 const ListFarmings = () => {
   const dispatch = useDispatch()
@@ -16,7 +15,7 @@ const ListFarmings = () => {
 
   useEffect(() => {
     dispatch(getFarms())
-  }, [])
+  }, [dispatch])
 
   return (
     <Row gutter={[16, 16]}>

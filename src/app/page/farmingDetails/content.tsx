@@ -1,5 +1,3 @@
-import { Fragment, useState } from 'react'
-
 import { Button, Space, Tooltip, Typography } from 'antd'
 import { MintAvatar } from 'app/shared/components/mint'
 import IonIcon from 'shared/antd/ionicon'
