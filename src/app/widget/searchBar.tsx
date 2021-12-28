@@ -1,5 +1,4 @@
 import { Button, Card, Input } from 'antd'
-import React from 'react'
 import IonIcon from 'shared/antd/ionicon'
 
 const SearchBar = ({ isHidden }: { isHidden: boolean }) => {
