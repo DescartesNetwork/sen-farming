@@ -62,12 +62,10 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
   )
 
   const onActive = () => {
-    if (!activeKey) {
-      query.set('farmAddress', farmAddress)
-      history.push(`/app/${appId}?` + query.toString())
-      return setActiveKey(farmAddress)
-    }
-    return setActiveKey(undefined)
+    if (activeKey) return setActiveKey(undefined)
+    query.set('farmAddress', farmAddress)
+    history.push(`/app/${appId}?` + query.toString())
+    return setActiveKey(farmAddress)
   }
 
   const handleHarvest = async () => {

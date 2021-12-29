@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { useLocation } from 'react-router-dom'
 
@@ -6,7 +6,7 @@ import { Tabs } from 'antd'
 import NewFarm from '../newFarm'
 import ListFarmings from './listFarming'
 import SentreFarms from './sentreFarms'
-import StakedFarm, { StakedFarms } from './stakedFarm'
+import StakedFarm from './stakedFarm'
 import YourFarms from './yourFamrs'
 
 import { AppState } from 'app/model'
@@ -25,47 +25,33 @@ const FarmingDetails = () => {
     wallet: { address: walletAddress },
   } = useWallet()
   const [tabActive, setTabActive] = useState('sen-farms')
-  const [isStakedFarms, setIsStakedFarms] = useState<StakedFarms>()
-
-  const listFarmAddress = useMemo(() => Object.keys(farms), [farms])
 
   const query = useMemo(
     () => new URLSearchParams(locationSearch),
     [locationSearch],
   )
 
-  const getStakedFarms = useCallback(async () => {
-    const filterFarms: StakedFarms = {}
-
-    for (const farmAddress of listFarmAddress) {
-      if (!farmAddress) continue
-      const debtAddress = await farming.deriveDebtAddress(
-        walletAddress,
-        farmAddress,
-      )
-      const debtData = debts[debtAddress]
-      if (debtData?.shares > global.BigInt(0)) {
-        filterFarms[farmAddress] = true
-      }
-    }
-    setIsStakedFarms(filterFarms)
-  }, [debts, listFarmAddress, walletAddress])
-
-  useEffect(() => {
-    getStakedFarms()
-  }, [getStakedFarms])
-
   // check tab activeKey with farmSelected
   useEffect(() => {
-    const farmSelected = query.get('farmAddress')
-    if (!farmSelected) return
-    const farmOwner = farms[farmSelected]?.owner
-    if (!farmOwner) return
-    if (farmOwner === walletAddress) return setTabActive('your-farms')
-    if (isStakedFarms?.[farmSelected]) return setTabActive('staked-farms')
-    if (senOwner.includes(farmOwner)) return setTabActive('sen-farms')
-    return setTabActive('all-farms')
-  }, [farms, isStakedFarms, query, walletAddress])
+    ;(async () => {
+      const farmSelected = query.get('farmAddress')
+      if (!farmSelected) return
+
+      const farmOwner = farms[farmSelected]?.owner
+      const debtAddress = await farming.deriveDebtAddress(
+        walletAddress,
+        farmSelected,
+      )
+      if (!farmOwner || !debtAddress) return
+
+      const debtData = debts[debtAddress]
+
+      if (farmOwner === walletAddress) return setTabActive('your-farms')
+      if (debtData?.shares > BigInt(0)) return setTabActive('staked-farms')
+      if (senOwner.includes(farmOwner)) return setTabActive('sen-farms')
+      return setTabActive('all-farms')
+    })()
+  }, [debts, farms, query, walletAddress])
 
   return (
     <Tabs

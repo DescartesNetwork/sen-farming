@@ -3,7 +3,7 @@ import { Fragment, useState } from 'react'
 import { Button, Tabs } from 'antd'
 import IonIcon from 'shared/antd/ionicon'
 import SearchBar from './searchBar'
-import Staked from './stakedFarm'
+import StakedFarms from './stakedFarms'
 import YourFarms from './yourFamrs'
 import FarmWatcher from 'app/components/watcher'
 
@@ -23,7 +23,7 @@ const Widget = () => {
       <FarmWatcher style={{ height: 336 }}>
         <Tabs className={toggle ? '' : 'hidden-tab'}>
           <Tabs.TabPane tab="Staked farms" key="staked-farm">
-            <Staked />
+            <StakedFarms />
           </Tabs.TabPane>
           <Tabs.TabPane tab="Your farms" key="your-farm">
             <YourFarms />
