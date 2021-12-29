@@ -1,4 +1,6 @@
-import { Fragment, useState } from 'react'
+import { Fragment, useMemo, useState } from 'react'
+import { useSelector } from 'react-redux'
+import { utils } from '@senswap/sen-js'
 import CopyToClipboard from 'react-copy-to-clipboard'
 
 import {
@@ -13,13 +15,16 @@ import {
   Tooltip,
 } from 'antd'
 import IonIcon from 'shared/antd/ionicon'
-import { MintAvatar, MintName } from 'app/shared/components/mint'
+import { MintAvatar, MintSymbol } from 'app/shared/components/mint'
 import Seed from './seed'
 import Unseed from './unseed'
 import FreezeOrThaw from './freezeOrThaw'
 import Close from './close'
 
-import { asyncWait, explorer } from 'shared/util'
+import { asyncWait, explorer, shortenAddress } from 'shared/util'
+import { AppState } from 'app/model'
+import { useBudget } from 'app/hooks/useBudget'
+import useMintDecimals from 'app/shared/hooks/useMintDecimals'
 
 const ExtraTypography = ({
   label = '',
@@ -40,15 +45,25 @@ const ExtraTypography = ({
   )
 }
 
-const Management = () => {
+const Management = ({ farmAddress }: { farmAddress: string }) => {
+  const farmData = useSelector((state: AppState) => state.farms?.[farmAddress])
   const [visible, setVisible] = useState(false)
   const [visibleTooltip, setVisibleTooltip] = useState(false)
+  const { budget, symbol } = useBudget(farmAddress)
+  const { mint_stake: mintFarmAddress, period, reward } = farmData || {}
+  const farmDecimal = useMintDecimals(mintFarmAddress)
 
   const onCopy = async () => {
     setVisibleTooltip(true)
     await asyncWait(1500)
     setVisibleTooltip(false)
   }
+
+  const farmPeriod = Number(period) / (60 * 60)
+  const farmReward = useMemo(() => {
+    if (farmDecimal === 0) return 0
+    return utils.undecimalize(reward, farmDecimal)
+  }, [farmDecimal, reward])
 
   return (
     <Fragment>
@@ -80,9 +95,9 @@ const Management = () => {
                 <Col span={24}>
                   <Row gutter={[0, 0]}>
                     <Col flex="auto">
-                      <Space size={0} style={{ fontWeight: 600 }}>
-                        <MintAvatar mintAddress={''} size={32} />
-                        <MintName mintAddress={''} />
+                      <Space size={4} style={{ fontWeight: 600 }}>
+                        <MintAvatar mintAddress={mintFarmAddress} size={32} />
+                        <MintSymbol mintAddress={mintFarmAddress} />
                       </Space>
                     </Col>
                     <Col>
@@ -91,10 +106,10 @@ const Management = () => {
                           type="secondary"
                           style={{ fontSize: 12 }}
                         >
-                          addr..
+                          {shortenAddress(farmAddress)}
                         </Typography.Text>
                         <Tooltip visible={visibleTooltip} title="Copied">
-                          <CopyToClipboard text="copy">
+                          <CopyToClipboard text={farmAddress}>
                             <Button
                               type="text"
                               size="small"
@@ -106,7 +121,9 @@ const Management = () => {
                         <Button
                           type="text"
                           size="small"
-                          onClick={() => explorer('farmAddress')}
+                          onClick={() =>
+                            window.open(explorer(farmAddress), '_blank')
+                          }
                           icon={<IonIcon name="open" />}
                         />
                       </Space>
@@ -114,13 +131,16 @@ const Management = () => {
                   </Row>
                 </Col>
                 <Col span={24}>
-                  <ExtraTypography label="Liquidity" title="$319.693" />
+                  <ExtraTypography
+                    label="Budget"
+                    title={`${budget} ${symbol}`}
+                  />
                 </Col>
                 <Col span={24}>
-                  <ExtraTypography label="Budget" title="200 SNTR" />
-                </Col>
-                <Col span={24}>
-                  <ExtraTypography label="Reward" title="1 SNTR/3 day" />
+                  <ExtraTypography
+                    label="Reward"
+                    title={`${farmReward} ${symbol}/${farmPeriod} hour`}
+                  />
                 </Col>
               </Row>
             </Card>
@@ -128,14 +148,20 @@ const Management = () => {
           <Col span={24}>
             <Tabs>
               <Tabs.TabPane key="seed" tab="Seed">
-                <Seed farmAddress={''} onChange={() => setVisible(false)} />
+                <Seed
+                  farmAddress={farmAddress}
+                  onChange={() => setVisible(false)}
+                />
               </Tabs.TabPane>
               <Tabs.TabPane key="unseed" tab="Unseed">
-                <Unseed farmAddress={''} onChange={() => setVisible(false)} />
+                <Unseed
+                  farmAddress={farmAddress}
+                  onChange={() => setVisible(false)}
+                />
               </Tabs.TabPane>
               <Tabs.TabPane key="freeze-thaw" tab="Freeze/Thaw">
                 <FreezeOrThaw
-                  farmAddress={''}
+                  farmAddress={farmAddress}
                   onChange={() => setVisible(false)}
                 />
               </Tabs.TabPane>
@@ -143,7 +169,10 @@ const Management = () => {
                 TBD
               </Tabs.TabPane>
               <Tabs.TabPane key="close" tab="Close">
-                <Close farmAddress={''} onChange={() => setVisible(false)} />
+                <Close
+                  farmAddress={farmAddress}
+                  onChange={() => setVisible(false)}
+                />
               </Tabs.TabPane>
             </Tabs>
           </Col>

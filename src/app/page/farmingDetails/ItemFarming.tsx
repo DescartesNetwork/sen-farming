@@ -17,20 +17,20 @@ import Content from './content'
 import IonIcon from 'shared/antd/ionicon'
 import Unstake from './stakeAndUnstake/unstake'
 import Stake from './stakeAndUnstake/stake'
-import Management from '../management'
+import Management from './management'
 
 import { useDebt } from 'app/hooks/useDebt'
 import { useReward } from 'app/hooks/useReward'
 import { useFarmLiquidity } from 'app/hooks/useFarmLiquidity'
 import { useFarmRoi } from 'app/hooks/useFarmRoi'
 import { AppState } from 'app/model'
-import util from 'helpers/util'
 import { LPT_DECIMALS } from 'app/configs/farmstat.config'
-import { useUI, useWallet } from 'senhub/providers'
-import configs from 'app/configs'
-import { HarvestValidator } from 'helpers/validateHarvest'
 import { notifyError, notifySuccess } from 'app/helper'
 import { MintAvatar, MintSymbol } from 'app/shared/components/mint'
+import { useUI, useWallet } from 'senhub/providers'
+import { HarvestValidator } from 'helpers/validateHarvest'
+import util from 'helpers/util'
+import configs from 'app/configs'
 
 const {
   sol: { senAddress, farming },
@@ -51,6 +51,8 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
   const [activeKey, setActiveKey] = useState<string>()
   const [visible, setVisible] = useState(false)
   const [loading, setLoading] = useState(false)
+  const { owner } = farmData || {}
+  const isOwner = owner === walletAddress
 
   const onActive = () => {
     if (!activeKey) return setActiveKey('extra-card-item')
@@ -178,7 +180,7 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
                 </Col>
                 <Col xs={{ order: 1 }} md={{ order: 2 }}>
                   <Space>
-                    <Management />
+                    {isOwner && <Management farmAddress={farmAddress} />}
                     <Button
                       onClick={() => setVisible(true)}
                       icon={<IonIcon name="add-outline" />}
