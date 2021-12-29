@@ -1,18 +1,33 @@
 import { Button, Card, Col, Row, Space, Typography } from 'antd'
 import { MintAvatar } from 'app/shared/components/mint'
+import { useAccount } from 'senhub/providers'
 import IonIcon from 'shared/antd/ionicon'
-import { explorer } from 'shared/util'
+import { explorer, openNewTab } from 'shared/util'
 
 const AccountCard = ({
   accountAddress,
   onClick = () => {},
 }: {
   accountAddress: string
-  onClick?: () => void
+  onClick: (mintAddress: string) => void
 }) => {
+  const {
+    accounts: {
+      [accountAddress]: { mint: mintAddress },
+    },
+  } = useAccount()
+  const shortenAddress = () => {
+    const size = 4
+    const prefix = accountAddress.substring(0, size)
+    const suffix = accountAddress.substring(
+      accountAddress.length - size,
+      accountAddress.length,
+    )
+    return prefix + ' ... ' + suffix
+  }
   return (
     <Card
-      onClick={onClick}
+      onClick={() => onClick(mintAddress)}
       style={{ boxShadow: 'unset', borderRadius: 8, background: '#fff' }}
       bodyStyle={{ padding: 12 }}
       bordered={false}
@@ -20,20 +35,20 @@ const AccountCard = ({
       <Row gutter={[8, 8]} wrap={false} align="middle">
         <Col flex="auto">
           <Space direction="vertical" size={0}>
-            <MintAvatar mintAddress={''} />
+            <MintAvatar mintAddress={mintAddress} />
             <Space>
               <Space size={4}>
                 <Typography.Text type="secondary" style={{ fontSize: 12 }}>
                   Account Address:
                 </Typography.Text>
-                <Typography.Text>asax...</Typography.Text>
+                <Typography.Text>{shortenAddress()}</Typography.Text>
               </Space>
               <Button
                 type="text"
                 size="small"
                 onClick={(e: React.MouseEvent) => {
                   e.stopPropagation()
-                  explorer(accountAddress)
+                  openNewTab(explorer(accountAddress))
                 }}
                 icon={<IonIcon name="open-outline" />}
               />

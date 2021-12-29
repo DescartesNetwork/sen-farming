@@ -10,6 +10,14 @@ import MintSelection from './mintSelection'
 const NewFarm = ({ size = 'small' }: { size?: SizeType }) => {
   const [visible, setVisible] = useState(false)
   const [stepNewFarm, setStepNewFarm] = useState(1)
+  const [mintAddress, setMintAddress] = useState('')
+  const [visibleInputModal, setVisibleInputModal] = useState(false)
+
+  const onClose = () => {
+    setVisible(false)
+    setStepNewFarm(1)
+    setMintAddress('')
+  }
 
   return (
     <Row>
@@ -26,11 +34,26 @@ const NewFarm = ({ size = 'small' }: { size?: SizeType }) => {
       >
         {stepNewFarm === 1 && <StepAddFarm onNext={setStepNewFarm} />}
         {stepNewFarm === 2 && (
-          <ConfirmAddFarm mintAddress={''} onNext={setStepNewFarm} />
+          <ConfirmAddFarm
+            mintAddress={mintAddress}
+            onClose={onClose}
+            onNext={setStepNewFarm}
+            onSelectInput={setVisibleInputModal}
+          />
         )}
-        {stepNewFarm === 3 && (
-          <MintSelection onChange={() => {}} onNext={setStepNewFarm} />
-        )}
+      </Modal>
+      <Modal
+        visible={visibleInputModal}
+        onCancel={() => setVisibleInputModal(false)}
+        footer={false}
+        closeIcon={<IonIcon name="close-outline" />}
+      >
+        <MintSelection
+          onChange={(value: string) => {
+            setMintAddress(value)
+          }}
+          onNext={setVisibleInputModal}
+        />
       </Modal>
     </Row>
   )

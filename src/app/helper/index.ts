@@ -8,6 +8,13 @@ export const notifySuccess = (content: string, txId: string) => {
   })
 }
 
+export const notifyWarning = (content: string) => {
+  return window.notify({
+    type: 'warning',
+    description: `${content}`,
+  })
+}
+
 export const notifyError = (er: any) => {
   return window.notify({
     type: 'error',
