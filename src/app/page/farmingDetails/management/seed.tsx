@@ -1,10 +1,21 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
+import { utils } from '@senswap/sen-js'
 
 import { Button, Card, Col, Row, Space, Typography } from 'antd'
 import IonIcon from 'shared/antd/ionicon'
 import NumericInput from 'shared/antd/numericInput'
 
 import { numeric } from 'shared/util'
+import { useAccount, useWallet } from 'senhub/providers'
+import { AppState } from 'app/model'
+import configs from 'app/configs'
+import { notifyError, notifySuccess } from 'app/helper'
+import useMintDecimals from 'app/shared/hooks/useMintDecimals'
+
+const {
+  sol: { senAddress, farming },
+} = configs
 
 const Seed = ({
   farmAddress,
@@ -13,8 +24,59 @@ const Seed = ({
   farmAddress: string
   onChange?: (txId: string) => void
 }) => {
+  const { accounts } = useAccount()
+  const {
+    wallet: { address: walletAddress },
+  } = useWallet()
+  const farms = useSelector((state: AppState) => state.farms)
   const [value, setValue] = useState('')
   const [balance, setBalance] = useState('0')
+  const [loading, setLoading] = useState(false)
+
+  const { mint_reward } = farms?.[farmAddress] || {}
+  const decimal = useMintDecimals(mint_reward)
+
+  useEffect(() => {
+    ;(async () => {
+      try {
+        const { splt } = window.sentre
+        const srcAddress = await splt.deriveAssociatedAddress(
+          walletAddress,
+          mint_reward,
+        )
+        const { amount } = accounts[srcAddress] || {}
+        if (!amount || decimal === 0) return setBalance('0')
+        return setBalance(utils.undecimalize(amount, decimal))
+      } catch (er) {
+        setBalance('0')
+      }
+    })()
+  }, [walletAddress, accounts, mint_reward, decimal])
+
+  const seed = async () => {
+    setLoading(true)
+    const { wallet, splt } = window.sentre
+    if (!wallet) return
+    const srcAddress = await splt.deriveAssociatedAddress(
+      walletAddress,
+      senAddress,
+    )
+    const amount = utils.decimalize(value, 9)
+    try {
+      const { txId } = await farming.seed(
+        amount,
+        farmAddress,
+        srcAddress,
+        wallet,
+      )
+      onChange(txId)
+      return notifySuccess('Seed', txId)
+    } catch (er) {
+      return notifyError(er)
+    } finally {
+      setLoading(false)
+    }
+  }
 
   return (
     <Row gutter={[16, 16]}>
@@ -72,9 +134,10 @@ const Seed = ({
         <Button
           type="primary"
           icon={<IonIcon name="add-outline" />}
-          onClick={() => setBalance}
+          onClick={seed}
           block
           disabled={!value}
+          loading={loading}
         >
           Seed
         </Button>

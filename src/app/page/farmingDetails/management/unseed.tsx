@@ -1,10 +1,22 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
+import { utils } from '@senswap/sen-js'
 
 import { Row, Col, Card, Typography, Space, Button } from 'antd'
 import IonIcon from 'shared/antd/ionicon'
-import NumericInput from 'shared/antd/numericInput'
 
+import NumericInput from 'shared/antd/numericInput'
 import { numeric } from 'shared/util'
+import { useWallet } from 'senhub/providers'
+import { AppState } from 'app/model'
+import configs from 'app/configs'
+import { notifyError, notifySuccess } from 'app/helper'
+import useMintDecimals from 'app/shared/hooks/useMintDecimals'
+import useMintCgk from 'app/shared/hooks/useMintCgk'
+
+const {
+  sol: { farming },
+} = configs
 
 const Unseed = ({
   farmAddress,
@@ -13,8 +25,54 @@ const Unseed = ({
   farmAddress: string
   onChange?: (txId: string) => void
 }) => {
+  const {
+    wallet: { address: walletAddress },
+  } = useWallet()
+  const farms = useSelector((state: AppState) => state.farms)
   const [value, setValue] = useState('')
   const [balance, setBalance] = useState('0')
+  const [loading, setLoading] = useState(false)
+  const { treasury_reward, mint_reward } = farms[farmAddress] || {}
+  const decimal = useMintDecimals(mint_reward)
+  const { symbol } = useMintCgk(mint_reward)
+
+  useEffect(() => {
+    ;(async () => {
+      try {
+        const { splt } = window.sentre
+        const { amount } = await splt.getAccountData(treasury_reward)
+        if (!amount || decimal === 0) return setBalance('0')
+        return setBalance(utils.undecimalize(amount, decimal))
+      } catch (er) {
+        setBalance('0')
+      }
+    })()
+  }, [decimal, treasury_reward])
+
+  const unseed = async () => {
+    setLoading(true)
+    const { wallet, splt } = window.sentre
+    if (!wallet) return
+    const dstAddress = await splt.deriveAssociatedAddress(
+      walletAddress,
+      mint_reward,
+    )
+    const amount = utils.decimalize(value, decimal)
+    try {
+      const { txId } = await farming.unseed(
+        amount,
+        farmAddress,
+        dstAddress,
+        wallet,
+      )
+      onChange(txId)
+      return notifySuccess('Unseed', txId)
+    } catch (er) {
+      return notifyError(er)
+    } finally {
+      setLoading(false)
+    }
+  }
 
   return (
     <Row gutter={[16, 16]}>
@@ -41,7 +99,7 @@ const Unseed = ({
                     <Typography.Text>
                       {numeric(balance).format('0,0.[00]')}
                     </Typography.Text>
-                    <Typography.Text type="secondary">SNTR</Typography.Text>
+                    <Typography.Text type="secondary">{symbol}</Typography.Text>
                   </Space>
                 </Col>
               </Row>
@@ -72,9 +130,10 @@ const Unseed = ({
         <Button
           type="primary"
           icon={<IonIcon name="remove-outline" />}
-          onClick={() => setBalance}
+          onClick={unseed}
           block
           disabled={!value}
+          loading={loading}
         >
           Unseed
         </Button>

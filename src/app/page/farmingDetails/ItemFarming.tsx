@@ -18,20 +18,20 @@ import Content from './content'
 import IonIcon from 'shared/antd/ionicon'
 import Unstake from './stakeAndUnstake/unstake'
 import Stake from './stakeAndUnstake/stake'
-import Management from '../management'
+import Management from './management'
 
+import { numeric } from 'shared/util'
+import { useUI, useWallet } from 'senhub/providers'
+import { HarvestValidator } from 'helpers/validateHarvest'
 import { useDebt } from 'app/hooks/useDebt'
 import { useReward } from 'app/hooks/useReward'
 import { useFarmLiquidity } from 'app/hooks/useFarmLiquidity'
 import { useFarmRoi } from 'app/hooks/useFarmRoi'
 import { AppState } from 'app/model'
-import util from 'helpers/util'
 import { LPT_DECIMALS } from 'app/configs/farmstat.config'
-import { useUI, useWallet } from 'senhub/providers'
-import configs from 'app/configs'
-import { HarvestValidator } from 'helpers/validateHarvest'
 import { notifyError, notifySuccess } from 'app/helper'
 import { MintAvatar, MintSymbol } from 'app/shared/components/mint'
+import configs from 'app/configs'
 import { useFarmPool } from 'app/hooks/useFarmPool'
 
 const {
@@ -40,7 +40,7 @@ const {
 } = configs
 
 const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
-  const farmData = useSelector((state: AppState) => state.farms[farmAddress])
+  const farmData = useSelector((state: AppState) => state.farms?.[farmAddress])
   const { data } = useDebt(farmAddress)
   const reward = useReward(farmAddress)
   const farmPool = useFarmPool(farmAddress)
@@ -57,6 +57,8 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
   const [activeKey, setActiveKey] = useState<string>()
   const [visible, setVisible] = useState(false)
   const [loading, setLoading] = useState(false)
+  const { owner } = farmData || {}
+  const isOwner = owner === walletAddress
 
   const query = useMemo(
     () => new URLSearchParams(locationSearch),
@@ -144,26 +146,26 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
                 <Content
                   label="APR"
                   tooltip={farmAddress}
-                  value={util.Numberic(apr).format('0,0.[00]a%')}
+                  value={numeric(apr).format('0,0.[00]a%')}
                 />
               </Col>
               <Col xs={12} md={5}>
                 <Content
                   label="Liquidity"
-                  value={util.Numberic(liquidity).format('0,0.00[00]a$')}
+                  value={numeric(liquidity).format('0,0.00[00]a$')}
                 />
               </Col>
               <Col xs={12} md={5}>
                 <Content
                   label="Your staked LPT"
-                  value={util.Numberic(amountLptShared).format('0,0.00[00]')}
+                  value={numeric(amountLptShared).format('0,0.00[00]')}
                 />
               </Col>
               <Col xs={12} md={5}>
                 <Content
                   mintAddress={farmData.mint_reward}
                   label="Reward"
-                  value={util.Numberic(reward).format('0,0.00[00]')}
+                  value={numeric(reward).format('0,0.00[00]')}
                 />
               </Col>
             </Row>
@@ -195,7 +197,7 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
                 </Col>
                 <Col xs={{ order: 1 }} md={{ order: 2 }}>
                   <Space>
-                    <Management />
+                    {isOwner && <Management farmAddress={farmAddress} />}
                     <Button
                       onClick={() => setVisible(true)}
                       icon={<IonIcon name="add-outline" />}

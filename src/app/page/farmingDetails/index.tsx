@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux'
 import { useLocation } from 'react-router-dom'
 
 import { Tabs } from 'antd'
-import NewFarm from '../newFarm'
+import NewFarm from './newFarm'
 import ListFarmings from './listFarming'
 import SentreFarms from './sentreFarms'
 import StakedFarm from './stakedFarm'
