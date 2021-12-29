@@ -38,6 +38,7 @@ const Seed = ({
 
   useEffect(() => {
     ;(async () => {
+      if (decimal === 0) return
       try {
         const { splt } = window.sentre
         const srcAddress = await splt.deriveAssociatedAddress(
@@ -45,7 +46,7 @@ const Seed = ({
           mint_reward,
         )
         const { amount } = accounts[srcAddress] || {}
-        if (!amount || decimal === 0) return setBalance('0')
+        if (!amount) return setBalance('0')
         return setBalance(utils.undecimalize(amount, decimal))
       } catch (er) {
         setBalance('0')
