@@ -12,10 +12,14 @@ export const useFarmList = (): { address: string; data: FarmData }[] => {
 
   const getFarmList = useCallback(() => {
     if (farmList.length) return
-    const newFarmList = []
+    let newFarmList = []
     for (const address in farms) {
       newFarmList.push({ address, data: farms[address] })
     }
+    //sort
+    newFarmList = newFarmList.sort((a, b) =>
+      a.data.total_shares < b.data.total_shares ? 1 : -1,
+    )
     setFarmList(newFarmList)
   }, [farmList.length, farms])
 

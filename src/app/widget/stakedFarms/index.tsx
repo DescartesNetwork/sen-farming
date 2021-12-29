@@ -3,21 +3,18 @@ import { useSelector } from 'react-redux'
 import LazyLoad from '@senswap/react-lazyload'
 
 import { Col, Row } from 'antd'
-import ItemFarming from './ItemFarming'
+import FarmCard from '../farmCard'
 
 import { AppState } from 'app/model'
 import { useWallet } from 'senhub/providers'
+import { StakedFarms } from 'app/page/farmingDetails/stakedFarm'
 import configs from 'app/configs'
 
 const {
   sol: { farming },
 } = configs
 
-export type StakedFarms = {
-  [x: string]: boolean
-}
-
-const StakedFarm = () => {
+const Staked = () => {
   const { farms, debts } = useSelector((state: AppState) => state)
   const {
     wallet: { address: walletAddress },
@@ -48,19 +45,20 @@ const StakedFarm = () => {
   }, [getStakedFarms])
 
   return (
-    <Row gutter={[16, 16]}>
-      {Object.keys(farms).map((farmAddress, i) => {
+    <Row gutter={[12, 12]}>
+      {Object.keys(farms).map((farmAddress, idx) => {
         if (!isStakedFarms?.[farmAddress]) return null
         return (
-          <Col span={24} key={farmAddress + i}>
-            <LazyLoad height={84}>
-              <ItemFarming farmAddress={farmAddress} />
+          <Col span={24} key={idx}>
+            <LazyLoad height={185} overflow>
+              <FarmCard farmAddress={farmAddress} />
             </LazyLoad>
           </Col>
         )
       })}
+      <Col />
     </Row>
   )
 }
 
-export default StakedFarm
+export default Staked

@@ -1,3 +1,5 @@
+import { useSelector } from 'react-redux'
+
 import { Card, Col, Divider, Row, Space, Typography } from 'antd'
 import { useUI } from 'senhub/providers'
 import IonIcon from 'shared/antd/ionicon'
@@ -6,6 +8,8 @@ import configs from 'app/configs'
 import useMintCgk from 'app/shared/hooks/useMintCgk'
 import { numeric } from 'shared/util'
 import { MintSymbol } from 'app/shared/components/mint'
+import { AppState } from 'app/model'
+import { useMemo } from 'react'
 
 const {
   sol: { senAddress },
@@ -15,6 +19,7 @@ const Banner = () => {
   const {
     ui: { width },
   } = useUI()
+  const farms = useSelector((state: AppState) => state.farms)
   const senCgk = useMintCgk(senAddress)
 
   const desktop = width > 768
@@ -23,6 +28,14 @@ const Banner = () => {
   const spaceSize = desktop ? 8 : 4
   const spaceDirection = desktop ? 'vertical' : 'horizontal'
   const iconName = desktop ? 'pause-outline' : 'reorder-two-outline'
+
+  const positiveFarms = useMemo(() => {
+    let count = 0
+    for (const addr in farms) {
+      if (farms[addr].total_shares) count++
+    }
+    return count
+  }, [farms])
 
   return (
     <Card
@@ -37,7 +50,8 @@ const Banner = () => {
         </Col>
         <Col span={24}>
           <Row gutter={[12, 12]}>
-            <Col span={xsSpan}>
+            {/* coming soon */}
+            {/* <Col span={xsSpan}>
               <Space direction="vertical" size={spaceSize}>
                 <Typography.Text style={{ color: '#212433' }}>
                   Total TVL all Farms
@@ -51,14 +65,14 @@ const Banner = () => {
               <Col>
                 <Divider type="vertical" style={{ height: '100%' }} />
               </Col>
-            )}
+            )} */}
             <Col span={xsSpan}>
               <Space direction="vertical" size={spaceSize}>
                 <Typography.Text style={{ color: '#212433' }}>
                   Positive Farms
                 </Typography.Text>
                 <Typography.Title level={2} style={{ color: '#F9575E' }}>
-                  19
+                  {positiveFarms}
                 </Typography.Title>
               </Space>
             </Col>

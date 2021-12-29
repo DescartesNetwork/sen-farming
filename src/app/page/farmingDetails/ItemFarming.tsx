@@ -1,6 +1,7 @@
-import { Fragment, useState } from 'react'
+import { Fragment, useEffect, useMemo, useState } from 'react'
 import { utils } from '@senswap/sen-js'
 import { useSelector } from 'react-redux'
+import { useLocation, useHistory } from 'react-router-dom'
 
 import {
   Button,
@@ -19,6 +20,9 @@ import Unstake from './stakeAndUnstake/unstake'
 import Stake from './stakeAndUnstake/stake'
 import Management from './management'
 
+import { numeric } from 'shared/util'
+import { useUI, useWallet } from 'senhub/providers'
+import { HarvestValidator } from 'helpers/validateHarvest'
 import { useDebt } from 'app/hooks/useDebt'
 import { useReward } from 'app/hooks/useReward'
 import { useFarmLiquidity } from 'app/hooks/useFarmLiquidity'
@@ -27,19 +31,19 @@ import { AppState } from 'app/model'
 import { LPT_DECIMALS } from 'app/configs/farmstat.config'
 import { notifyError, notifySuccess } from 'app/helper'
 import { MintAvatar, MintSymbol } from 'app/shared/components/mint'
-import { useUI, useWallet } from 'senhub/providers'
-import { HarvestValidator } from 'helpers/validateHarvest'
-import util from 'helpers/util'
 import configs from 'app/configs'
+import { useFarmPool } from 'app/hooks/useFarmPool'
 
 const {
   sol: { senAddress, farming },
+  manifest: { appId },
 } = configs
 
 const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
   const farmData = useSelector((state: AppState) => state.farms[farmAddress])
   const { data } = useDebt(farmAddress)
   const reward = useReward(farmAddress)
+  const farmPool = useFarmPool(farmAddress)
   const liquidity = useFarmLiquidity(farmAddress)
   const { apr } = useFarmRoi(farmAddress)
   const {
@@ -48,15 +52,24 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
   const {
     wallet: { address: walletAddress },
   } = useWallet()
+  const locationSearch = useLocation().search
+  const history = useHistory()
   const [activeKey, setActiveKey] = useState<string>()
   const [visible, setVisible] = useState(false)
   const [loading, setLoading] = useState(false)
   const { owner } = farmData || {}
   const isOwner = owner === walletAddress
 
+  const query = useMemo(
+    () => new URLSearchParams(locationSearch),
+    [locationSearch],
+  )
+
   const onActive = () => {
-    if (!activeKey) return setActiveKey('extra-card-item')
-    return setActiveKey(undefined)
+    if (activeKey) return setActiveKey(undefined)
+    query.set('farmAddress', farmAddress)
+    history.push(`/app/${appId}?` + query.toString())
+    return setActiveKey(farmAddress)
   }
 
   const handleHarvest = async () => {
@@ -78,6 +91,12 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
       setLoading(false)
     }
   }
+
+  useEffect(() => {
+    const farmSelected = query.get('farmAddress')
+    if (!farmSelected || farmSelected !== farmAddress) return
+    setActiveKey(farmSelected)
+  }, [farmAddress, query])
 
   let amountLptShared = '0'
   if (data) {
@@ -127,26 +146,26 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
                 <Content
                   label="APR"
                   tooltip={farmAddress}
-                  value={util.Numberic(apr).format('0,0.[00]a%')}
+                  value={numeric(apr).format('0,0.[00]a%')}
                 />
               </Col>
               <Col xs={12} md={5}>
                 <Content
                   label="Liquidity"
-                  value={util.Numberic(liquidity).format('0,0.00[00]a$')}
+                  value={numeric(liquidity).format('0,0.00[00]a$')}
                 />
               </Col>
               <Col xs={12} md={5}>
                 <Content
                   label="Your staked LPT"
-                  value={util.Numberic(amountLptShared).format('0,0.00[00]')}
+                  value={numeric(amountLptShared).format('0,0.00[00]')}
                 />
               </Col>
               <Col xs={12} md={5}>
                 <Content
                   mintAddress={farmData.mint_reward}
                   label="Reward"
-                  value={util.Numberic(reward).format('0,0.00[00]')}
+                  value={numeric(reward).format('0,0.00[00]')}
                 />
               </Col>
             </Row>
@@ -163,20 +182,18 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
       <Row>
         <Col span={24}>
           <Collapse activeKey={activeKey} className="expand-card">
-            <Collapse.Panel
-              header={null}
-              key="extra-card-item"
-              showArrow={false}
-            >
+            <Collapse.Panel header={null} key={farmAddress} showArrow={false}>
               <Row gutter={[16, 16]}>
                 <Col xs={{ order: 2 }} md={{ order: 1 }} flex="auto">
-                  <Button
-                    type="text"
-                    style={{ padding: 0, background: 'transparent' }}
-                  >
-                    Go pool
-                    <IonIcon name="chevron-forward-outline" />
-                  </Button>
+                  {farmPool && (
+                    <Button
+                      type="text"
+                      style={{ padding: 0, background: 'transparent' }}
+                    >
+                      Go pool
+                      <IonIcon name="chevron-forward-outline" />
+                    </Button>
+                  )}
                 </Col>
                 <Col xs={{ order: 1 }} md={{ order: 2 }}>
                   <Space>
