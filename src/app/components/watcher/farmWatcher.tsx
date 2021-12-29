@@ -63,7 +63,7 @@ const FarmWatcher = ({
   }, [fetchData, watchData])
 
   return (
-    <Spin spinning={isLoading} tip="Loading..." style={style}>
+    <Spin spinning={isLoading} style={style}>
       {children}
     </Spin>
   )

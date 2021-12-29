@@ -1,4 +1,4 @@
-import { Fragment, useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 import { utils } from '@senswap/sen-js'
 import { useSelector } from 'react-redux'
 
@@ -38,6 +38,7 @@ const {
 
 const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
   const farmData = useSelector((state: AppState) => state.farms[farmAddress])
+  const { farmSelected } = useSelector((state: AppState) => state.main)
   const { data } = useDebt(farmAddress)
   const reward = useReward(farmAddress)
   const liquidity = useFarmLiquidity(farmAddress)
@@ -53,7 +54,7 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
   const [loading, setLoading] = useState(false)
 
   const onActive = () => {
-    if (!activeKey) return setActiveKey('extra-card-item')
+    if (!activeKey) return setActiveKey(farmAddress)
     return setActiveKey(undefined)
   }
 
@@ -76,6 +77,11 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
       setLoading(false)
     }
   }
+
+  useEffect(() => {
+    if (!farmSelected || farmSelected !== farmAddress) return
+    setActiveKey(farmSelected)
+  }, [farmAddress, farmSelected])
 
   let amountLptShared = '0'
   if (data) {
@@ -161,11 +167,7 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
       <Row>
         <Col span={24}>
           <Collapse activeKey={activeKey} className="expand-card">
-            <Collapse.Panel
-              header={null}
-              key="extra-card-item"
-              showArrow={false}
-            >
+            <Collapse.Panel header={null} key={farmAddress} showArrow={false}>
               <Row gutter={[16, 16]}>
                 <Col xs={{ order: 2 }} md={{ order: 1 }} flex="auto">
                   <Button
