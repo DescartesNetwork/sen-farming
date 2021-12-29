@@ -8,6 +8,7 @@ import ItemFarming from './ItemFarming'
 import { AppState } from 'app/model'
 import { useWallet } from 'senhub/providers'
 import configs from 'app/configs'
+import { useSearchFarm } from 'app/hooks/useSearchFarm'
 
 const {
   sol: { farming },
@@ -18,10 +19,11 @@ export type StakedFarms = {
 }
 
 const StakedFarm = () => {
-  const { farms, debts } = useSelector((state: AppState) => state)
+  const { debts } = useSelector((state: AppState) => state)
   const {
     wallet: { address: walletAddress },
   } = useWallet()
+  const farms = useSearchFarm()
   const [isStakedFarms, setIsStakedFarms] = useState<StakedFarms>()
 
   const listFarmAddress = useMemo(() => Object.keys(farms), [farms])

@@ -7,7 +7,6 @@ import { useFarmList } from 'app/hooks/useFarmList'
 
 const ListFarmings = () => {
   const farms = useFarmList()
-
   return (
     <Row gutter={[16, 16]}>
       {farms.map((farm) => (
