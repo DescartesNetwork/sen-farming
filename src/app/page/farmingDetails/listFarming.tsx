@@ -1,20 +1,19 @@
-import { useSelector } from 'react-redux'
 import LazyLoad from '@senswap/react-lazyload'
 
 import { Col, Row } from 'antd'
 import ItemFarming from './ItemFarming'
 
-import { AppState } from 'app/model'
+import { useFarmList } from 'app/hooks/useFarmList'
 
 const ListFarmings = () => {
-  const { farms } = useSelector((state: AppState) => state)
+  const farms = useFarmList()
 
   return (
     <Row gutter={[16, 16]}>
-      {Object.keys(farms).map((farmAddress, idx) => (
-        <Col span={24} key={idx}>
+      {farms.map((farm) => (
+        <Col span={24} key={farm.address}>
           <LazyLoad height={84}>
-            <ItemFarming farmAddress={farmAddress} />
+            <ItemFarming farmAddress={farm.address} />
           </LazyLoad>
         </Col>
       ))}

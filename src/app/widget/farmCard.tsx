@@ -10,11 +10,13 @@ import { useReward } from 'app/hooks/useReward'
 import { useDebt } from 'app/hooks/useDebt'
 import { utils } from '@senswap/sen-js'
 import { LPT_DECIMALS } from 'app/configs/farmstat.config'
+import { useFarmRoi } from 'app/hooks/useFarmRoi'
 
 const FarmCard = ({ farmAddress }: { farmAddress: string }) => {
   const reward = useReward(farmAddress)
   const farmData = useSelector((state: AppState) => state.farms[farmAddress])
   const { data } = useDebt(farmAddress)
+  const { apr } = useFarmRoi(farmAddress)
 
   let amountLptShared = '0'
   if (data) {
@@ -64,7 +66,9 @@ const FarmCard = ({ farmAddress }: { farmAddress: string }) => {
                 </Col>
                 <Col>
                   <Space>
-                    <Typography.Text>0 SEN</Typography.Text>
+                    <Typography.Text>
+                      {util.Numberic(apr).format('0,0.[00]%')}
+                    </Typography.Text>
                   </Space>
                 </Col>
               </Row>

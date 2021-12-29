@@ -12,6 +12,7 @@ import { notifyError, notifySuccess } from 'app/helper'
 import { useAccountStake } from 'app/hooks/useAccountStake'
 import configs from 'app/configs'
 import { LPT_DECIMALS } from 'app/configs/farmstat.config'
+import { HarvestValidator } from 'helpers/validateHarvest'
 
 const {
   sol: { senAddress, farming },
@@ -51,8 +52,8 @@ const Stake = ({
         await splt.initializeAccount(senAddress, walletAddress, wallet)
 
       // Validate farming seed balance
-      //   const harvestValidator = new HarvestValidator()
-      //   await harvestValidator.validate(farmAddress)
+      const harvestValidator = new HarvestValidator()
+      await harvestValidator.validate(farmAddress)
 
       const { txId } = await farming.stake(
         utils.decimalize(amount, LPT_DECIMALS),

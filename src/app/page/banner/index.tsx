@@ -2,10 +2,20 @@ import { Card, Col, Divider, Row, Space, Typography } from 'antd'
 import { useUI } from 'senhub/providers'
 import IonIcon from 'shared/antd/ionicon'
 
+import configs from 'app/configs'
+import useMintCgk from 'app/shared/hooks/useMintCgk'
+import { numeric } from 'shared/util'
+import { MintSymbol } from 'app/shared/components/mint'
+
+const {
+  sol: { senAddress },
+} = configs
+
 const Banner = () => {
   const {
     ui: { width },
   } = useUI()
+  const senCgk = useMintCgk(senAddress)
 
   const desktop = width > 768
   const xsSpan = !desktop ? 24 : undefined
@@ -60,11 +70,11 @@ const Banner = () => {
             <Col span={xsSpan}>
               <Space direction={spaceDirection} size={0} align="center">
                 <Typography.Title level={4} style={{ color: '#212433' }}>
-                  1 SEN
+                  1 <MintSymbol mintAddress={senAddress} />
                 </Typography.Title>
                 <IonIcon style={{ color: '#212433' }} name={iconName} />
                 <Typography.Title level={4} style={{ color: '#F9575E' }}>
-                  $1.8924
+                  ${numeric(senCgk.price).format('0,0.[00]')}
                 </Typography.Title>
               </Space>
             </Col>

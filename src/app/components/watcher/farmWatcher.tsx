@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { CSSProperties, useCallback, useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 
 import { Spin } from 'antd'
@@ -14,7 +14,13 @@ const {
 // Watch id
 let watchId = 0
 
-const FarmWatcher = ({ children }: { children: JSX.Element }) => {
+const FarmWatcher = ({
+  children,
+  style = {},
+}: {
+  children: JSX.Element
+  style?: CSSProperties
+}) => {
   const dispatch = useDispatch()
   const [isLoading, setIsLoading] = useState(false)
 
@@ -57,7 +63,7 @@ const FarmWatcher = ({ children }: { children: JSX.Element }) => {
   }, [fetchData, watchData])
 
   return (
-    <Spin spinning={isLoading} tip="Loading...">
+    <Spin spinning={isLoading} tip="Loading..." style={style}>
       {children}
     </Spin>
   )
