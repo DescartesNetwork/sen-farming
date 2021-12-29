@@ -3,28 +3,28 @@ import { useState } from 'react'
 import { Button, Card, Col, Row, Space, Typography } from 'antd'
 import { MintAvatar, MintSymbol } from 'app/shared/components/mint'
 import NumericInput from 'shared/antd/numericInput'
-import configs from 'app/configs'
-import { notifyError, notifySuccess } from 'app/helper'
 
 import { account, utils } from '@senswap/sen-js'
 import { useWallet } from 'senhub/providers'
-
-const FARM_DECIMAL = 9
+import { FARM_DECIMAL } from 'app/constants/farms'
+import configs from 'app/configs'
+import { notifyError, notifySuccess } from 'app/helper'
 
 const ConfirmAddFarm = ({
   mintAddress,
   onClose = () => {},
-  onSelectInput = () => {},
+  setVisibleInputTokenModal = () => {},
 }: {
   mintAddress: string
   onClose?: () => void
-  onSelectInput?: (visibled: boolean) => void
+  setVisibleInputTokenModal?: (visibled: boolean) => void
 }) => {
   const {
     sol: { senAddress, farming },
   } = configs
+
   const [value, setValue] = useState('')
-  const [day, setDay] = useState('')
+  const [duration, setDuration] = useState('')
   const [loading, setLoading] = useState(false)
   const {
     wallet: { address: walletAddress },
@@ -39,7 +39,8 @@ const ConfirmAddFarm = ({
     const { wallet } = window.sentre
     if (!wallet) return
     const reward = utils.decimalize(value, FARM_DECIMAL)
-    const period = utils.decimalize(day, FARM_DECIMAL)
+    const period = BigInt(Number(duration) * 86400)
+
     try {
       const { txId } = await farming.initializeFarm(
         reward,
@@ -58,7 +59,7 @@ const ConfirmAddFarm = ({
     }
   }
 
-  const disabled = !value || !day || !account.isAddress(mintAddress)
+  const disabled = !value || !duration || !account.isAddress(mintAddress)
 
   return (
     <Row gutter={[16, 16]}>
@@ -69,7 +70,7 @@ const ConfirmAddFarm = ({
               <Typography.Title type="secondary" level={5}>
                 Input token type
               </Typography.Title>
-              <Space onClick={() => onSelectInput(true)}>
+              <Space onClick={() => setVisibleInputTokenModal(true)}>
                 <MintAvatar mintAddress={mintAddress} />
                 <MintSymbol mintAddress={mintAddress} />
               </Space>
@@ -118,8 +119,8 @@ const ConfirmAddFarm = ({
             <NumericInput
               size="large"
               placeholder="0"
-              value={day}
-              onValue={setDay}
+              value={duration}
+              onValue={setDuration}
             />
           </Col>
         </Row>

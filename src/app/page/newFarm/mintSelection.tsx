@@ -1,21 +1,21 @@
-import LazyLoad from '@senswap/react-lazyload'
-
 import { Col, Row, Typography } from 'antd'
-
-import { useMintSelection } from 'app/hooks/useMintSelection'
+import LazyLoad from '@senswap/react-lazyload'
 import AccountCard from './accountCard'
 import SearchAccount from './searchAccount'
 
+import { useMintSelection } from 'app/hooks/useMintSelection'
+
 const MintSelection = ({
   onChange,
-  onHideInputModal = () => {},
+  onHideInputTokenModal = () => {},
 }: {
   onChange: (value: string) => void
-  onHideInputModal?: (visible: boolean) => void
+  onHideInputTokenModal?: (visible: boolean) => void
 }) => {
   const { searchedResult, accountAddresses, onSearch } = useMintSelection()
+
   const onClick = (mintAddress: string) => {
-    onHideInputModal(false)
+    onHideInputTokenModal(false)
     return onChange(mintAddress)
   }
 
