@@ -1,6 +1,9 @@
 import { Tabs } from 'antd'
 import NewFarm from '../newFarm'
 import ListFarmings from './listFarming'
+import SentreFarms from './sentreFarms'
+import StakedFarm from './stakedFarm'
+import YourFarms from './yourFamrs'
 
 const FarmingDetails = () => {
   return (
@@ -8,10 +11,15 @@ const FarmingDetails = () => {
       <Tabs.TabPane tab="All" key="all-farms">
         <ListFarmings />
       </Tabs.TabPane>
-      <Tabs.TabPane tab="Sen Farms" key="sen-farms"></Tabs.TabPane>
-      <Tabs.TabPane tab="Your Farms" key="your-farms"></Tabs.TabPane>
-      <Tabs.TabPane tab="Staked Farms" key="staked-farms"></Tabs.TabPane>
-      <Tabs.TabPane tab="Archived Farms" key="archived-farms"></Tabs.TabPane>
+      <Tabs.TabPane tab="Sen Farms" key="sen-farms">
+        <SentreFarms />
+      </Tabs.TabPane>
+      <Tabs.TabPane tab="Your Farms" key="your-farms">
+        <YourFarms />
+      </Tabs.TabPane>
+      <Tabs.TabPane tab="Staked Farms" key="staked-farms">
+        <StakedFarm />
+      </Tabs.TabPane>
     </Tabs>
   )
 }
