@@ -1,4 +1,6 @@
+import { useCallback, useMemo } from 'react'
 import { useSelector } from 'react-redux'
+import { useHistory, useLocation } from 'react-router-dom'
 
 import { Button, Card, Col, Divider, Row, Space, Typography } from 'antd'
 import { MintAvatar, MintSymbol } from 'app/shared/components/mint'
@@ -10,10 +12,8 @@ import { useDebt } from 'app/hooks/useDebt'
 import { utils } from '@senswap/sen-js'
 import { LPT_DECIMALS } from 'app/configs/farmstat.config'
 import { useFarmRoi } from 'app/hooks/useFarmRoi'
-import { useHistory, useLocation } from 'react-router-dom'
 import configs from 'app/configs'
 import { numeric } from 'shared/util'
-import { useCallback, useMemo } from 'react'
 
 const {
   manifest: { appId },
