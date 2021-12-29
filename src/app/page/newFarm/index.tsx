@@ -6,7 +6,7 @@ import IonIcon from 'shared/antd/ionicon'
 import StepAddFarm from './stepAddFarm'
 import ConfirmAddFarm from './confirmAddFarm'
 import MintSelection from './mintSelection'
-import { NewFarmStep } from 'app/constants/vars'
+import { NewFarmStep } from 'app/constants/farms'
 
 const NewFarm = ({ size = 'small' }: { size?: SizeType }) => {
   const [visible, setVisible] = useState(false)

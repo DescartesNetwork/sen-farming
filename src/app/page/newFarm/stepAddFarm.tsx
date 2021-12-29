@@ -2,7 +2,7 @@ import { ReactNode, useState } from 'react'
 
 import { Col, Row, Space, Typography, Checkbox, Button } from 'antd'
 import { CheckboxChangeEvent } from 'antd/lib/checkbox'
-import { NewFarmStep } from 'app/constants/vars'
+import { NewFarmStep } from 'app/constants/farms'
 
 const Step = ({
   title = '',

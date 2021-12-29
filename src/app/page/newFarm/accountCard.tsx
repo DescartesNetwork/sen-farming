@@ -1,5 +1,6 @@
 import { Button, Card, Col, Row, Space, Typography } from 'antd'
 import { MintAvatar } from 'app/shared/components/mint'
+import { useMemo } from 'react'
 import { useAccount } from 'senhub/providers'
 import IonIcon from 'shared/antd/ionicon'
 import { explorer, openNewTab } from 'shared/util'
@@ -16,7 +17,8 @@ const AccountCard = ({
       [accountAddress]: { mint: mintAddress },
     },
   } = useAccount()
-  const shortenAddress = () => {
+
+  const shortenAddress = useMemo(() => {
     const size = 4
     const prefix = accountAddress.substring(0, size)
     const suffix = accountAddress.substring(
@@ -24,7 +26,8 @@ const AccountCard = ({
       accountAddress.length,
     )
     return prefix + ' ... ' + suffix
-  }
+  }, [accountAddress])
+
   return (
     <Card
       onClick={() => onClick(mintAddress)}
@@ -41,7 +44,7 @@ const AccountCard = ({
                 <Typography.Text type="secondary" style={{ fontSize: 12 }}>
                   Account Address:
                 </Typography.Text>
-                <Typography.Text>{shortenAddress()}</Typography.Text>
+                <Typography.Text>{shortenAddress}</Typography.Text>
               </Space>
               <Button
                 type="text"
