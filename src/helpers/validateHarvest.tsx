@@ -13,10 +13,13 @@ export class HarvestValidator {
   private async checkSeedBalance(farmAddress: string) {
     const { splt, wallet } = window.sentre
     if (!wallet) throw new Error('Please connect wallet first!')
+
     const farmData = store.getState().farms[farmAddress]
+
     const walletAddress = await wallet.getAddress()
     if (!account.isAddress(walletAddress))
       throw new Error(FARMING_ERRORS.WALLET_ADDRESS_INVALID)
+
     const debtAddress = await farming.deriveDebtAddress(
       walletAddress,
       farmAddress,
