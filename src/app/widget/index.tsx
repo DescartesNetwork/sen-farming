@@ -1,10 +1,10 @@
 import { Fragment, useState } from 'react'
 
 import { Button, Tabs } from 'antd'
-
 import IonIcon from 'shared/antd/ionicon'
 import SearchBar from './searchBar'
-import Stacked from './stacked'
+import StakedFarms from './stakedFarms'
+import YourFarms from './yourFamrs'
 import FarmWatcher from 'app/components/watcher'
 
 const Widget = () => {
@@ -21,12 +21,12 @@ const Widget = () => {
 
       <SearchBar isHidden={toggle} />
       <FarmWatcher style={{ height: 336 }}>
-        <Tabs className={toggle ? '' : 'hidden-tab'} defaultActiveKey="1">
-          <Tabs.TabPane tab="Stacked farms" key="stacked-farm">
-            <Stacked />
+        <Tabs className={toggle ? '' : 'hidden-tab'}>
+          <Tabs.TabPane tab="Staked farms" key="staked-farm">
+            <StakedFarms />
           </Tabs.TabPane>
           <Tabs.TabPane tab="Your farms" key="your-farm">
-            Content of Tab Pane 2
+            <YourFarms />
           </Tabs.TabPane>
         </Tabs>
       </FarmWatcher>

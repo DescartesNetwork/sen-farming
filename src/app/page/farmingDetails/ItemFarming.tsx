@@ -1,6 +1,7 @@
-import { Fragment, useState } from 'react'
+import { Fragment, useEffect, useMemo, useState } from 'react'
 import { utils } from '@senswap/sen-js'
 import { useSelector } from 'react-redux'
+import { useLocation, useHistory } from 'react-router-dom'
 
 import {
   Button,
@@ -35,6 +36,7 @@ import { useFarmPool } from 'app/hooks/useFarmPool'
 
 const {
   sol: { senAddress, farming },
+  manifest: { appId },
 } = configs
 
 const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
@@ -50,13 +52,22 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
   const {
     wallet: { address: walletAddress },
   } = useWallet()
+  const locationSearch = useLocation().search
+  const history = useHistory()
   const [activeKey, setActiveKey] = useState<string>()
   const [visible, setVisible] = useState(false)
   const [loading, setLoading] = useState(false)
 
+  const query = useMemo(
+    () => new URLSearchParams(locationSearch),
+    [locationSearch],
+  )
+
   const onActive = () => {
-    if (!activeKey) return setActiveKey('extra-card-item')
-    return setActiveKey(undefined)
+    if (activeKey) return setActiveKey(undefined)
+    query.set('farmAddress', farmAddress)
+    history.push(`/app/${appId}?` + query.toString())
+    return setActiveKey(farmAddress)
   }
 
   const handleHarvest = async () => {
@@ -78,6 +89,12 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
       setLoading(false)
     }
   }
+
+  useEffect(() => {
+    const farmSelected = query.get('farmAddress')
+    if (!farmSelected || farmSelected !== farmAddress) return
+    setActiveKey(farmSelected)
+  }, [farmAddress, query])
 
   let amountLptShared = '0'
   if (data) {
@@ -163,11 +180,7 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
       <Row>
         <Col span={24}>
           <Collapse activeKey={activeKey} className="expand-card">
-            <Collapse.Panel
-              header={null}
-              key="extra-card-item"
-              showArrow={false}
-            >
+            <Collapse.Panel header={null} key={farmAddress} showArrow={false}>
               <Row gutter={[16, 16]}>
                 <Col xs={{ order: 2 }} md={{ order: 1 }} flex="auto">
                   {farmPool && (
