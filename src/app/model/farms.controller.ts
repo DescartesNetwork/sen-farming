@@ -17,23 +17,28 @@ const initialState: State = {}
  * Actions
  */
 
-export const getFarms = createAsyncThunk(`${NAME}/getFarms`, async () => {
-  // Get all farm
-  const value: Array<{ pubkey: PublicKey; account: AccountInfo<Buffer> }> =
-    await farming.connection.getProgramAccounts(farming.farmingProgramId, {
-      filters: [
-        { dataSize: 209 },
-        { memcmp: { bytes: senAddress, offset: 97 } },
-      ],
+export const getFarms = createAsyncThunk<State, void, { state: any }>(
+  `${NAME}/getFarms`,
+  async (_, { getState }) => {
+    const { farms } = getState()
+    if (Object.keys(farms).length) return farms
+    // Get all farm
+    const value: Array<{ pubkey: PublicKey; account: AccountInfo<Buffer> }> =
+      await farming.connection.getProgramAccounts(farming.farmingProgramId, {
+        filters: [
+          { dataSize: 209 },
+          { memcmp: { bytes: senAddress, offset: 97 } },
+        ],
+      })
+    let bulk: State = {}
+    value.forEach(({ pubkey, account: { data: buf } }) => {
+      const address = pubkey.toBase58()
+      const data = farming.parseFarmData(buf)
+      bulk[address] = data
     })
-  let bulk: State = {}
-  value.forEach(({ pubkey, account: { data: buf } }) => {
-    const address = pubkey.toBase58()
-    const data = farming.parseFarmData(buf)
-    bulk[address] = data
-  })
-  return bulk
-})
+    return bulk
+  },
+)
 
 export const getFarm = createAsyncThunk<
   State,
@@ -68,14 +73,19 @@ const slice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) =>
-    void builder.addCase(
-      getFarms.fulfilled,
-      (state, { payload }) => void Object.assign(state, payload),
-    ),
-  // .addCase(
-  //   upsetFarm.fulfilled,
-  //   (state, { payload }) => void Object.assign(state, payload),
-  // ),
+    void builder
+      .addCase(
+        getFarms.fulfilled,
+        (state, { payload }) => void Object.assign(state, payload),
+      )
+      .addCase(
+        getFarm.fulfilled,
+        (state, { payload }) => void Object.assign(state, payload),
+      )
+      .addCase(
+        upsetFarm.fulfilled,
+        (state, { payload }) => void Object.assign(state, payload),
+      ),
 })
 
 export default slice.reducer

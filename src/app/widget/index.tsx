@@ -20,7 +20,7 @@ const Widget = () => {
       />
 
       <SearchBar isHidden={toggle} />
-      <FarmWatcher>
+      <FarmWatcher style={{ height: 336 }}>
         <Tabs className={toggle ? '' : 'hidden-tab'} defaultActiveKey="1">
           <Tabs.TabPane tab="Stacked farms" key="stacked-farm">
             <Stacked />
