@@ -24,7 +24,7 @@ const FarmingDetails = () => {
   const {
     wallet: { address: walletAddress },
   } = useWallet()
-  const [tabActive, setTabActive] = useState('sentre-farm')
+  const [tabActive, setTabActive] = useState('sen-farms')
   const [isStakedFarms, setIsStakedFarms] = useState<StakedFarms>()
 
   const listFarmAddress = useMemo(() => Object.keys(farms), [farms])
@@ -60,6 +60,7 @@ const FarmingDetails = () => {
     const farmSelected = query.get('farmAddress')
     if (!farmSelected) return
     const farmOwner = farms[farmSelected]?.owner
+    if (!farmOwner) return
     if (farmOwner === walletAddress) return setTabActive('your-farms')
     if (isStakedFarms?.[farmSelected]) return setTabActive('staked-farms')
     if (senOwner.includes(farmOwner)) return setTabActive('sen-farms')
