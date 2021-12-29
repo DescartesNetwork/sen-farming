@@ -5,6 +5,15 @@ import { net } from 'shared/runtime'
 import { DataLoader } from './dataloader'
 
 /**
+ * Open newtab
+ * @param href - string
+ * @returns
+ */
+export const openNewTab = (href: string) => {
+  return window.open(href, '_blank')
+}
+
+/**
  * Delay by async/await
  * @param ms - milisenconds
  * @returns

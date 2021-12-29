@@ -1,19 +1,24 @@
-import LazyLoad from '@senswap/react-lazyload'
-
 import { Col, Row, Typography } from 'antd'
+import LazyLoad from '@senswap/react-lazyload'
 import AccountCard from './accountCard'
 import SearchAccount from './searchAccount'
 
+import { useMintSelection } from 'app/hooks/useMintSelection'
+
 const MintSelection = ({
   onChange,
-  onNext = () => {},
+  onHideInputTokenModal = () => {},
 }: {
   onChange: (value: string) => void
-  onNext?: (step: number) => void
+  onHideInputTokenModal?: (visible: boolean) => void
 }) => {
-  const onSearch = () => {
-    console.log('onsearch')
+  const { searchedResult, accountAddresses, onSearch } = useMintSelection()
+
+  const onClick = (mintAddress: string) => {
+    onHideInputTokenModal(false)
+    return onChange(mintAddress)
   }
+
   return (
     <Row gutter={[16, 16]} style={{ height: 400, overflow: 'auto' }}>
       <Col span={24}>
@@ -22,13 +27,10 @@ const MintSelection = ({
       <Col span={24}>
         <SearchAccount onChange={onSearch} />
       </Col>
-      {[1, 2, 3, 4].map((accountAddress, i) => (
+      {(searchedResult || accountAddresses).map((accountAddress, i) => (
         <Col span={24} key={accountAddress + i}>
           <LazyLoad height={84} overflow>
-            <AccountCard
-              accountAddress={'accountAddress'}
-              onClick={() => onNext(2)}
-            />
+            <AccountCard accountAddress={accountAddress} onClick={onClick} />
           </LazyLoad>
         </Col>
       ))}

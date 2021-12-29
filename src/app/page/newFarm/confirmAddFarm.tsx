@@ -4,17 +4,62 @@ import { Button, Card, Col, Row, Space, Typography } from 'antd'
 import { MintAvatar, MintSymbol } from 'app/shared/components/mint'
 import NumericInput from 'shared/antd/numericInput'
 
+import { account, utils } from '@senswap/sen-js'
+import { useWallet } from 'senhub/providers'
+import { FARM_DECIMAL } from 'app/constants/farms'
+import configs from 'app/configs'
+import { notifyError, notifySuccess } from 'app/helper'
+
 const ConfirmAddFarm = ({
   mintAddress,
   onClose = () => {},
-  onNext = () => {},
+  setVisibleInputTokenModal = () => {},
 }: {
   mintAddress: string
   onClose?: () => void
-  onNext?: (next: number) => void
+  setVisibleInputTokenModal?: (visibled: boolean) => void
 }) => {
+  const {
+    sol: { senAddress, farming },
+  } = configs
+
   const [value, setValue] = useState('')
+  const [duration, setDuration] = useState('')
   const [loading, setLoading] = useState(false)
+  const {
+    wallet: { address: walletAddress },
+  } = useWallet()
+
+  const newFarm = async () => {
+    if (!account.isAddress(mintAddress))
+      return notifyError({
+        message: `Invalid mint address: ${mintAddress}`,
+      })
+    setLoading(true)
+    const { wallet } = window.sentre
+    if (!wallet) return
+    const reward = utils.decimalize(value, FARM_DECIMAL)
+    const period = BigInt(Number(duration) * 86400)
+
+    try {
+      const { txId } = await farming.initializeFarm(
+        reward,
+        period,
+        walletAddress,
+        mintAddress,
+        senAddress,
+        wallet,
+      )
+      onClose()
+      return notifySuccess('Create a new farm', txId)
+    } catch (er: any) {
+      return notifyError({ message: er.message })
+    } finally {
+      return setLoading(false)
+    }
+  }
+
+  const disabled = !value || !duration || !account.isAddress(mintAddress)
 
   return (
     <Row gutter={[16, 16]}>
@@ -25,7 +70,7 @@ const ConfirmAddFarm = ({
               <Typography.Title type="secondary" level={5}>
                 Input token type
               </Typography.Title>
-              <Space onClick={() => onNext(3)}>
+              <Space onClick={() => setVisibleInputTokenModal(true)}>
                 <MintAvatar mintAddress={mintAddress} />
                 <MintSymbol mintAddress={mintAddress} />
               </Space>
@@ -35,43 +80,12 @@ const ConfirmAddFarm = ({
                 Output token type
               </Typography.Title>
               <Space>
-                <MintAvatar mintAddress={''} />
-                <MintSymbol mintAddress={''} />
+                <MintAvatar mintAddress={senAddress} />
+                <MintSymbol mintAddress={senAddress} />
               </Space>
             </Col>
           </Row>
         </Card>
-      </Col>
-      <Col span={24}>
-        <Row gutter={[0, 0]}>
-          <Col flex="auto">
-            <Typography.Text
-              type="secondary"
-              style={{ marginLeft: 12, fontSize: 12 }}
-            >
-              Budget
-            </Typography.Text>
-          </Col>
-          <Col>
-            <Space>
-              <Typography.Text type="secondary" className="caption">
-                Available:
-              </Typography.Text>
-              <Typography.Text type="secondary" className="caption">
-                1000 SNTR
-              </Typography.Text>
-            </Space>
-          </Col>
-          <Col span={24}>
-            <NumericInput
-              placeholder="0"
-              value={value}
-              onValue={setValue}
-              size="large"
-              prefix={<Typography.Text>SNTR</Typography.Text>}
-            />
-          </Col>
-        </Row>
       </Col>
       <Col span={24}>
         <Row gutter={[0, 0]}>
@@ -105,8 +119,8 @@ const ConfirmAddFarm = ({
             <NumericInput
               size="large"
               placeholder="0"
-              value={value}
-              onValue={setValue}
+              value={duration}
+              onValue={setDuration}
             />
           </Col>
         </Row>
@@ -114,8 +128,8 @@ const ConfirmAddFarm = ({
       <Col span={24}>
         <Button
           type="primary"
-          onClick={() => setLoading(false)}
-          disabled={!value}
+          onClick={newFarm}
+          disabled={disabled}
           block
           loading={loading}
         >
