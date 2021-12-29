@@ -4,32 +4,32 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
  * Interface & Utility
  */
 
-export type State = {
-  counter: number
+type State = {
+  run: boolean
+  step: number
 }
 
 /**
  * Store constructor
  */
 
-const NAME = 'main'
+const NAME = 'walkthrough'
 const initialState: State = {
-  counter: 0,
+  run: false,
+  step: 0,
 }
 
 /**
  * Actions
  */
 
-export const increaseCounter = createAsyncThunk<State, void, { state: any }>(
-  `${NAME}/increaseCounter`,
-  async (_, { getState }) => {
-    const {
-      main: { counter },
-    } = getState()
-    return { counter: counter + 1 }
-  },
-)
+export const setWalkthrough = createAsyncThunk<
+  Partial<State>,
+  Partial<State>,
+  { state: any }
+>(`${NAME}/setWalkthrough`, async (state) => {
+  return { ...state }
+})
 
 /**
  * Usual procedure
@@ -41,7 +41,7 @@ const slice = createSlice({
   reducers: {},
   extraReducers: (builder) =>
     void builder.addCase(
-      increaseCounter.fulfilled,
+      setWalkthrough.fulfilled,
       (state, { payload }) => void Object.assign(state, payload),
     ),
 })

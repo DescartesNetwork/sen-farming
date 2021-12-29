@@ -1,42 +1,48 @@
-import { useCallback } from 'react'
+import { Fragment, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
-import { Row, Col, Typography, Space, Button } from 'antd'
+import { Button, Tabs } from 'antd'
 import IonIcon from 'shared/antd/ionicon'
+import SearchBar from './searchBar'
+import StakedFarms from './stakedFarms'
+import YourFarms from './yourFamrs'
+import FarmWatcher from 'app/components/watcher'
 
 import { AppDispatch, AppState } from 'app/model'
-import { increaseCounter } from 'app/model/main.controller'
-import { env } from 'shared/runtime'
-import { useUI } from 'senhub/providers'
+import { setSearch } from 'app/model/main.controller'
 
 const Widget = () => {
-  const {
-    ui: { width, infix },
-  } = useUI()
+  const [isOpenSearch, setIsOpenSearch] = useState(false)
   const dispatch = useDispatch<AppDispatch>()
-  const { counter } = useSelector((state: AppState) => state.main)
-  const increase = useCallback(() => dispatch(increaseCounter()), [dispatch])
+  const { search } = useSelector((state: AppState) => state.main)
+
+  const onToggle = () => {
+    if (isOpenSearch) dispatch(setSearch({ search: '' }))
+    setIsOpenSearch(!isOpenSearch)
+  }
 
   return (
-    <Row gutter={[24, 24]}>
-      <Col span={24}>
-        <Space align="center">
-          <IonIcon name="apps-outline" />
-          <Typography.Title level={4}>Widget</Typography.Title>
-        </Space>
-      </Col>
-      <Col span={24}>
-        <Typography.Text>
-          Env: {env} - {width}px - {infix}
-        </Typography.Text>
-      </Col>
-      <Col>
-        <Typography.Text>Counter: {counter}</Typography.Text>
-      </Col>
-      <Col>
-        <Button onClick={increase}>Increase</Button>
-      </Col>
-    </Row>
+    <Fragment>
+      <Button
+        className="button-search"
+        type="text"
+        icon={
+          <IonIcon name={isOpenSearch ? 'close-outline' : 'search-outline'} />
+        }
+        onClick={onToggle}
+      />
+      <SearchBar isHidden={!search && !isOpenSearch} />
+      <FarmWatcher style={{ height: 336 }}>
+        <Tabs className={!isOpenSearch ? '' : 'hidden-tab'}>
+          <Tabs.TabPane tab="Staked farms" key="staked-farm">
+            <StakedFarms />
+          </Tabs.TabPane>
+          <Tabs.TabPane tab="Your farms" key="your-farm">
+            <YourFarms />
+          </Tabs.TabPane>
+        </Tabs>
+      </FarmWatcher>
+    </Fragment>
   )
 }
 
