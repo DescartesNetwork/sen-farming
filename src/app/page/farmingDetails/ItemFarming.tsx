@@ -40,7 +40,7 @@ const {
 } = configs
 
 const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
-  const farmData = useSelector((state: AppState) => state.farms[farmAddress])
+  const farmData = useSelector((state: AppState) => state.farms?.[farmAddress])
   const { data } = useDebt(farmAddress)
   const reward = useReward(farmAddress)
   const farmPool = useFarmPool(farmAddress)
