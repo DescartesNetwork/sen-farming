@@ -17,8 +17,6 @@ import Content from './content'
 import IonIcon from 'shared/antd/ionicon'
 import Unstake from './stakeAndUnstake/unstake'
 import Stake from './stakeAndUnstake/stake'
-
-import { MintAvatar, MintSymbol } from 'app/shared/components/mint'
 import Management from '../management'
 
 import { useDebt } from 'app/hooks/useDebt'
@@ -28,7 +26,15 @@ import { useFarmRoi } from 'app/hooks/useFarmRoi'
 import { AppState } from 'app/model'
 import util from 'helpers/util'
 import { LPT_DECIMALS } from 'app/configs/farmstat.config'
-import { useUI } from 'senhub/providers'
+import { useUI, useWallet } from 'senhub/providers'
+import configs from 'app/configs'
+import { HarvestValidator } from 'helpers/validateHarvest'
+import { notifyError, notifySuccess } from 'app/helper'
+import { MintAvatar, MintSymbol } from 'app/shared/components/mint'
+
+const {
+  sol: { senAddress, farming },
+} = configs
 
 const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
   const farmData = useSelector((state: AppState) => state.farms[farmAddress])
@@ -36,15 +42,39 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
   const reward = useReward(farmAddress)
   const liquidity = useFarmLiquidity(farmAddress)
   const { apr } = useFarmRoi(farmAddress)
-  const [activeKey, setActiveKey] = useState<string>()
-  const [visible, setVisible] = useState(false)
   const {
     ui: { width },
   } = useUI()
+  const {
+    wallet: { address: walletAddress },
+  } = useWallet()
+  const [activeKey, setActiveKey] = useState<string>()
+  const [visible, setVisible] = useState(false)
+  const [loading, setLoading] = useState(false)
 
   const onActive = () => {
     if (!activeKey) return setActiveKey('extra-card-item')
     return setActiveKey(undefined)
+  }
+
+  const handleHarvest = async () => {
+    setLoading(true)
+    const { splt, wallet } = window.sentre
+    const senWallet = await splt.deriveAssociatedAddress(
+      walletAddress,
+      senAddress,
+    )
+    try {
+      if (!wallet) throw new Error('please connect wallet first!')
+      const harvestValidator = new HarvestValidator()
+      await harvestValidator.validate(farmAddress)
+      const { txId } = await farming.harvest(farmAddress, senWallet, wallet)
+      return notifySuccess('Harvest', txId)
+    } catch (er) {
+      return notifyError(er)
+    } finally {
+      setLoading(false)
+    }
   }
 
   let amountLptShared = '0'
@@ -158,6 +188,9 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
                     <Button
                       type="primary"
                       icon={<IonIcon name="leaf-outline" />}
+                      loading={loading}
+                      onClick={handleHarvest}
+                      disabled={reward === 0}
                     >
                       Harvest
                     </Button>
