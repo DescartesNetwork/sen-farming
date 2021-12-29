@@ -31,6 +31,7 @@ import configs from 'app/configs'
 import { HarvestValidator } from 'helpers/validateHarvest'
 import { notifyError, notifySuccess } from 'app/helper'
 import { MintAvatar, MintSymbol } from 'app/shared/components/mint'
+import { useFarmPool } from 'app/hooks/useFarmPool'
 
 const {
   sol: { senAddress, farming },
@@ -40,6 +41,7 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
   const farmData = useSelector((state: AppState) => state.farms[farmAddress])
   const { data } = useDebt(farmAddress)
   const reward = useReward(farmAddress)
+  const farmPool = useFarmPool(farmAddress)
   const liquidity = useFarmLiquidity(farmAddress)
   const { apr } = useFarmRoi(farmAddress)
   const {
@@ -168,13 +170,15 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
             >
               <Row gutter={[16, 16]}>
                 <Col xs={{ order: 2 }} md={{ order: 1 }} flex="auto">
-                  <Button
-                    type="text"
-                    style={{ padding: 0, background: 'transparent' }}
-                  >
-                    Go pool
-                    <IonIcon name="chevron-forward-outline" />
-                  </Button>
+                  {farmPool && (
+                    <Button
+                      type="text"
+                      style={{ padding: 0, background: 'transparent' }}
+                    >
+                      Go pool
+                      <IonIcon name="chevron-forward-outline" />
+                    </Button>
+                  )}
                 </Col>
                 <Col xs={{ order: 1 }} md={{ order: 2 }}>
                   <Space>
