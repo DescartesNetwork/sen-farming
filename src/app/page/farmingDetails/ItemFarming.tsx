@@ -189,6 +189,11 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
                     <Button
                       type="text"
                       style={{ padding: 0, background: 'transparent' }}
+                      onClick={() => {
+                        history.push(
+                          `/app/sen_lp?poolAddress=${farmPool.address}`,
+                        )
+                      }}
                     >
                       Go pool
                       <IonIcon name="chevron-forward-outline" />
