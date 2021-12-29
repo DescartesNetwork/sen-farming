@@ -1,7 +1,8 @@
+import { useDispatch, useSelector } from 'react-redux'
+
 import { Button, Card, Input } from 'antd'
 import { AppDispatch, AppState } from 'app/model'
 import { setSearch } from 'app/model/main.controller'
-import { useDispatch, useSelector } from 'react-redux'
 import IonIcon from 'shared/antd/ionicon'
 
 const SearchBar = ({ isHidden }: { isHidden: boolean }) => {

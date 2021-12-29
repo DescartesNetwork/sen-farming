@@ -1,3 +1,4 @@
+import { useMemo } from 'react'
 import { useSelector } from 'react-redux'
 
 import { Card, Col, Divider, Row, Space, Typography } from 'antd'
@@ -9,7 +10,6 @@ import useMintCgk from 'app/shared/hooks/useMintCgk'
 import { numeric } from 'shared/util'
 import { MintSymbol } from 'app/shared/components/mint'
 import { AppState } from 'app/model'
-import { useMemo } from 'react'
 
 const {
   sol: { senAddress },

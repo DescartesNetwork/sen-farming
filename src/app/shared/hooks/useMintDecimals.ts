@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
+
 import { useMint } from 'senhub/providers'
 
 const useMintDecimals = (mintAddress: string): number => {

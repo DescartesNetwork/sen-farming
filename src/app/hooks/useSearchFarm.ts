@@ -1,7 +1,8 @@
-import { FarmData } from '@senswap/sen-js'
-import { AppState } from 'app/model'
 import { useCallback, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
+import { FarmData } from '@senswap/sen-js'
+
+import { AppState } from 'app/model'
 import { usePool, useMint } from 'senhub/providers'
 
 const KEY_SIZE = 3
