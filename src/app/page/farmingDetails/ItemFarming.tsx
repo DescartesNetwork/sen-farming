@@ -1,6 +1,7 @@
-import { Fragment, useEffect, useState } from 'react'
+import { Fragment, useEffect, useMemo, useState } from 'react'
 import { utils } from '@senswap/sen-js'
 import { useSelector } from 'react-redux'
+import { useLocation, useHistory } from 'react-router-dom'
 
 import {
   Button,
@@ -34,11 +35,11 @@ import { MintAvatar, MintSymbol } from 'app/shared/components/mint'
 
 const {
   sol: { senAddress, farming },
+  manifest: { appId },
 } = configs
 
 const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
   const farmData = useSelector((state: AppState) => state.farms[farmAddress])
-  const { farmSelected } = useSelector((state: AppState) => state.main)
   const { data } = useDebt(farmAddress)
   const reward = useReward(farmAddress)
   const liquidity = useFarmLiquidity(farmAddress)
@@ -49,12 +50,23 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
   const {
     wallet: { address: walletAddress },
   } = useWallet()
+  const locationSearch = useLocation().search
+  const history = useHistory()
   const [activeKey, setActiveKey] = useState<string>()
   const [visible, setVisible] = useState(false)
   const [loading, setLoading] = useState(false)
 
+  const query = useMemo(
+    () => new URLSearchParams(locationSearch),
+    [locationSearch],
+  )
+
   const onActive = () => {
-    if (!activeKey) return setActiveKey(farmAddress)
+    if (!activeKey) {
+      query.set('farmAddress', farmAddress)
+      history.push(`/app/${appId}?` + query.toString())
+      return setActiveKey(farmAddress)
+    }
     return setActiveKey(undefined)
   }
 
@@ -79,9 +91,10 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
   }
 
   useEffect(() => {
+    const farmSelected = query.get('farmAddress')
     if (!farmSelected || farmSelected !== farmAddress) return
     setActiveKey(farmSelected)
-  }, [farmAddress, farmSelected])
+  }, [farmAddress, query])
 
   let amountLptShared = '0'
   if (data) {

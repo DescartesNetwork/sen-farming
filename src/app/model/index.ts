@@ -3,7 +3,6 @@ import { devTools, bigintSerializationMiddleware } from 'shared/devTools'
 
 import farms from 'app/model/farms.controller'
 import debts from 'app/model/debts.controller'
-import main from 'app/model/main.controller'
 
 /**
  * Isolated store
@@ -15,7 +14,6 @@ const model = configureStore({
   reducer: {
     farms,
     debts,
-    main,
   },
 })
 
