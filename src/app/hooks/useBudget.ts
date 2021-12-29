@@ -10,9 +10,9 @@ export const useBudget = (
   farmAddress: string,
 ): { budget: number | string; symbol: string } => {
   const [budget, setBudget] = useState('0')
-  const farms = useSelector((state: AppState) => state.farms)
+  const farmData = useSelector((state: AppState) => state.farms?.[farmAddress])
   const { treasury_stake, treasury_reward, mint_reward, total_shares } =
-    farms[farmAddress] || {}
+    farmData || {}
   const decimal = useMintDecimals(mint_reward)
   const { symbol } = useMintCgk(mint_reward)
 
