@@ -2,6 +2,7 @@ import { ReactNode, useState } from 'react'
 
 import { Col, Row, Space, Typography, Checkbox, Button } from 'antd'
 import { CheckboxChangeEvent } from 'antd/lib/checkbox'
+import { NewFarmStep } from 'app/constants/vars'
 
 const Step = ({
   title = '',
@@ -44,9 +45,9 @@ const Description = () => {
 }
 
 const StepAddFarm = ({
-  onNext = () => {},
+  setFarmCreatingStep = () => {},
 }: {
-  onNext?: (next: number) => void
+  setFarmCreatingStep?: (farmStep: NewFarmStep) => void
 }) => {
   const [stepOne, setStepOne] = useState(false)
   const [stepTwo, setStepTwo] = useState(false)
@@ -94,7 +95,7 @@ const StepAddFarm = ({
           <Col>
             <Button
               type="primary"
-              onClick={() => onNext(2)}
+              onClick={() => setFarmCreatingStep('FARM_CREATING_CONFIRMATION')}
               disabled={disabled}
             >
               Next

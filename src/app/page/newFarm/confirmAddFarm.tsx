@@ -4,7 +4,7 @@ import { Button, Card, Col, Row, Space, Typography } from 'antd'
 import { MintAvatar, MintSymbol } from 'app/shared/components/mint'
 import NumericInput from 'shared/antd/numericInput'
 import configs from 'app/configs'
-import { notifyError, notifySuccess, notifyWarning } from 'app/helper'
+import { notifyError, notifySuccess } from 'app/helper'
 
 import { account, utils } from '@senswap/sen-js'
 import { useWallet } from 'senhub/providers'
@@ -14,12 +14,10 @@ const FARM_DECIMAL = 9
 const ConfirmAddFarm = ({
   mintAddress,
   onClose = () => {},
-  onNext = () => {},
   onSelectInput = () => {},
 }: {
   mintAddress: string
   onClose?: () => void
-  onNext?: (next: number) => void
   onSelectInput?: (visibled: boolean) => void
 }) => {
   const {
@@ -33,8 +31,6 @@ const ConfirmAddFarm = ({
   } = useWallet()
 
   const newFarm = async () => {
-    if (!value)
-      return notifyWarning('Please input the amount of reward per day')
     if (!account.isAddress(mintAddress))
       return notifyError({
         message: `Invalid mint address: ${mintAddress}`,
@@ -82,7 +78,7 @@ const ConfirmAddFarm = ({
               <Typography.Title type="secondary" level={5}>
                 Output token type
               </Typography.Title>
-              <Space onClick={() => onNext(3)}>
+              <Space>
                 <MintAvatar mintAddress={senAddress} />
                 <MintSymbol mintAddress={senAddress} />
               </Space>

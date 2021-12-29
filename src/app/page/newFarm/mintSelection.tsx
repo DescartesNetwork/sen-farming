@@ -8,14 +8,14 @@ import SearchAccount from './searchAccount'
 
 const MintSelection = ({
   onChange,
-  onNext = () => {},
+  onHideInputModal = () => {},
 }: {
   onChange: (value: string) => void
-  onNext?: (visible: boolean) => void
+  onHideInputModal?: (visible: boolean) => void
 }) => {
   const { searchedResult, accountAddresses, onSearch } = useMintSelection()
   const onClick = (mintAddress: string) => {
-    onNext(false)
+    onHideInputModal(false)
     return onChange(mintAddress)
   }
 

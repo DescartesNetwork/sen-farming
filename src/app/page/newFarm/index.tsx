@@ -6,16 +6,18 @@ import IonIcon from 'shared/antd/ionicon'
 import StepAddFarm from './stepAddFarm'
 import ConfirmAddFarm from './confirmAddFarm'
 import MintSelection from './mintSelection'
+import { NewFarmStep } from 'app/constants/vars'
 
 const NewFarm = ({ size = 'small' }: { size?: SizeType }) => {
   const [visible, setVisible] = useState(false)
-  const [stepNewFarm, setStepNewFarm] = useState(1)
+  const [stepNewFarm, setStepNewFarm] =
+    useState<NewFarmStep>('POLICY_AGREEMENT')
   const [mintAddress, setMintAddress] = useState('')
   const [visibleInputModal, setVisibleInputModal] = useState(false)
 
   const onClose = () => {
     setVisible(false)
-    setStepNewFarm(1)
+    setStepNewFarm('POLICY_AGREEMENT')
     setMintAddress('')
   }
 
@@ -32,12 +34,13 @@ const NewFarm = ({ size = 'small' }: { size?: SizeType }) => {
         footer={false}
         closeIcon={<IonIcon name="close-outline" />}
       >
-        {stepNewFarm === 1 && <StepAddFarm onNext={setStepNewFarm} />}
-        {stepNewFarm === 2 && (
+        {stepNewFarm === 'POLICY_AGREEMENT' && (
+          <StepAddFarm setFarmCreatingStep={setStepNewFarm} />
+        )}
+        {stepNewFarm === 'FARM_CREATING_CONFIRMATION' && (
           <ConfirmAddFarm
             mintAddress={mintAddress}
             onClose={onClose}
-            onNext={setStepNewFarm}
             onSelectInput={setVisibleInputModal}
           />
         )}
@@ -52,7 +55,7 @@ const NewFarm = ({ size = 'small' }: { size?: SizeType }) => {
           onChange={(value: string) => {
             setMintAddress(value)
           }}
-          onNext={setVisibleInputModal}
+          onHideInputModal={setVisibleInputModal}
         />
       </Modal>
     </Row>
