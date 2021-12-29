@@ -64,6 +64,9 @@ const ConfirmAddFarm = ({
   return (
     <Row gutter={[16, 16]}>
       <Col span={24}>
+        <Typography.Title level={4}>New farm</Typography.Title>
+      </Col>
+      <Col span={24}>
         <Card bodyStyle={{ padding: 16 }} bordered={false}>
           <Row gutter={[16, 16]}>
             <Col span={12}>
