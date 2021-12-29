@@ -17,11 +17,7 @@ const SearchAccount = ({
   }, [keyword, onChange])
 
   return (
-    <Card
-      style={{ boxShadow: 'unset', borderRadius: 8, background: '#fff' }}
-      bodyStyle={{ padding: 6 }}
-      bordered={false}
-    >
+    <Card className="account-card" bodyStyle={{ padding: 6 }} bordered={false}>
       <Input
         placeholder="Search"
         value={keyword}

@@ -50,6 +50,7 @@ const Management = ({ farmAddress }: { farmAddress: string }) => {
   const [visible, setVisible] = useState(false)
   const [visibleTooltip, setVisibleTooltip] = useState(false)
   const { budget, symbol } = useBudget(farmAddress)
+  console.log(budget)
   const { mint_stake: mintFarmAddress, period, reward } = farmData || {}
   const farmDecimal = useMintDecimals(mintFarmAddress)
 
@@ -73,8 +74,8 @@ const Management = ({ farmAddress }: { farmAddress: string }) => {
         onCancel={() => setVisible(false)}
         closeIcon={<IonIcon name="close" />}
         footer={null}
-        destroyOnClose={true}
-        centered={true}
+        destroyOnClose
+        centered
       >
         <Row gutter={[16, 16]}>
           <Col span={24}>

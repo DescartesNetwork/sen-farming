@@ -29,7 +29,7 @@ const MintSelection = ({
       </Col>
       {(searchedResult || accountAddresses).map((accountAddress, i) => (
         <Col span={24} key={accountAddress + i}>
-          <LazyLoad height={84} overflow>
+          <LazyLoad height={72} overflow>
             <AccountCard accountAddress={accountAddress} onClick={onClick} />
           </LazyLoad>
         </Col>

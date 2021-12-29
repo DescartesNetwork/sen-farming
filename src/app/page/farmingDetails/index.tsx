@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { useLocation } from 'react-router-dom'
+import { forceCheck } from '@senswap/react-lazyload'
 
 import { Tabs } from 'antd'
 import NewFarm from './newFarm'
@@ -52,10 +53,17 @@ const FarmingDetails = () => {
     })()
   }, [debts, farms, query, walletAddress])
 
+  const onChange = (key: string) => {
+    setTimeout(() => {
+      forceCheck()
+    }, 500)
+    setTabActive(key)
+  }
+
   return (
     <Tabs
       activeKey={tabActive}
-      onChange={setTabActive}
+      onChange={onChange}
       tabBarExtraContent={<NewFarm />}
     >
       <Tabs.TabPane tab="Sen Farms" key="sen-farms">
