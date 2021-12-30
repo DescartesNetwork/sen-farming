@@ -64,6 +64,14 @@ export const upsetFarm = createAsyncThunk<
   return { [address]: data }
 })
 
+export const deleteFarm = createAsyncThunk(
+  `${NAME}/deleteFarm`,
+  async ({ farmAddress }: { farmAddress: string }) => {
+    if (!account.isAddress(farmAddress)) throw new Error('Invalid address')
+    return { farmAddress }
+  },
+)
+
 /**
  * Usual procedure
  */
@@ -85,6 +93,10 @@ const slice = createSlice({
       .addCase(
         upsetFarm.fulfilled,
         (state, { payload }) => void Object.assign(state, payload),
+      )
+      .addCase(
+        deleteFarm.fulfilled,
+        (state, { payload }) => void delete state[payload.farmAddress],
       ),
 })
 
