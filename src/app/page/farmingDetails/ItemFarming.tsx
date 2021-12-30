@@ -24,6 +24,7 @@ import { notifyError, notifySuccess } from 'app/helper'
 import { MintAvatar, MintSymbol } from 'app/shared/components/mint'
 import configs from 'app/configs'
 import { useFarmPool } from 'app/hooks/useFarmPool'
+import Exit from './stakeAndUnstake/exit'
 
 const {
   sol: { senAddress, farming },
@@ -228,6 +229,9 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
           </Tabs.TabPane>
           <Tabs.TabPane tab="Unstake" key="unstake">
             <Unstake farmAddress={farmAddress} onClose={setVisible} />
+          </Tabs.TabPane>
+          <Tabs.TabPane tab="Exit" key="exit">
+            <Exit farmAddress={farmAddress} onClose={setVisible} />
           </Tabs.TabPane>
         </Tabs>
       </Modal>
