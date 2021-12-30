@@ -35,7 +35,6 @@ const Banner = () => {
     let count = 0
     for (const addr in farms) {
       if (farms[addr].total_shares) {
-        console.log('addr', addr)
         count++
       }
     }

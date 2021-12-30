@@ -50,7 +50,6 @@ const Management = ({ farmAddress }: { farmAddress: string }) => {
   const [visible, setVisible] = useState(false)
   const [visibleTooltip, setVisibleTooltip] = useState(false)
   const { budget, symbol } = useBudget(farmAddress)
-  console.log(budget)
   const { mint_stake: mintFarmAddress, period, reward } = farmData || {}
   const farmDecimal = useMintDecimals(mintFarmAddress)
 
