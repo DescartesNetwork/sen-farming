@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useSelector } from 'react-redux'
 import LazyLoad from '@senswap/react-lazyload'
 
-import { Col, Row } from 'antd'
+import { Col, Empty, Row } from 'antd'
 import ItemFarming from './ItemFarming'
 
 import { AppState } from 'app/model'
@@ -22,7 +22,7 @@ const StakedFarm = () => {
   const {
     wallet: { address: walletAddress },
   } = useWallet()
-  const [isStakedFarms, setIsStakedFarms] = useState<StakedFarms>()
+  const [isStakedFarms, setIsStakedFarms] = useState<StakedFarms>({})
 
   const listFarmAddress = useMemo(() => Object.keys(farms), [farms])
 
@@ -46,6 +46,8 @@ const StakedFarm = () => {
   useEffect(() => {
     getStakedFarms()
   }, [getStakedFarms])
+
+  if (Object.keys(isStakedFarms).length === 0) return <Empty />
 
   return (
     <Row gutter={[16, 16]}>

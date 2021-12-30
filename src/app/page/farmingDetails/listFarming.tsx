@@ -1,12 +1,13 @@
 import LazyLoad from '@senswap/react-lazyload'
 
-import { Col, Row } from 'antd'
+import { Col, Empty, Row } from 'antd'
 import ItemFarming from './ItemFarming'
 
 import { useFarmList } from 'app/hooks/useFarmList'
 
 const ListFarmings = () => {
   const farms = useFarmList()
+  if (farms.length === 0) return <Empty />
 
   return (
     <Row gutter={[16, 16]}>

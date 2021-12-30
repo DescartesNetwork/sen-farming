@@ -31,6 +31,7 @@ const FarmInfor = ({ farmAddress }: { farmAddress: string }) => {
       setMintSymbol(symbol || DEFAULT_TOKEN_SYMBOL)
     })()
   }, [mint_reward, tokenProvider])
+
   const poolAddress = Object.keys(pools).find((poolAddress) => {
     const { mint_lpt } = pools[poolAddress]
     return mint_lpt === mint_stake
