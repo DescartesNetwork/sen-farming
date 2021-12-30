@@ -54,6 +54,11 @@ const FreezeOrThaw = ({
     }
   }
 
+  const isFreeze = state === 1
+  const btnStyle = isFreeze ? { backgroundColor: '#40A9FF', color: '#fff' } : {}
+  const iconName = isFreeze ? 'snow-outline' : 'sunny-outline'
+  const btnName = isFreeze ? 'Freeze' : 'Thaw'
+
   return (
     <Row gutter={[16, 16]}>
       <Col span={24}>
@@ -73,15 +78,14 @@ const FreezeOrThaw = ({
       <Col span={24}>
         <Button
           type="primary"
-          icon={
-            <IonIcon name={state === 1 ? 'snow-outline' : 'sunny-outline'} />
-          }
-          onClick={state === 1 ? freeze : thaw}
+          style={{ ...btnStyle, border: 'unset' }}
+          icon={<IonIcon name={iconName} />}
+          onClick={isFreeze ? freeze : thaw}
           block
           disabled={!state}
           loading={loading}
         >
-          {state === 1 ? 'Freeze' : 'Thaw'}
+          {btnName}
         </Button>
       </Col>
     </Row>
