@@ -47,7 +47,7 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
   const history = useHistory()
   const [activeKey, setActiveKey] = useState<string>()
   const [visible, setVisible] = useState(false)
-  const [visibleInfo, setVisibleInfo] = useState<boolean>(false)
+  const [visibleInfo, setVisibleInfo] = useState(false)
   const [loading, setLoading] = useState(false)
   const { owner } = farmData || {}
   const isOwner = owner === walletAddress
