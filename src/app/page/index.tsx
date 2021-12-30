@@ -37,7 +37,7 @@ const Page = () => {
                     dispatch(setSearch({ search: e.target.value }))
                   }
                   prefix={
-                    !search ? (
+                    search ? (
                       <Button
                         type="text"
                         style={{
