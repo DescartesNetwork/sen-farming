@@ -232,8 +232,8 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
         closeIcon={<IonIcon name="close" />}
         title="Farm Info"
         footer={null}
-        destroyOnClose={true}
-        centered={true}
+        destroyOnClose
+        centered
       >
         <FarmInfo farmAddress={farmAddress} />
       </Modal>
