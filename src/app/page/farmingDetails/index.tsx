@@ -51,6 +51,8 @@ const FarmingDetails = () => {
       if (farmOwner === walletAddress) setTabActive('your-farms')
       if (debtData?.shares > BigInt(0)) setTabActive('staked-farms')
       if (senOwner.includes(farmOwner)) setTabActive('sen-farms')
+
+      /** just run only one time, avoid case select many times tab */
       return setFirstLoading(false)
     })()
   }, [debts, farms, firstLoading, query, walletAddress])
