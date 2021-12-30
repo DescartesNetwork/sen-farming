@@ -1,7 +1,7 @@
 import LazyLoad from '@senswap/react-lazyload'
 import { useSelector } from 'react-redux'
 
-import { Col, Row } from 'antd'
+import { Col, Empty, Row } from 'antd'
 import ItemFarming from './ItemFarming'
 
 import { useSearchFarm } from 'app/hooks/useSearchFarm'
@@ -11,6 +11,7 @@ const ListFarmings = () => {
   const allFarms = useSelector((state: AppState) => state.farms)
   const farms = useSearchFarm(allFarms)
 
+  if (!Object.keys(farms).length) return <Empty />
   return (
     <Row gutter={[16, 16]}>
       {Object.keys(farms).map((address) => (

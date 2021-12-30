@@ -1,6 +1,6 @@
 import LazyLoad from '@senswap/react-lazyload'
 
-import { Col, Row } from 'antd'
+import { Col, Empty, Row } from 'antd'
 import FarmCard from '../farmCard'
 
 import { useSearchFarm } from 'app/hooks/useSearchFarm'
@@ -9,6 +9,8 @@ import { useYourFarms } from 'app/hooks/listFarm/useYourFarms'
 const YourFarms = () => {
   const { yourFarms } = useYourFarms()
   const farms = useSearchFarm(yourFarms)
+
+  if (sortedFarm.length === 0) return <Empty />
 
   return (
     <Row gutter={[16, 16]}>

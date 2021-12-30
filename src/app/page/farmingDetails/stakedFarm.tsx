@@ -1,6 +1,6 @@
 import LazyLoad from '@senswap/react-lazyload'
 
-import { Col, Row } from 'antd'
+import { Col, Empty, Row } from 'antd'
 import ItemFarming from './ItemFarming'
 
 import { useSearchFarm } from 'app/hooks/useSearchFarm'
@@ -14,6 +14,7 @@ const StakedFarm = () => {
   const { stakedFarms } = useStakedFarms()
   const farms = useSearchFarm(stakedFarms)
 
+  if (Object.keys(farms).length === 0) return <Empty />
   return (
     <Row gutter={[16, 16]}>
       {Object.keys(farms).map((farmAddress) => {

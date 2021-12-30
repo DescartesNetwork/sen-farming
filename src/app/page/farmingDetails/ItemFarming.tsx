@@ -3,21 +3,12 @@ import { utils } from '@senswap/sen-js'
 import { useSelector } from 'react-redux'
 import { useLocation, useHistory } from 'react-router-dom'
 
-import {
-  Button,
-  Card,
-  Col,
-  Collapse,
-  Modal,
-  Row,
-  Space,
-  Tabs,
-  Tooltip,
-} from 'antd'
+import { Button, Card, Col, Collapse, Modal, Row, Space, Tabs } from 'antd'
 import Content from './content'
 import IonIcon from 'shared/antd/ionicon'
 import Unstake from './stakeAndUnstake/unstake'
 import Stake from './stakeAndUnstake/stake'
+import FarmInfo from './farmInfo'
 import Management from './management'
 
 import { numeric } from 'shared/util'
@@ -56,6 +47,7 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
   const history = useHistory()
   const [activeKey, setActiveKey] = useState<string>()
   const [visible, setVisible] = useState(false)
+  const [visibleInfo, setVisibleInfo] = useState(false)
   const [loading, setLoading] = useState(false)
   const { owner } = farmData || {}
   const isOwner = owner === walletAddress
@@ -132,14 +124,13 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
                 <Space>
                   <MintAvatar mintAddress={farmData.mint_stake} size={24} />
                   <MintSymbol mintAddress={farmAddress} />
-                  <Tooltip title={farmAddress}>
-                    <Button
-                      type="text"
-                      shape="circle"
-                      size="small"
-                      icon={<IonIcon name="alert-circle-outline" />}
-                    />
-                  </Tooltip>
+                  <Button
+                    type="text"
+                    shape="circle"
+                    size="small"
+                    icon={<IonIcon name="alert-circle-outline" />}
+                    onClick={() => setVisibleInfo(true)}
+                  />
                 </Space>
               </Col>
               <Col xs={12} md={4}>
@@ -239,6 +230,17 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
             <Unstake farmAddress={farmAddress} onClose={setVisible} />
           </Tabs.TabPane>
         </Tabs>
+      </Modal>
+      <Modal
+        visible={visibleInfo}
+        onCancel={() => setVisibleInfo(false)}
+        closeIcon={<IonIcon name="close" />}
+        title="Farm Info"
+        footer={null}
+        destroyOnClose
+        centered
+      >
+        <FarmInfo farmAddress={farmAddress} />
       </Modal>
     </Fragment>
   )
