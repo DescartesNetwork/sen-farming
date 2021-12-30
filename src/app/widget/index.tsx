@@ -1,4 +1,4 @@
-import { Fragment, useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { forceCheck } from '@senswap/react-lazyload'
 
@@ -21,6 +21,10 @@ const Widget = () => {
     if (isOpenSearch) dispatch(setSearch({ search: '' }))
     setIsOpenSearch(!isOpenSearch)
   }
+
+  useEffect(() => {
+    if (search) setIsOpenSearch(true)
+  }, [search])
 
   return (
     <Fragment>
