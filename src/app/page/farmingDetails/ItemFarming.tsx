@@ -10,6 +10,7 @@ import Unstake from './stakeAndUnstake/unstake'
 import Stake from './stakeAndUnstake/stake'
 import FarmInfo from './farmInfo'
 import Management from './management'
+import Exit from './stakeAndUnstake/exit'
 
 import { numeric } from 'shared/util'
 import { useUI, useWallet } from 'senhub/providers'
@@ -228,6 +229,9 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
           </Tabs.TabPane>
           <Tabs.TabPane tab="Unstake" key="unstake">
             <Unstake farmAddress={farmAddress} onClose={setVisible} />
+          </Tabs.TabPane>
+          <Tabs.TabPane tab="Exit" key="exit">
+            <Exit farmAddress={farmAddress} onClose={setVisible} />
           </Tabs.TabPane>
         </Tabs>
       </Modal>
