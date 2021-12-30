@@ -43,7 +43,7 @@ const Widget = () => {
           onChange={() =>
             setTimeout(() => {
               forceCheck()
-            }, 500)
+            }, 300)
           }
         >
           <Tabs.TabPane tab="Staked farms" key="staked-farm">

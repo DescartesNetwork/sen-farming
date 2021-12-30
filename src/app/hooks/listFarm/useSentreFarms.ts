@@ -13,19 +13,29 @@ export const useSentreFarms = () => {
   const farms = useSelector((state: AppState) => state.farms)
   const [sentreFarms, setSentreFarms] = useState<State>({})
 
-  const filterSentreFarms = useCallback((farms: State) => {
-    const newSentreFarm: State = {}
-    for (const addr in farms) {
-      const farm = farms[addr]
-      if (!senOwner.includes(farm.owner)) continue
-      newSentreFarm[addr] = farm
-    }
-    setSentreFarms(newSentreFarm)
-  }, [])
+  const checkSentreFarm = useCallback(
+    (farmAddress: string) => {
+      const farm = farms[farmAddress]
+      return senOwner.includes(farm.owner)
+    },
+    [farms],
+  )
+
+  const filterSentreFarms = useCallback(
+    (farms: State) => {
+      const newSentreFarm: State = {}
+      for (const addr in farms) {
+        if (!checkSentreFarm(addr)) continue
+        newSentreFarm[addr] = farms[addr]
+      }
+      setSentreFarms(newSentreFarm)
+    },
+    [checkSentreFarm],
+  )
 
   useEffect(() => {
     filterSentreFarms(farms)
   }, [farms, filterSentreFarms])
 
-  return { sentreFarms, filterSentreFarms }
+  return { sentreFarms, filterSentreFarms, checkSentreFarm }
 }

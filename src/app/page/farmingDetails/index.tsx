@@ -60,7 +60,7 @@ const FarmingDetails = () => {
   const onChange = (key: string) => {
     setTimeout(() => {
       forceCheck()
-    }, 500)
+    }, 300)
     setTabActive(key)
   }
 

@@ -12,22 +12,30 @@ export const useYourFarms = () => {
   const farms = useSelector((state: AppState) => state.farms)
   const [yourFarms, setYourFarms] = useState<State>({})
 
+  const checkYourFarm = useCallback(
+    (address: string) => {
+      const farm = farms[address]
+      return farm.owner === walletAddress
+    },
+    [farms, walletAddress],
+  )
+
   const filterYourFarms = useCallback(
     (farms: State) => {
       const newSentreFarm: State = {}
       for (const addr in farms) {
-        const farm = farms[addr]
-        if (farm.owner !== walletAddress) continue
-        newSentreFarm[addr] = farm
+        const isYourFarm = checkYourFarm(addr)
+        if (!isYourFarm) continue
+        newSentreFarm[addr] = farms[addr]
       }
       setYourFarms(newSentreFarm)
     },
-    [walletAddress],
+    [checkYourFarm],
   )
 
   useEffect(() => {
     filterYourFarms(farms)
   }, [farms, filterYourFarms])
 
-  return { yourFarms, filterSentreFarms: filterYourFarms }
+  return { yourFarms, filterYourFarms, checkYourFarm }
 }
