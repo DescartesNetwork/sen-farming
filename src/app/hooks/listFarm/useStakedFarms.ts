@@ -17,27 +17,34 @@ export const useStakedFarms = () => {
   const { farms, debts } = useSelector((state: AppState) => state)
   const [stakedFarms, setStakedFarms] = useState<State>({})
 
+  const checkStakedFarm = useCallback(
+    async (farmAddress: string) => {
+      const debtAddress = await farming.deriveDebtAddress(
+        walletAddress,
+        farmAddress,
+      )
+      const debtData = debts[debtAddress]
+      return debtData?.shares > BigInt(0)
+    },
+    [debts, walletAddress],
+  )
+
   const filterStakedFarms = useCallback(
     async (farms: State) => {
       const newSentreFarm: State = {}
       for (const farmAddress in farms) {
-        const farm = farms[farmAddress]
-        const debtAddress = await farming.deriveDebtAddress(
-          walletAddress,
-          farmAddress,
-        )
-        const debtData = debts[debtAddress]
-        if (!debtData?.shares) continue
-        newSentreFarm[farmAddress] = farm
+        const staked = await checkStakedFarm(farmAddress)
+        if (!staked) continue
+        newSentreFarm[farmAddress] = farms[farmAddress]
       }
       setStakedFarms(newSentreFarm)
     },
-    [debts, walletAddress],
+    [checkStakedFarm],
   )
 
   useEffect(() => {
     filterStakedFarms(farms)
   }, [farms, filterStakedFarms])
 
-  return { stakedFarms, filterStakedFarms }
+  return { stakedFarms, filterStakedFarms, checkStakedFarm }
 }

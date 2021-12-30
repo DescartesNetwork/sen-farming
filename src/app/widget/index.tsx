@@ -1,4 +1,4 @@
-import { Fragment, useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { forceCheck } from '@senswap/react-lazyload'
 
@@ -22,6 +22,10 @@ const Widget = () => {
     setIsOpenSearch(!isOpenSearch)
   }
 
+  useEffect(() => {
+    if (search) setIsOpenSearch(true)
+  }, [search])
+
   return (
     <Fragment>
       <Button
@@ -39,7 +43,7 @@ const Widget = () => {
           onChange={() =>
             setTimeout(() => {
               forceCheck()
-            }, 500)
+            }, 300)
           }
         >
           <Tabs.TabPane tab="Staked farms" key="staked-farm">
