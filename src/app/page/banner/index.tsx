@@ -1,3 +1,4 @@
+import { useMemo } from 'react'
 import { useSelector } from 'react-redux'
 
 import { Card, Col, Divider, Row, Space, Typography } from 'antd'
@@ -9,7 +10,7 @@ import useMintCgk from 'app/shared/hooks/useMintCgk'
 import { numeric } from 'shared/util'
 import { MintSymbol } from 'app/shared/components/mint'
 import { AppState } from 'app/model'
-import { useMemo } from 'react'
+import { useListFarmTvl } from 'app/hooks/listFarm/useListFarmTvl'
 
 const {
   sol: { senAddress },
@@ -21,6 +22,7 @@ const Banner = () => {
   } = useUI()
   const farms = useSelector((state: AppState) => state.farms)
   const senCgk = useMintCgk(senAddress)
+  const tvl = useListFarmTvl()
 
   const desktop = width > 768
   const xsSpan = !desktop ? 24 : undefined
@@ -51,13 +53,13 @@ const Banner = () => {
         <Col span={24}>
           <Row gutter={[12, 12]}>
             {/* coming soon */}
-            {/* <Col span={xsSpan}>
+            <Col span={xsSpan}>
               <Space direction="vertical" size={spaceSize}>
                 <Typography.Text style={{ color: '#212433' }}>
                   Total TVL all Farms
                 </Typography.Text>
                 <Typography.Title level={2} style={{ color: '#F9575E' }}>
-                  $2,096,977,588
+                  ${numeric(tvl).format('0,0.[00]')}
                 </Typography.Title>
               </Space>
             </Col>
@@ -65,7 +67,7 @@ const Banner = () => {
               <Col>
                 <Divider type="vertical" style={{ height: '100%' }} />
               </Col>
-            )} */}
+            )}
             <Col span={xsSpan}>
               <Space direction="vertical" size={spaceSize}>
                 <Typography.Text style={{ color: '#212433' }}>

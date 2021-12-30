@@ -1,15 +1,14 @@
 import { useMemo } from 'react'
-import { useSelector } from 'react-redux'
 import LazyLoad from '@senswap/react-lazyload'
 
 import { Col, Empty, Row } from 'antd'
 import FarmCard from '../farmCard'
 
-import { AppState } from 'app/model'
 import { useWallet } from 'senhub/providers'
+import { useSearchFarm } from 'app/hooks/useSearchFarm'
 
 const YourFarms = () => {
-  const { farms } = useSelector((state: AppState) => state)
+  const farms = useSearchFarm()
   const {
     wallet: { address: walletAddress },
   } = useWallet()

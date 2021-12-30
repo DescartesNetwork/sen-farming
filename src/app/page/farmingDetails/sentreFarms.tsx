@@ -1,19 +1,18 @@
 import { useMemo } from 'react'
-import { useSelector } from 'react-redux'
 import LazyLoad from '@senswap/react-lazyload'
 
 import { Col, Empty, Row } from 'antd'
 import ItemFarming from './ItemFarming'
 
-import { AppState } from 'app/model'
 import configs from 'app/configs'
+import { useSearchFarm } from 'app/hooks/useSearchFarm'
 
 const {
   sol: { senOwner },
 } = configs
 
 const SentreFarms = () => {
-  const { farms } = useSelector((state: AppState) => state)
+  const farms = useSearchFarm()
 
   const listFarmAddress = useMemo(() => Object.keys(farms), [farms])
 

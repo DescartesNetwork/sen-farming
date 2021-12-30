@@ -33,7 +33,7 @@ const AccountCard = ({
   return (
     <Card
       onClick={() => onClick(mintAddress)}
-      style={{ boxShadow: 'unset', borderRadius: 8, background: '#fff' }}
+      className="account-card"
       bodyStyle={{ padding: 12 }}
       bordered={false}
     >

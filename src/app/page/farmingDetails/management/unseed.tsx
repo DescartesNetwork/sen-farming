@@ -38,10 +38,11 @@ const Unseed = ({
 
   useEffect(() => {
     ;(async () => {
+      if (decimal === 0) return
       try {
         const { splt } = window.sentre
         const { amount } = await splt.getAccountData(treasury_reward)
-        if (!amount || decimal === 0) return setBalance('0')
+        if (!amount) return setBalance('0')
         return setBalance(utils.undecimalize(amount, decimal))
       } catch (er) {
         setBalance('0')

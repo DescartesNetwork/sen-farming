@@ -1,6 +1,7 @@
-import { AppState } from 'app/model'
 import { useCallback, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
+
+import { AppState } from 'app/model'
 import { useMintUsd } from './useMintUsd'
 
 export const useFarmLiquidity = (farmAddress: string) => {

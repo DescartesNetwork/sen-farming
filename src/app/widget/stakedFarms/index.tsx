@@ -9,13 +9,15 @@ import { AppState } from 'app/model'
 import { useWallet } from 'senhub/providers'
 import { StakedFarms } from 'app/page/farmingDetails/stakedFarm'
 import configs from 'app/configs'
+import { useSearchFarm } from 'app/hooks/useSearchFarm'
 
 const {
   sol: { farming },
 } = configs
 
 const Staked = () => {
-  const { farms, debts } = useSelector((state: AppState) => state)
+  const { debts } = useSelector((state: AppState) => state)
+  const farms = useSearchFarm()
   const {
     wallet: { address: walletAddress },
   } = useWallet()

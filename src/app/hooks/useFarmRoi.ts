@@ -1,7 +1,8 @@
-import { useFarmLiquidity } from 'app/hooks/useFarmLiquidity'
-import { AppState } from 'app/model'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useSelector } from 'react-redux'
+
+import { useFarmLiquidity } from 'app/hooks/useFarmLiquidity'
+import { AppState } from 'app/model'
 import { useMintUsd } from './useMintUsd'
 
 export const useFarmRoi = (farmAddress: string) => {

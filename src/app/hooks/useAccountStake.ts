@@ -1,5 +1,5 @@
-import { useSelector } from 'react-redux'
 import { useCallback, useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
 import isEqual from 'react-fast-compare'
 import { AccountData } from '@senswap/sen-js'
 

@@ -1,6 +1,6 @@
-import { useSelector } from 'react-redux'
 import { useCallback, useEffect, useState } from 'react'
 import { FarmData } from '@senswap/sen-js'
+import { useSelector } from 'react-redux'
 
 import { AppState } from 'app/model'
 
@@ -11,7 +11,6 @@ export const useFarmList = (): { address: string; data: FarmData }[] => {
   >([])
 
   const getFarmList = useCallback(() => {
-    if (farmList.length) return
     let newFarmList = []
     for (const address in farms) {
       newFarmList.push({ address, data: farms[address] })
@@ -21,7 +20,7 @@ export const useFarmList = (): { address: string; data: FarmData }[] => {
       a.data.total_shares < b.data.total_shares ? 1 : -1,
     )
     setFarmList(newFarmList)
-  }, [farmList.length, farms])
+  }, [farms])
 
   useEffect(() => {
     getFarmList()

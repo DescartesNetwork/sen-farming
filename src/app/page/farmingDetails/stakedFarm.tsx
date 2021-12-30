@@ -18,7 +18,7 @@ export type StakedFarms = {
 }
 
 const StakedFarm = () => {
-  const { farms, debts } = useSelector((state: AppState) => state)
+  const { debts, farms } = useSelector((state: AppState) => state)
   const {
     wallet: { address: walletAddress },
   } = useWallet()
