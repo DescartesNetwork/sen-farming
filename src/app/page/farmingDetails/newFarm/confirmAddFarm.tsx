@@ -70,24 +70,31 @@ const ConfirmAddFarm = ({
         <Card bodyStyle={{ padding: 16 }} bordered={false}>
           <Row gutter={[16, 16]}>
             <Col span={12}>
-              <Typography.Title type="secondary" level={5}>
-                Input token type
-              </Typography.Title>
-              <Space
-                style={{ cursor: 'pointer' }}
-                onClick={() => setVisibleInputTokenModal(true)}
-              >
-                <MintAvatar mintAddress={mintAddress} />
-                <MintSymbol mintAddress={mintAddress} />
+              <Space direction="vertical">
+                <Typography.Text type="secondary">Input</Typography.Text>
+                <Space
+                  size={12}
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => setVisibleInputTokenModal(true)}
+                >
+                  <MintAvatar mintAddress={mintAddress} />
+                  {account.isAddress(mintAddress) ? (
+                    <MintSymbol mintAddress={mintAddress} />
+                  ) : (
+                    <Typography.Text type="secondary">
+                      Select token type
+                    </Typography.Text>
+                  )}
+                </Space>
               </Space>
             </Col>
             <Col span={12}>
-              <Typography.Title type="secondary" level={5}>
-                Output token type
-              </Typography.Title>
-              <Space>
-                <MintAvatar mintAddress={senAddress} />
-                <MintSymbol mintAddress={senAddress} />
+              <Space direction="vertical">
+                <Typography.Text type="secondary">Output</Typography.Text>
+                <Space size={12} style={{ cursor: 'pointer' }}>
+                  <MintAvatar mintAddress={senAddress} />
+                  <MintSymbol mintAddress={senAddress} />
+                </Space>
               </Space>
             </Col>
           </Row>

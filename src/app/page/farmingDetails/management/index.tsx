@@ -114,7 +114,7 @@ const Management = ({ farmAddress }: { farmAddress: string }) => {
                               type="text"
                               size="small"
                               onClick={onCopy}
-                              icon={<IonIcon name="copy" />}
+                              icon={<IonIcon name="copy-outline" />}
                             />
                           </CopyToClipboard>
                         </Tooltip>
@@ -124,7 +124,7 @@ const Management = ({ farmAddress }: { farmAddress: string }) => {
                           onClick={() =>
                             window.open(explorer(farmAddress), '_blank')
                           }
-                          icon={<IonIcon name="open" />}
+                          icon={<IonIcon name="open-outline" />}
                         />
                       </Space>
                     </Col>
