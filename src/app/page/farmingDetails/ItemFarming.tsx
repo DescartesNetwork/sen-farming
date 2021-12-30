@@ -1,7 +1,7 @@
-import { Fragment, useEffect, useMemo, useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 import { utils } from '@senswap/sen-js'
 import { useSelector } from 'react-redux'
-import { useLocation, useHistory } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 
 import { Button, Card, Col, Collapse, Modal, Row, Space, Tabs } from 'antd'
 import Content from './content'
@@ -28,7 +28,6 @@ import { useFarmPool } from 'app/hooks/useFarmPool'
 
 const {
   sol: { senAddress, farming },
-  manifest: { appId },
 } = configs
 
 const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
@@ -44,7 +43,6 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
   const {
     wallet: { address: walletAddress },
   } = useWallet()
-  const locationSearch = useLocation().search
   const history = useHistory()
   const [activeKey, setActiveKey] = useState<string>()
   const [visible, setVisible] = useState(false)
@@ -52,16 +50,10 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
   const [loading, setLoading] = useState(false)
   const { owner } = farmData || {}
   const isOwner = owner === walletAddress
-
-  const query = useMemo(
-    () => new URLSearchParams(locationSearch),
-    [locationSearch],
-  )
+  const farmSelected = useSelector((state: AppState) => state.main.search)
 
   const onActive = () => {
     if (activeKey) return setActiveKey(undefined)
-    query.set('farmAddress', farmAddress)
-    history.push(`/app/${appId}?` + query.toString())
     return setActiveKey(farmAddress)
   }
 
@@ -86,14 +78,13 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
   }
 
   useEffect(() => {
-    const farmSelected = query.get('farmAddress')
     if (!farmSelected || farmSelected !== farmAddress) return
     setActiveKey(farmSelected)
-  }, [farmAddress, query])
+  }, [farmAddress, farmSelected])
 
   let amountLptShared = '0'
   if (data) {
-    amountLptShared = utils.undecimalize(data.shares, LPT_DECIMALS)
+    amountLptShared = utils.undecimalize(data?.shares, LPT_DECIMALS)
   }
   const desktop = width > 768
   const icoDesktopCollapse = activeKey
@@ -123,7 +114,7 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
             <Row gutter={[16, 16]} align="middle">
               <Col xs={24} md={5}>
                 <Space>
-                  <MintAvatar mintAddress={farmData.mint_stake} size={24} />
+                  <MintAvatar mintAddress={farmData?.mint_stake} size={24} />
                   <MintSymbol mintAddress={farmAddress} />
                   <Button
                     type="text"
@@ -155,7 +146,7 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
               </Col>
               <Col xs={12} md={5}>
                 <Content
-                  mintAddress={farmData.mint_reward}
+                  mintAddress={farmData?.mint_reward}
                   label="Reward"
                   value={numeric(reward).format('0,0.00[00]')}
                 />
@@ -183,7 +174,7 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
                       style={{ padding: 0, background: 'transparent' }}
                       onClick={() => {
                         history.push(
-                          `/app/sen_lp?poolAddress=${farmPool.address}`,
+                          `/app/sen_lp?poolAddress=${farmPool?.address}`,
                         )
                       }}
                     >
@@ -195,11 +186,8 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
                 <Col xs={{ order: 1 }} md={{ order: 2 }}>
                   <Space>
                     {isOwner && <Management farmAddress={farmAddress} />}
-                    <Button
-                      onClick={() => setVisible(true)}
-                      icon={<IonIcon name="add-outline" />}
-                    >
-                      Stake
+                    <Button onClick={() => setVisible(true)}>
+                      Stake / Unstake
                     </Button>
                     <Button
                       type="primary"
@@ -219,6 +207,7 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
       </Row>
       <Modal
         onCancel={() => setVisible(false)}
+        closeIcon={<IonIcon name="close" />}
         footer={null}
         title={null}
         visible={visible}

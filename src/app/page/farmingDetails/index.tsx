@@ -1,7 +1,7 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
-import { useLocation } from 'react-router-dom'
 import { forceCheck } from '@senswap/react-lazyload'
+import { account } from '@senswap/sen-js'
 
 import { Tabs } from 'antd'
 import NewFarm from './newFarm'
@@ -11,56 +11,42 @@ import StakedFarm from './stakedFarm'
 import YourFarms from './yourFamrs'
 
 import { AppState } from 'app/model'
-import configs from 'app/configs'
-import { useWallet } from 'senhub/providers'
-
-const {
-  sol: { senOwner, farming },
-} = configs
+import { useStakedFarms } from 'app/hooks/listFarm/useStakedFarms'
+import { useYourFarms } from 'app/hooks/listFarm/useYourFarms'
+import { useSentreFarms } from 'app/hooks/listFarm/useSentreFarms'
 
 const FarmingDetails = () => {
-  const { farms, debts } = useSelector((state: AppState) => state)
-  const locationSearch = useLocation().search
-  const {
-    wallet: { address: walletAddress },
-  } = useWallet()
+  const farmSelected = useSelector((state: AppState) => state.main.search)
+  const { checkStakedFarm } = useStakedFarms()
+  const { checkYourFarm } = useYourFarms()
+  const { checkSentreFarm } = useSentreFarms()
+
   const [tabActive, setTabActive] = useState('sen-farms')
   const [isLoaded, setIsLoaded] = useState(false)
-
-  const query = useMemo(
-    () => new URLSearchParams(locationSearch),
-    [locationSearch],
-  )
 
   // check tab activeKey with farmSelected
   useEffect(() => {
     ;(async () => {
-      const farmSelected = query.get('farmAddress')
       /** isLoaded: just run only one time, avoid case select many times tab */
-      if (!farmSelected || isLoaded) return
+      if (!account.isAddress(farmSelected) || isLoaded) return
 
-      const farmOwner = farms[farmSelected]?.owner
-      const debtAddress = await farming.deriveDebtAddress(
-        walletAddress,
-        farmSelected,
-      )
-      if (!farmOwner || !debtAddress) return
+      const stakedFarm = await checkStakedFarm(farmSelected)
+      const yourFarm = checkYourFarm(farmSelected)
+      const sentreFarm = checkSentreFarm(farmSelected)
 
-      const debtData = debts[debtAddress]
-
-      setTabActive('all-farms')
-      if (farmOwner === walletAddress) setTabActive('your-farms')
-      if (debtData?.shares > BigInt(0)) setTabActive('staked-farms')
-      if (senOwner.includes(farmOwner)) setTabActive('sen-farms')
+      setTabActive('community-farms')
+      if (stakedFarm) setTabActive('staked-farms')
+      if (sentreFarm) setTabActive('sen-farms')
+      if (yourFarm) setTabActive('your-farms')
 
       return setIsLoaded(true)
     })()
-  }, [debts, farms, isLoaded, query, walletAddress])
+  }, [checkSentreFarm, checkStakedFarm, checkYourFarm, farmSelected, isLoaded])
 
   const onChange = (key: string) => {
     setTimeout(() => {
       forceCheck()
-    }, 300)
+    }, 500)
     setTabActive(key)
   }
 
@@ -79,7 +65,7 @@ const FarmingDetails = () => {
       <Tabs.TabPane tab="Your Farms" key="your-farms">
         <YourFarms />
       </Tabs.TabPane>
-      <Tabs.TabPane tab="All" key="all-farms">
+      <Tabs.TabPane tab="Community Farns" key="community-farms">
         <ListFarmings />
       </Tabs.TabPane>
     </Tabs>

@@ -1,19 +1,20 @@
-import { useCallback, useMemo } from 'react'
-import { useSelector } from 'react-redux'
-import { useHistory, useLocation } from 'react-router-dom'
+import { useCallback } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { useHistory } from 'react-router-dom'
 import { utils } from '@senswap/sen-js'
 
 import { Button, Card, Col, Divider, Row, Space, Typography } from 'antd'
 import { MintAvatar, MintSymbol } from 'app/shared/components/mint'
 import IonIcon from 'shared/antd/ionicon'
 
-import { AppState } from 'app/model'
+import { AppDispatch, AppState } from 'app/model'
 import { useReward } from 'app/hooks/useReward'
 import { useDebt } from 'app/hooks/useDebt'
 import { LPT_DECIMALS } from 'app/configs/farmstat.config'
 import { useFarmRoi } from 'app/hooks/useFarmRoi'
 import configs from 'app/configs'
 import { numeric } from 'shared/util'
+import { setSearch } from 'app/model/main.controller'
 
 const {
   manifest: { appId },
@@ -23,19 +24,14 @@ const FarmCard = ({ farmAddress }: { farmAddress: string }) => {
   const reward = useReward(farmAddress)
   const farmData = useSelector((state: AppState) => state.farms[farmAddress])
   const history = useHistory()
-  const locationSearch = useLocation().search
   const { data } = useDebt(farmAddress)
   const { apr } = useFarmRoi(farmAddress)
-
-  const query = useMemo(
-    () => new URLSearchParams(locationSearch),
-    [locationSearch],
-  )
+  const dispatch = useDispatch<AppDispatch>()
 
   const handleDetail = useCallback(() => {
-    query.set('farmAddress', farmAddress)
-    history.push(`/app/${appId}?` + query.toString())
-  }, [farmAddress, history, query])
+    history.push(`/app/${appId}`)
+    dispatch(setSearch({ search: farmAddress }))
+  }, [dispatch, farmAddress, history])
 
   let amountLptShared = '0'
   if (data) {
