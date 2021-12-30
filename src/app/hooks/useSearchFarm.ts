@@ -24,16 +24,16 @@ export const useSearchFarm = () => {
       const { mint_stake } = farm
       let check = false
 
-      // check farm address
+      // farm address
       if (addr === keyword) check = true
-      // check token
+      // token
       const mintStakeInfo = await tokenProvider.findByAddress(mint_stake)
       if (mintStakeInfo) {
-        // check token symbol
+        // token symbol
         const tokenName = mintStakeInfo.symbol + mintStakeInfo.name
         if (tokenName.toLowerCase().includes(keyword.toLowerCase()))
           check = true
-        // check token address
+        // token address
         if (mintStakeInfo.address === keyword) check = true
       }
       if (check) newFarmFilter[addr] = farm

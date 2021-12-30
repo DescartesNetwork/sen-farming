@@ -1,10 +1,11 @@
 import { useCallback, useEffect, useState } from 'react'
 import { FarmData } from '@senswap/sen-js'
+import { useSelector } from 'react-redux'
 
-import { useSearchFarm } from './useSearchFarm'
+import { AppState } from 'app/model'
 
 export const useFarmList = (): { address: string; data: FarmData }[] => {
-  const farms = useSearchFarm()
+  const farms = useSelector((state: AppState) => state.farms)
   const [farmList, setFarmList] = useState<
     { address: string; data: FarmData }[]
   >([])

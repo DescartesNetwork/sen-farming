@@ -33,6 +33,7 @@ export const useMintUsd = () => {
       )
       if (!poolData) return 0
       const { reserve_a, reserve_b, mint_a, mint_b } = poolData
+      if (reserve_a * reserve_b === BigInt(0)) return 0
       const {
         [lptAddress]: { supply },
       } = await getMint({ address: lptAddress })
