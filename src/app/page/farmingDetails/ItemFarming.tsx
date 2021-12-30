@@ -8,7 +8,7 @@ import Content from './content'
 import IonIcon from 'shared/antd/ionicon'
 import Unstake from './stakeAndUnstake/unstake'
 import Stake from './stakeAndUnstake/stake'
-import FarmInfor from './farmInfor'
+import FarmInfo from './farmInfo'
 import Management from './management'
 
 import { numeric } from 'shared/util'
@@ -47,7 +47,7 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
   const history = useHistory()
   const [activeKey, setActiveKey] = useState<string>()
   const [visible, setVisible] = useState(false)
-  const [visibleInfor, setVisibleInfor] = useState<boolean>(false)
+  const [visibleInfo, setVisibleInfo] = useState<boolean>(false)
   const [loading, setLoading] = useState(false)
   const { owner } = farmData || {}
   const isOwner = owner === walletAddress
@@ -129,7 +129,7 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
                     shape="circle"
                     size="small"
                     icon={<IonIcon name="alert-circle-outline" />}
-                    onClick={() => setVisibleInfor(true)}
+                    onClick={() => setVisibleInfo(true)}
                   />
                 </Space>
               </Col>
@@ -227,15 +227,15 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
         </Tabs>
       </Modal>
       <Modal
-        visible={visibleInfor}
-        onCancel={() => setVisibleInfor(false)}
+        visible={visibleInfo}
+        onCancel={() => setVisibleInfo(false)}
         closeIcon={<IonIcon name="close" />}
         title="Farm Info"
         footer={null}
         destroyOnClose={true}
         centered={true}
       >
-        <FarmInfor farmAddress={farmAddress} />
+        <FarmInfo farmAddress={farmAddress} />
       </Modal>
     </Fragment>
   )

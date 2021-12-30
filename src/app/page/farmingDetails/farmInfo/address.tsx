@@ -45,7 +45,6 @@ const Address = ({
               size="small"
               style={{ marginRight: -7 }}
               icon={<IonIcon name="copy-outline" />}
-              disabled={!address}
             />
           </CopyToClipboard>
         </Tooltip>

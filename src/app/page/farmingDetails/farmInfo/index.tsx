@@ -14,7 +14,7 @@ import { useBudget } from 'app/hooks/useBudget'
 
 const DEFAULT_TOKEN_SYMBOL = 'TOKEN'
 
-const FarmInfor = ({ farmAddress }: { farmAddress: string }) => {
+const FarmInfo = ({ farmAddress }: { farmAddress: string }) => {
   const { tokenProvider } = useMint()
   const { pools } = usePool()
   const { budget } = useBudget(farmAddress)
@@ -91,4 +91,4 @@ const FarmInfor = ({ farmAddress }: { farmAddress: string }) => {
   )
 }
 
-export default FarmInfor
+export default FarmInfo
