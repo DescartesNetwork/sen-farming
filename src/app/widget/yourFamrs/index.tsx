@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import LazyLoad from '@senswap/react-lazyload'
 
-import { Col, Row } from 'antd'
+import { Col, Empty, Row } from 'antd'
 import FarmCard from '../farmCard'
 
 import { useWallet } from 'senhub/providers'
@@ -27,6 +27,8 @@ const YourFarms = () => {
     })
     return listFarms
   }, [farms, filterFarm])
+
+  if (sortedFarm.length === 0) return <Empty />
 
   return (
     <Row gutter={[16, 16]}>

@@ -2,13 +2,12 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useSelector } from 'react-redux'
 import LazyLoad from '@senswap/react-lazyload'
 
-import { Col, Row } from 'antd'
+import { Col, Empty, Row } from 'antd'
 import ItemFarming from './ItemFarming'
 
 import { AppState } from 'app/model'
 import { useWallet } from 'senhub/providers'
 import configs from 'app/configs'
-import { useSearchFarm } from 'app/hooks/useSearchFarm'
 
 const {
   sol: { farming },
@@ -19,12 +18,11 @@ export type StakedFarms = {
 }
 
 const StakedFarm = () => {
-  const { debts } = useSelector((state: AppState) => state)
+  const { debts, farms } = useSelector((state: AppState) => state)
   const {
     wallet: { address: walletAddress },
   } = useWallet()
-  const farms = useSearchFarm()
-  const [isStakedFarms, setIsStakedFarms] = useState<StakedFarms>()
+  const [isStakedFarms, setIsStakedFarms] = useState<StakedFarms>({})
 
   const listFarmAddress = useMemo(() => Object.keys(farms), [farms])
 
@@ -48,6 +46,8 @@ const StakedFarm = () => {
   useEffect(() => {
     getStakedFarms()
   }, [getStakedFarms])
+
+  if (Object.keys(isStakedFarms).length === 0) return <Empty />
 
   return (
     <Row gutter={[16, 16]}>

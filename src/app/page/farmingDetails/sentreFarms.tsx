@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import LazyLoad from '@senswap/react-lazyload'
 
-import { Col, Row } from 'antd'
+import { Col, Empty, Row } from 'antd'
 import ItemFarming from './ItemFarming'
 
 import configs from 'app/configs'
@@ -30,6 +30,8 @@ const SentreFarms = () => {
     })
     return listFarms
   }, [farms, filterFarm])
+
+  if (sortedFarm.length === 0) return <Empty />
 
   return (
     <Row gutter={[16, 16]}>
