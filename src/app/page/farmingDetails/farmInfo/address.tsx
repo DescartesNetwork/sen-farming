@@ -1,4 +1,5 @@
 import { CopyToClipboard } from 'react-copy-to-clipboard'
+import { account } from '@senswap/sen-js'
 
 import { Row, Col, Typography, Tooltip, Button } from 'antd'
 import Title from './title'
@@ -35,7 +36,9 @@ const Address = ({
         lg={{ span: 14 }}
         flex="auto"
       >
-        {address ? <Typography.Text>{address}</Typography.Text> : null}
+        {account.isAddress(address) && (
+          <Typography.Text>{address}</Typography.Text>
+        )}
       </Col>
       <Col>
         <Tooltip title="Copied" visible={address === copieAddress}>
