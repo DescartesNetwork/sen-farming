@@ -25,7 +25,7 @@ const FarmingDetails = () => {
     wallet: { address: walletAddress },
   } = useWallet()
   const [tabActive, setTabActive] = useState('sen-farms')
-  const [firstLoading, setFirstLoading] = useState(true)
+  const [isLoaded, setIsLoaded] = useState(false)
 
   const query = useMemo(
     () => new URLSearchParams(locationSearch),
@@ -36,7 +36,8 @@ const FarmingDetails = () => {
   useEffect(() => {
     ;(async () => {
       const farmSelected = query.get('farmAddress')
-      if (!farmSelected || !firstLoading) return
+      /** isLoaded: just run only one time, avoid case select many times tab */
+      if (!farmSelected || isLoaded) return
 
       const farmOwner = farms[farmSelected]?.owner
       const debtAddress = await farming.deriveDebtAddress(
@@ -52,10 +53,9 @@ const FarmingDetails = () => {
       if (debtData?.shares > BigInt(0)) setTabActive('staked-farms')
       if (senOwner.includes(farmOwner)) setTabActive('sen-farms')
 
-      /** just run only one time, avoid case select many times tab */
-      return setFirstLoading(false)
+      return setIsLoaded(true)
     })()
-  }, [debts, farms, firstLoading, query, walletAddress])
+  }, [debts, farms, isLoaded, query, walletAddress])
 
   const onChange = (key: string) => {
     setTimeout(() => {
