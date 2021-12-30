@@ -10,8 +10,7 @@ const YourFarms = () => {
   const { yourFarms } = useYourFarms()
   const farms = useSearchFarm(yourFarms)
 
-  if (sortedFarm.length === 0) return <Empty />
-
+  if (!Object.keys(farms).length) return <Empty />
   return (
     <Row gutter={[16, 16]}>
       {Object.keys(farms).map((farmAddress) => {
