@@ -10,6 +10,7 @@ import Unstake from './stakeAndUnstake/unstake'
 import Stake from './stakeAndUnstake/stake'
 import FarmInfo from './farmInfo'
 import Management from './management'
+import Exit from './stakeAndUnstake/exit'
 
 import { numeric } from 'shared/util'
 import { useUI, useWallet } from 'senhub/providers'
@@ -24,7 +25,6 @@ import { notifyError, notifySuccess } from 'app/helper'
 import { MintAvatar, MintSymbol } from 'app/shared/components/mint'
 import configs from 'app/configs'
 import { useFarmPool } from 'app/hooks/useFarmPool'
-import Exit from './stakeAndUnstake/exit'
 
 const {
   sol: { senAddress, farming },
