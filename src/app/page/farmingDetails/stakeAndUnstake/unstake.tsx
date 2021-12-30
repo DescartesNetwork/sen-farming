@@ -1,5 +1,6 @@
 import { useCallback, useState } from 'react'
 import { utils } from '@senswap/sen-js'
+import { useSelector } from 'react-redux'
 
 import { Button, Card, Col, Row, Space, Typography } from 'antd'
 import IonIcon from 'shared/antd/ionicon'
@@ -11,8 +12,9 @@ import { numeric } from 'shared/util'
 import { notifyError, notifySuccess } from 'app/helper'
 import { useAccountStake } from 'app/hooks/useAccountStake'
 import configs from 'app/configs'
-import { LPT_DECIMALS } from 'app/configs/farmstat.config'
 import { HarvestValidator } from 'helpers/validateHarvest'
+import useMintDecimals from 'app/shared/hooks/useMintDecimals'
+import { AppState } from 'app/model'
 
 const {
   sol: { senAddress, farming },
@@ -25,6 +27,7 @@ const Unstake = ({
   farmAddress: string
   onClose: (visible: boolean) => void
 }) => {
+  const farmData = useSelector((state: AppState) => state.farms?.[farmAddress])
   const {
     wallet: { address: walletAddress },
   } = useWallet()
@@ -33,6 +36,7 @@ const Unstake = ({
   const [amount, setAmount] = useState()
   const [disable, setDisable] = useState(true)
   const [isLoading, setIsLoading] = useState(false)
+  const lptDecimal = useMintDecimals(farmData.mint_stake)
 
   const handleUnstake = async () => {
     setIsLoading(true)
@@ -40,7 +44,7 @@ const Unstake = ({
       const { splt, wallet } = window.sentre
       if (!wallet) throw Error('Please connect wallet first')
       if (!amount || !accountStake) return
-      const ammount = utils.decimalize(amount, LPT_DECIMALS)
+      const ammount = utils.decimalize(amount, lptDecimal)
       const senWallet = await splt.deriveAssociatedAddress(
         walletAddress,
         senAddress,
@@ -71,7 +75,7 @@ const Unstake = ({
     return await setDisable(false)
   }, [])
 
-  const stakedValue = utils.undecimalize(debtData?.shares, LPT_DECIMALS)
+  const stakedValue = utils.undecimalize(debtData?.shares, lptDecimal)
   return (
     <Row gutter={[16, 16]}>
       <Col span={24}>
