@@ -1,60 +1,24 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
-import { useSelector } from 'react-redux'
 import LazyLoad from '@senswap/react-lazyload'
 
 import { Col, Row } from 'antd'
 import ItemFarming from './ItemFarming'
 
-import { AppState } from 'app/model'
-import { useWallet } from 'senhub/providers'
-import configs from 'app/configs'
 import { useSearchFarm } from 'app/hooks/useSearchFarm'
-
-const {
-  sol: { farming },
-} = configs
+import { useStakedFarms } from 'app/hooks/listFarm/useStakedFarms'
 
 export type StakedFarms = {
   [x: string]: boolean
 }
 
 const StakedFarm = () => {
-  const { debts } = useSelector((state: AppState) => state)
-  const {
-    wallet: { address: walletAddress },
-  } = useWallet()
-  const farms = useSearchFarm()
-  const [isStakedFarms, setIsStakedFarms] = useState<StakedFarms>()
-
-  const listFarmAddress = useMemo(() => Object.keys(farms), [farms])
-
-  const getStakedFarms = useCallback(async () => {
-    const filterFarms: StakedFarms = {}
-
-    for (const farmAddress of listFarmAddress) {
-      if (!farmAddress) continue
-      const debtAddress = await farming.deriveDebtAddress(
-        walletAddress,
-        farmAddress,
-      )
-      const debtData = debts[debtAddress]
-      if (debtData?.shares > global.BigInt(0)) {
-        filterFarms[farmAddress] = true
-      }
-    }
-    setIsStakedFarms(filterFarms)
-  }, [debts, listFarmAddress, walletAddress])
-
-  useEffect(() => {
-    getStakedFarms()
-  }, [getStakedFarms])
+  const { stakedFarms } = useStakedFarms()
+  const farms = useSearchFarm(stakedFarms)
 
   return (
     <Row gutter={[16, 16]}>
-      {Object.keys(farms).map((farmAddress, i) => {
-        if (!isStakedFarms?.[farmAddress]) return null
+      {Object.keys(farms).map((farmAddress) => {
         return (
-          <Col span={24} key={farmAddress + i}>
+          <Col span={24} key={farmAddress}>
             <LazyLoad height={84}>
               <ItemFarming farmAddress={farmAddress} />
             </LazyLoad>

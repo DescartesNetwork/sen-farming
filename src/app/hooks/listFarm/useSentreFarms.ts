@@ -1,8 +1,9 @@
 import { useCallback, useEffect, useState } from 'react'
-import configs from 'app/configs'
-import { State } from 'app/model/farms.controller'
 import { useSelector } from 'react-redux'
+
+import configs from 'app/configs'
 import { AppState } from 'app/model'
+import { State } from 'app/model/farms.controller'
 
 const {
   sol: { senOwner },
@@ -12,7 +13,7 @@ export const useSentreFarms = () => {
   const farms = useSelector((state: AppState) => state.farms)
   const [sentreFarms, setSentreFarms] = useState<State>({})
 
-  const filterFarms = useCallback((farms: State) => {
+  const filterSentreFarms = useCallback((farms: State) => {
     const newSentreFarm: State = {}
     for (const addr in farms) {
       const farm = farms[addr]
@@ -23,8 +24,8 @@ export const useSentreFarms = () => {
   }, [])
 
   useEffect(() => {
-    filterFarms(farms)
-  }, [farms, filterFarms])
+    filterSentreFarms(farms)
+  }, [farms, filterSentreFarms])
 
-  return { sentreFarms, filterFarms }
+  return { sentreFarms, filterSentreFarms }
 }

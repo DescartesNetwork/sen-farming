@@ -3,14 +3,14 @@ import { useSelector } from 'react-redux'
 import { FarmData } from '@senswap/sen-js'
 
 import { AppState } from 'app/model'
+import { State } from 'app/model/farms.controller'
 import { usePool, useMint } from 'senhub/providers'
 
 const KEY_SIZE = 3
 
-export const useSearchFarm = () => {
+export const useSearchFarm = (farms: State) => {
   const { tokenProvider } = useMint()
   const { pools } = usePool()
-  const farms = useSelector((state: AppState) => state.farms)
   const { search: keyword } = useSelector((state: AppState) => state.main)
   const [farmFilter, setFarmFilter] = useState<Record<string, FarmData>>({})
 

@@ -34,7 +34,10 @@ const Banner = () => {
   const positiveFarms = useMemo(() => {
     let count = 0
     for (const addr in farms) {
-      if (farms[addr].total_shares) count++
+      if (farms[addr].total_shares) {
+        console.log('addr', addr)
+        count++
+      }
     }
     return count
   }, [farms])
@@ -56,10 +59,10 @@ const Banner = () => {
             <Col span={xsSpan}>
               <Space direction="vertical" size={spaceSize}>
                 <Typography.Text style={{ color: '#212433' }}>
-                  Total TVL all Farms
+                  Total TVL Sen Farms
                 </Typography.Text>
                 <Typography.Title level={2} style={{ color: '#F9575E' }}>
-                  ${numeric(tvl).format('0,0.[00]')}
+                  {numeric(tvl).format('0,0.[00]$')}
                 </Typography.Title>
               </Space>
             </Col>
@@ -90,7 +93,7 @@ const Banner = () => {
                 </Typography.Title>
                 <IonIcon style={{ color: '#212433' }} name={iconName} />
                 <Typography.Title level={4} style={{ color: '#F9575E' }}>
-                  ${numeric(senCgk.price).format('0,0.[00]')}
+                  {numeric(senCgk.price).format('0,0.[0000]$')}
                 </Typography.Title>
               </Space>
             </Col>

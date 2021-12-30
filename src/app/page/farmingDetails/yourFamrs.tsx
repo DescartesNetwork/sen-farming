@@ -1,38 +1,20 @@
-import { useMemo } from 'react'
 import LazyLoad from '@senswap/react-lazyload'
 
 import { Col, Row } from 'antd'
 import ItemFarming from './ItemFarming'
 
-import { useWallet } from 'senhub/providers'
 import { useSearchFarm } from 'app/hooks/useSearchFarm'
+import { useYourFarms } from 'app/hooks/listFarm/useYourFarms'
 
 const YourFarms = () => {
-  const farms = useSearchFarm()
-  const {
-    wallet: { address: walletAddress },
-  } = useWallet()
-
-  const listFarmAddress = useMemo(() => Object.keys(farms), [farms])
-
-  const filterFarm = useMemo(() => {
-    return listFarmAddress.filter((addr) => walletAddress === farms[addr].owner)
-  }, [farms, listFarmAddress, walletAddress])
-
-  const sortedFarm = useMemo(() => {
-    const listFarms = filterFarm.sort((fistFarm, secondFarm) => {
-      const totalFistFarm = farms[fistFarm].total_shares
-      const totalSecondFarm = farms[secondFarm].total_shares
-      return totalFistFarm < totalSecondFarm ? 1 : -1
-    })
-    return listFarms
-  }, [farms, filterFarm])
+  const { yourFarms } = useYourFarms()
+  const farms = useSearchFarm(yourFarms)
 
   return (
     <Row gutter={[16, 16]}>
-      {sortedFarm.map((farmAddress, i) => {
+      {Object.keys(farms).map((farmAddress) => {
         return (
-          <Col span={24} key={farmAddress + i}>
+          <Col span={24} key={farmAddress}>
             <LazyLoad height={84}>
               <ItemFarming farmAddress={farmAddress} />
             </LazyLoad>
