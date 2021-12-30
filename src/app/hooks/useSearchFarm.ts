@@ -23,6 +23,14 @@ export const useSearchFarm = (farms: State) => {
       const farm = farms[addr]
       const { mint_stake } = farm
       let check = false
+      // search with poolAddress
+      for (const poolAddress in pools) {
+        const poolData = pools[poolAddress]
+        if (poolData.mint_lpt === mint_stake && poolAddress === keyword) {
+          check = true
+          break
+        }
+      }
 
       // farm address
       if (addr === keyword) check = true

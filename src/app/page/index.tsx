@@ -1,4 +1,6 @@
+import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { useLocation } from 'react-router-dom'
 
 import { Row, Col, Input, Card, Button } from 'antd'
 import Banner from './banner'
@@ -8,10 +10,20 @@ import IonIcon from 'shared/antd/ionicon'
 
 import { AppDispatch, AppState } from 'app/model'
 import { setSearch } from 'app/model/main.controller'
+import { account } from '@senswap/sen-js'
 
 const Page = () => {
+  const locationSearch = useLocation().search
   const { search } = useSelector((state: AppState) => state.main)
   const dispatch = useDispatch<AppDispatch>()
+
+  useEffect(() => {
+    const poolAddress =
+      new URLSearchParams(locationSearch).get('poolAddress') || ''
+    if (account.isAddress(poolAddress)) {
+      dispatch(setSearch({ search: poolAddress }))
+    }
+  }, [dispatch, locationSearch])
 
   return (
     <FarmWatcher>

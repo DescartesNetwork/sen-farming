@@ -1,10 +1,10 @@
 import { useState } from 'react'
+import { account, utils } from '@senswap/sen-js'
 
 import { Button, Card, Col, Row, Space, Typography } from 'antd'
 import { MintAvatar, MintSymbol } from 'app/shared/components/mint'
 import NumericInput from 'shared/antd/numericInput'
 
-import { account, utils } from '@senswap/sen-js'
 import { useWallet } from 'senhub/providers'
 import configs from 'app/configs'
 import { notifyError, notifySuccess } from 'app/helper'
