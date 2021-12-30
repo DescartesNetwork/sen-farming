@@ -20,20 +20,27 @@ const MintSelection = ({
   }
 
   return (
-    <Row gutter={[16, 16]} style={{ height: 400, overflow: 'auto' }}>
+    <Row gutter={[16, 16]}>
       <Col span={24}>
         <Typography.Title level={4}>Select token type</Typography.Title>
       </Col>
       <Col span={24}>
         <SearchAccount onChange={onSearch} />
       </Col>
-      {(searchedResult || accountAddresses).map((accountAddress, i) => (
-        <Col span={24} key={accountAddress + i}>
-          <LazyLoad height={72} overflow>
-            <AccountCard accountAddress={accountAddress} onClick={onClick} />
-          </LazyLoad>
-        </Col>
-      ))}
+      <Col span={24}>
+        <Row gutter={[16, 16]} style={{ height: 300, overflow: 'auto' }}>
+          {(searchedResult || accountAddresses).map((accountAddress, i) => (
+            <Col span={24} key={accountAddress + i}>
+              <LazyLoad height={72} overflow>
+                <AccountCard
+                  accountAddress={accountAddress}
+                  onClick={onClick}
+                />
+              </LazyLoad>
+            </Col>
+          ))}
+        </Row>
+      </Col>
     </Row>
   )
 }

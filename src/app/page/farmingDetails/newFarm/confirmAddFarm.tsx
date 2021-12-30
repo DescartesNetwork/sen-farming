@@ -74,7 +74,10 @@ const ConfirmAddFarm = ({
               <Typography.Title type="secondary" level={5}>
                 Input token type
               </Typography.Title>
-              <Space onClick={() => setVisibleInputTokenModal(true)}>
+              <Space
+                style={{ cursor: 'pointer' }}
+                onClick={() => setVisibleInputTokenModal(true)}
+              >
                 <MintAvatar mintAddress={mintAddress} />
                 <MintSymbol mintAddress={mintAddress} />
               </Space>

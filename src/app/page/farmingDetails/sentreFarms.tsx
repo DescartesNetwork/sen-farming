@@ -6,14 +6,15 @@ import ItemFarming from './ItemFarming'
 
 import configs from 'app/configs'
 import { useSearchFarm } from 'app/hooks/useSearchFarm'
+import { useSentreFarms } from 'app/hooks/listFarm/useSentreFarms'
 
 const {
   sol: { senOwner },
 } = configs
 
 const SentreFarms = () => {
-  const farms = useSearchFarm()
-
+  const { sentreFarms } = useSentreFarms()
+  const farms = useSearchFarm(sentreFarms)
   const listFarmAddress = useMemo(() => Object.keys(farms), [farms])
 
   const filterFarm = useMemo(() => {
