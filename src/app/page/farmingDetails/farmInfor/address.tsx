@@ -17,8 +17,6 @@ const Address = ({
   description?: boolean
   title: string
 }) => {
-  console.log(address)
-  console.log(copieAddress)
   return (
     <Row gutter={[0, 8]}>
       <Col
