@@ -19,9 +19,7 @@ const Page = () => {
 
   useEffect(() => {
     const search = new URLSearchParams(locationSearch).get('search') || ''
-    if (account.isAddress(search)) {
-      dispatch(setSearch({ search: search }))
-    }
+    dispatch(setSearch({ search: search }))
   }, [dispatch, locationSearch])
 
   return (
