@@ -10,6 +10,7 @@ export const useFarmLiquidity = (farmAddress: string) => {
   const [liquidity, setLiquidity] = useState(0)
 
   const calcLiquidity = useCallback(async () => {
+    if (!farmData) return setLiquidity(0)
     const { total_shares, mint_stake } = farmData
     const totalValue = await getTotalValue({
       mintAddress: mint_stake,
