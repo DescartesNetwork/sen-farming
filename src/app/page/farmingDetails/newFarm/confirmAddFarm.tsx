@@ -1,14 +1,14 @@
 import { useState } from 'react'
+import { account, utils } from '@senswap/sen-js'
 
 import { Button, Card, Col, Row, Space, Typography } from 'antd'
 import { MintAvatar, MintSymbol } from 'app/shared/components/mint'
 import NumericInput from 'shared/antd/numericInput'
 
-import { account, utils } from '@senswap/sen-js'
 import { useWallet } from 'senhub/providers'
-import { FARM_DECIMAL } from 'app/constants/farms'
 import configs from 'app/configs'
 import { notifyError, notifySuccess } from 'app/helper'
+import useMintDecimals from 'app/shared/hooks/useMintDecimals'
 
 const ConfirmAddFarm = ({
   mintAddress,
@@ -26,6 +26,7 @@ const ConfirmAddFarm = ({
   const [value, setValue] = useState('')
   const [duration, setDuration] = useState('')
   const [loading, setLoading] = useState(false)
+  const rewardDecimal = useMintDecimals(senAddress)
   const {
     wallet: { address: walletAddress },
   } = useWallet()
@@ -38,7 +39,7 @@ const ConfirmAddFarm = ({
     setLoading(true)
     const { wallet } = window.sentre
     if (!wallet) return
-    const reward = utils.decimalize(value, FARM_DECIMAL)
+    const reward = utils.decimalize(value, rewardDecimal)
     const period = BigInt(Number(duration) * 86400)
 
     try {
@@ -70,21 +71,31 @@ const ConfirmAddFarm = ({
         <Card bodyStyle={{ padding: 16 }} bordered={false}>
           <Row gutter={[16, 16]}>
             <Col span={12}>
-              <Typography.Title type="secondary" level={5}>
-                Input token type
-              </Typography.Title>
-              <Space onClick={() => setVisibleInputTokenModal(true)}>
-                <MintAvatar mintAddress={mintAddress} />
-                <MintSymbol mintAddress={mintAddress} />
+              <Space direction="vertical">
+                <Typography.Text type="secondary">Input</Typography.Text>
+                <Space
+                  size={12}
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => setVisibleInputTokenModal(true)}
+                >
+                  <MintAvatar mintAddress={mintAddress} />
+                  {account.isAddress(mintAddress) ? (
+                    <MintSymbol mintAddress={mintAddress} />
+                  ) : (
+                    <Typography.Text type="secondary">
+                      Select token type
+                    </Typography.Text>
+                  )}
+                </Space>
               </Space>
             </Col>
             <Col span={12}>
-              <Typography.Title type="secondary" level={5}>
-                Output token type
-              </Typography.Title>
-              <Space>
-                <MintAvatar mintAddress={senAddress} />
-                <MintSymbol mintAddress={senAddress} />
+              <Space direction="vertical">
+                <Typography.Text type="secondary">Output</Typography.Text>
+                <Space size={12} style={{ cursor: 'pointer' }}>
+                  <MintAvatar mintAddress={senAddress} />
+                  <MintSymbol mintAddress={senAddress} />
+                </Space>
               </Space>
             </Col>
           </Row>

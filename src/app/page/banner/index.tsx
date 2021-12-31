@@ -10,6 +10,7 @@ import useMintCgk from 'app/shared/hooks/useMintCgk'
 import { numeric } from 'shared/util'
 import { MintSymbol } from 'app/shared/components/mint'
 import { AppState } from 'app/model'
+import { useListFarmTvl } from 'app/hooks/listFarm/useListFarmTvl'
 
 const {
   sol: { senAddress },
@@ -21,6 +22,7 @@ const Banner = () => {
   } = useUI()
   const farms = useSelector((state: AppState) => state.farms)
   const senCgk = useMintCgk(senAddress)
+  const tvl = useListFarmTvl()
 
   const desktop = width > 768
   const xsSpan = !desktop ? 24 : undefined
@@ -32,7 +34,9 @@ const Banner = () => {
   const positiveFarms = useMemo(() => {
     let count = 0
     for (const addr in farms) {
-      if (farms[addr].total_shares) count++
+      if (farms[addr].total_shares) {
+        count++
+      }
     }
     return count
   }, [farms])
@@ -51,13 +55,13 @@ const Banner = () => {
         <Col span={24}>
           <Row gutter={[12, 12]}>
             {/* coming soon */}
-            {/* <Col span={xsSpan}>
+            <Col span={xsSpan}>
               <Space direction="vertical" size={spaceSize}>
                 <Typography.Text style={{ color: '#212433' }}>
-                  Total TVL all Farms
+                  Total TVL Sen Farms
                 </Typography.Text>
                 <Typography.Title level={2} style={{ color: '#F9575E' }}>
-                  $2,096,977,588
+                  {numeric(tvl).format('0,0.[00]$')}
                 </Typography.Title>
               </Space>
             </Col>
@@ -65,7 +69,7 @@ const Banner = () => {
               <Col>
                 <Divider type="vertical" style={{ height: '100%' }} />
               </Col>
-            )} */}
+            )}
             <Col span={xsSpan}>
               <Space direction="vertical" size={spaceSize}>
                 <Typography.Text style={{ color: '#212433' }}>
@@ -88,7 +92,7 @@ const Banner = () => {
                 </Typography.Title>
                 <IonIcon style={{ color: '#212433' }} name={iconName} />
                 <Typography.Title level={4} style={{ color: '#F9575E' }}>
-                  ${numeric(senCgk.price).format('0,0.[00]')}
+                  {numeric(senCgk.price).format('0,0.[0000]$')}
                 </Typography.Title>
               </Space>
             </Col>

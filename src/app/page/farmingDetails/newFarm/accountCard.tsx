@@ -34,7 +34,7 @@ const AccountCard = ({
     <Card
       onClick={() => onClick(mintAddress)}
       className="account-card"
-      bodyStyle={{ padding: 12 }}
+      bodyStyle={{ padding: 12, cursor: 'pointer' }}
       bordered={false}
     >
       <Row gutter={[8, 8]} wrap={false} align="middle">

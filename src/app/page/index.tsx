@@ -1,6 +1,8 @@
+import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { useLocation } from 'react-router-dom'
 
-import { Row, Col, Input } from 'antd'
+import { Row, Col, Input, Card, Button } from 'antd'
 import Banner from './banner'
 import FarmingDetails from './farmingDetails'
 import FarmWatcher from 'app/components/watcher'
@@ -10,8 +12,14 @@ import { AppDispatch, AppState } from 'app/model'
 import { setSearch } from 'app/model/main.controller'
 
 const Page = () => {
+  const locationSearch = useLocation().search
   const { search } = useSelector((state: AppState) => state.main)
   const dispatch = useDispatch<AppDispatch>()
+
+  useEffect(() => {
+    const search = new URLSearchParams(locationSearch).get('search') || ''
+    dispatch(setSearch({ search: search }))
+  }, [dispatch, locationSearch])
 
   return (
     <FarmWatcher>
@@ -22,14 +30,40 @@ const Page = () => {
         <Col xs={24} lg={18}>
           <Row gutter={[8, 8]}>
             <Col xs={24} lg={8}>
-              <Input
-                value={search}
-                onChange={(e) =>
-                  dispatch(setSearch({ search: e.target.value }))
-                }
-                prefix={<IonIcon name="search-outline" />}
-                bordered
-              />
+              <Card
+                bodyStyle={{ padding: 0 }}
+                style={{
+                  borderRadius: 8,
+                  background: 'transparent',
+                  boxShadow: 'unset',
+                }}
+              >
+                <Input
+                  placeholder="Search by name, address"
+                  value={search}
+                  onChange={(e) =>
+                    dispatch(setSearch({ search: e.target.value }))
+                  }
+                  prefix={
+                    search ? (
+                      <Button
+                        type="text"
+                        style={{
+                          width: 'auto',
+                          height: 'auto',
+                          background: 'transparent',
+                        }}
+                        onClick={() => dispatch(setSearch({ search: '' }))}
+                        icon={<IonIcon name="close-outline" />}
+                      />
+                    ) : (
+                      <IonIcon name="search-outline" />
+                    )
+                  }
+                  bordered={false}
+                  size="large"
+                />
+              </Card>
             </Col>
             <Col span={24}>
               <FarmingDetails />

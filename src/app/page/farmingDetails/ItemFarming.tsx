@@ -1,24 +1,16 @@
-import { Fragment, useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { utils } from '@senswap/sen-js'
 import { useSelector } from 'react-redux'
-import { useLocation, useHistory } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 
-import {
-  Button,
-  Card,
-  Col,
-  Collapse,
-  Modal,
-  Row,
-  Space,
-  Tabs,
-  Tooltip,
-} from 'antd'
+import { Button, Card, Col, Collapse, Modal, Row, Space, Tabs } from 'antd'
 import Content from './content'
 import IonIcon from 'shared/antd/ionicon'
 import Unstake from './stakeAndUnstake/unstake'
 import Stake from './stakeAndUnstake/stake'
+import FarmInfo from './farmInfo'
 import Management from './management'
+import Exit from './stakeAndUnstake/exit'
 
 import { numeric } from 'shared/util'
 import { useUI, useWallet } from 'senhub/providers'
@@ -28,15 +20,15 @@ import { useReward } from 'app/hooks/useReward'
 import { useFarmLiquidity } from 'app/hooks/useFarmLiquidity'
 import { useFarmRoi } from 'app/hooks/useFarmRoi'
 import { AppState } from 'app/model'
-import { LPT_DECIMALS } from 'app/configs/farmstat.config'
 import { notifyError, notifySuccess } from 'app/helper'
 import { MintAvatar, MintSymbol } from 'app/shared/components/mint'
 import configs from 'app/configs'
 import { useFarmPool } from 'app/hooks/useFarmPool'
+import { FarmStatus } from 'app/constants/farms'
+import useMintDecimals from 'app/shared/hooks/useMintDecimals'
 
 const {
   sol: { senAddress, farming },
-  manifest: { appId },
 } = configs
 
 const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
@@ -52,23 +44,19 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
   const {
     wallet: { address: walletAddress },
   } = useWallet()
-  const locationSearch = useLocation().search
   const history = useHistory()
   const [activeKey, setActiveKey] = useState<string>()
   const [visible, setVisible] = useState(false)
+  const [visibleInfo, setVisibleInfo] = useState(false)
   const [loading, setLoading] = useState(false)
-  const { owner } = farmData || {}
+  const { owner, state } = farmData || {}
   const isOwner = owner === walletAddress
-
-  const query = useMemo(
-    () => new URLSearchParams(locationSearch),
-    [locationSearch],
-  )
+  const farmSelected = useSelector((state: AppState) => state.main.search)
+  const isFreezeFarm = state === FarmStatus.isFreeze
+  const lptDecimal = useMintDecimals(farmData.mint_stake)
 
   const onActive = () => {
     if (activeKey) return setActiveKey(undefined)
-    query.set('farmAddress', farmAddress)
-    history.push(`/app/${appId}?` + query.toString())
     return setActiveKey(farmAddress)
   }
 
@@ -93,14 +81,13 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
   }
 
   useEffect(() => {
-    const farmSelected = query.get('farmAddress')
     if (!farmSelected || farmSelected !== farmAddress) return
     setActiveKey(farmSelected)
-  }, [farmAddress, query])
+  }, [farmAddress, farmSelected])
 
   let amountLptShared = '0'
   if (data) {
-    amountLptShared = utils.undecimalize(data.shares, LPT_DECIMALS)
+    amountLptShared = utils.undecimalize(data.shares, lptDecimal)
   }
   const desktop = width > 768
   const icoDesktopCollapse = activeKey
@@ -111,122 +98,128 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
     : 'chevron-down-outline'
 
   const icon = !desktop ? icoMobileCollapse : icoDesktopCollapse
+  const freezeStyle = isFreezeFarm ? { opacity: 0.6 } : {}
 
   return (
-    <Fragment>
-      <Card
-        bordered={false}
-        className="farming-card"
-        bodyStyle={{ padding: 16 }}
-        style={{
-          boxShadow: 'unset',
-          borderRadius: 8,
-          position: 'relative',
-          zIndex: 1,
-        }}
-      >
-        <Row gutter={[16, 16]} justify="center" align="middle">
-          <Col flex="auto">
-            <Row gutter={[16, 16]} align="middle">
-              <Col xs={24} md={5}>
-                <Space>
-                  <MintAvatar mintAddress={farmData.mint_stake} size={24} />
-                  <MintSymbol mintAddress={farmAddress} />
-                  <Tooltip title={farmAddress}>
+    <Row style={{ ...freezeStyle }}>
+      <Col span={24}>
+        <Card
+          bordered={false}
+          className="farming-card"
+          bodyStyle={{ padding: 16 }}
+          style={{
+            boxShadow: 'unset',
+            borderRadius: 8,
+            position: 'relative',
+            zIndex: 1,
+          }}
+        >
+          <Row gutter={[16, 16]} justify="center" align="middle">
+            <Col flex="auto">
+              <Row gutter={[16, 16]} align="middle">
+                <Col xs={24} md={5}>
+                  <Space>
+                    <MintAvatar mintAddress={farmData.mint_stake} size={24} />
+                    <MintSymbol mintAddress={farmAddress} />
                     <Button
                       type="text"
                       shape="circle"
                       size="small"
                       icon={<IonIcon name="alert-circle-outline" />}
+                      onClick={() => setVisibleInfo(true)}
                     />
-                  </Tooltip>
-                </Space>
-              </Col>
-              <Col xs={12} md={4}>
-                <Content
-                  label="APR"
-                  tooltip={farmAddress}
-                  value={numeric(apr).format('0,0.[00]a%')}
-                />
-              </Col>
-              <Col xs={12} md={5}>
-                <Content
-                  label="Liquidity"
-                  value={numeric(liquidity).format('0,0.00[00]a$')}
-                />
-              </Col>
-              <Col xs={12} md={5}>
-                <Content
-                  label="Your staked LPT"
-                  value={numeric(amountLptShared).format('0,0.00[00]')}
-                />
-              </Col>
-              <Col xs={12} md={5}>
-                <Content
-                  mintAddress={farmData.mint_reward}
-                  label="Reward"
-                  value={numeric(reward).format('0,0.00[00]')}
-                />
-              </Col>
-            </Row>
-          </Col>
-          <Col>
-            <Button
-              type="text"
-              icon={<IonIcon name={icon} />}
-              onClick={onActive}
-            />
-          </Col>
-        </Row>
-      </Card>
-      <Row>
-        <Col span={24}>
-          <Collapse activeKey={activeKey} className="expand-card">
-            <Collapse.Panel header={null} key={farmAddress} showArrow={false}>
-              <Row gutter={[16, 16]}>
-                <Col xs={{ order: 2 }} md={{ order: 1 }} flex="auto">
-                  {farmPool && (
-                    <Button
-                      type="text"
-                      style={{ padding: 0, background: 'transparent' }}
-                      onClick={() => {
-                        history.push(
-                          `/app/sen_lp?poolAddress=${farmPool.address}`,
-                        )
-                      }}
-                    >
-                      Go pool
-                      <IonIcon name="chevron-forward-outline" />
-                    </Button>
-                  )}
-                </Col>
-                <Col xs={{ order: 1 }} md={{ order: 2 }}>
-                  <Space>
-                    {isOwner && <Management farmAddress={farmAddress} />}
-                    <Button
-                      onClick={() => setVisible(true)}
-                      icon={<IonIcon name="add-outline" />}
-                    >
-                      Stake
-                    </Button>
-                    <Button
-                      type="primary"
-                      icon={<IonIcon name="leaf-outline" />}
-                      loading={loading}
-                      onClick={handleHarvest}
-                      disabled={reward === 0}
-                    >
-                      Harvest
-                    </Button>
                   </Space>
                 </Col>
+                <Col xs={12} md={4}>
+                  <Content
+                    label="APR"
+                    tooltip={farmAddress}
+                    value={numeric(apr).format('0,0.[00]a%')}
+                  />
+                </Col>
+                <Col xs={12} md={5}>
+                  <Content
+                    label="Liquidity"
+                    value={numeric(liquidity).format('0,0.00[00]a$')}
+                  />
+                </Col>
+                <Col xs={12} md={5}>
+                  <Content
+                    label="Your staked LPT"
+                    value={numeric(amountLptShared).format('0,0.00[00]')}
+                  />
+                </Col>
+                <Col xs={12} md={5}>
+                  <Content
+                    mintAddress={farmData.mint_reward}
+                    label="Reward"
+                    value={numeric(reward).format('0,0.00[00]')}
+                  />
+                </Col>
               </Row>
-            </Collapse.Panel>
-          </Collapse>
-        </Col>
-      </Row>
+            </Col>
+            <Col>
+              <Space>
+                {isFreezeFarm && <IonIcon name="snow-outline" />}
+                <Button
+                  type="text"
+                  icon={<IonIcon name={icon} />}
+                  disabled={!isOwner && isFreezeFarm}
+                  onClick={onActive}
+                />
+              </Space>
+            </Col>
+          </Row>
+        </Card>
+      </Col>
+      <Col span={24}>
+        <Collapse activeKey={activeKey} className="expand-farm-card">
+          <Collapse.Panel header={null} key={farmAddress} showArrow={false}>
+            <Row gutter={[16, 16]}>
+              <Col xs={{ order: 2 }} md={{ order: 1 }} flex="auto">
+                {farmPool && (
+                  <Button
+                    type="text"
+                    style={{ padding: 0, background: 'transparent' }}
+                    onClick={() => {
+                      history.push(
+                        `/app/sen_lp?poolAddress=${farmPool.address}`,
+                      )
+                    }}
+                  >
+                    Go pool
+                    <IonIcon name="chevron-forward-outline" />
+                  </Button>
+                )}
+              </Col>
+              <Col xs={{ order: 1 }} md={{ order: 2 }}>
+                <Space>
+                  {isOwner && <Management farmAddress={farmAddress} />}
+                  <Button
+                    onClick={() => setVisible(true)}
+                    icon={<IonIcon name="add-outline" />}
+                    disabled={isFreezeFarm}
+                  >
+                    Stake
+                  </Button>
+                  <Button
+                    type="primary"
+                    icon={<IonIcon name="leaf-outline" />}
+                    loading={loading}
+                    onClick={handleHarvest}
+                    disabled={isFreezeFarm || reward === 0}
+                  >
+                    Harvest
+                  </Button>
+                </Space>
+              </Col>
+            </Row>
+          </Collapse.Panel>
+        </Collapse>
+      </Col>
       <Modal
         onCancel={() => setVisible(false)}
+        closeIcon={<IonIcon name="close" />}
         footer={null}
         title={null}
         visible={visible}
@@ -238,9 +231,23 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
           <Tabs.TabPane tab="Unstake" key="unstake">
             <Unstake farmAddress={farmAddress} onClose={setVisible} />
           </Tabs.TabPane>
+          <Tabs.TabPane tab="Exit" key="exit">
+            <Exit farmAddress={farmAddress} onClose={setVisible} />
+          </Tabs.TabPane>
         </Tabs>
       </Modal>
-    </Fragment>
+      <Modal
+        visible={visibleInfo}
+        onCancel={() => setVisibleInfo(false)}
+        closeIcon={<IonIcon name="close" />}
+        title="Farm Info"
+        footer={null}
+        destroyOnClose
+        centered
+      >
+        <FarmInfo farmAddress={farmAddress} />
+      </Modal>
+    </Row>
   )
 }
 export default ItemFarming

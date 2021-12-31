@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 import { Button, Card, Col, Row, Space, Typography } from 'antd'
 
@@ -7,6 +7,7 @@ import { AppState } from 'app/model'
 import IonIcon from 'shared/antd/ionicon'
 import configs from 'app/configs'
 import { notifyError, notifySuccess } from 'app/helper'
+import { deleteFarm } from 'app/model/farms.controller'
 
 const {
   sol: { farming },
@@ -22,6 +23,7 @@ const Close = ({
   const farms = useSelector((state: AppState) => state.farms)
   const [loading, setLoading] = useState(false)
   const { total_shares } = farms?.[farmAddress] || {}
+  const dispatch = useDispatch()
 
   const close = async () => {
     const { wallet } = window.sentre
@@ -30,6 +32,7 @@ const Close = ({
     try {
       const { txId } = await farming.closeFarm(farmAddress, wallet)
       onChange(txId)
+      dispatch(deleteFarm({ farmAddress }))
       return notifySuccess('Close the farm', txId)
     } catch (er) {
       return notifyError(er)

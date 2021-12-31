@@ -3,14 +3,14 @@ import { useSelector } from 'react-redux'
 import { FarmData } from '@senswap/sen-js'
 
 import { AppState } from 'app/model'
+import { State } from 'app/model/farms.controller'
 import { usePool, useMint } from 'senhub/providers'
 
 const KEY_SIZE = 3
 
-export const useSearchFarm = () => {
+export const useSearchFarm = (farms: State) => {
   const { tokenProvider } = useMint()
   const { pools } = usePool()
-  const farms = useSelector((state: AppState) => state.farms)
   const { search: keyword } = useSelector((state: AppState) => state.main)
   const [farmFilter, setFarmFilter] = useState<Record<string, FarmData>>({})
 
@@ -23,17 +23,25 @@ export const useSearchFarm = () => {
       const farm = farms[addr]
       const { mint_stake } = farm
       let check = false
+      // search with poolAddress
+      for (const poolAddress in pools) {
+        const poolData = pools[poolAddress]
+        if (poolData.mint_lpt === mint_stake && poolAddress === keyword) {
+          check = true
+          break
+        }
+      }
 
-      // check farm address
+      // farm address
       if (addr === keyword) check = true
-      // check token
+      // token
       const mintStakeInfo = await tokenProvider.findByAddress(mint_stake)
       if (mintStakeInfo) {
-        // check token symbol
+        // token symbol
         const tokenName = mintStakeInfo.symbol + mintStakeInfo.name
         if (tokenName.toLowerCase().includes(keyword.toLowerCase()))
           check = true
-        // check token address
+        // token address
         if (mintStakeInfo.address === keyword) check = true
       }
       if (check) newFarmFilter[addr] = farm
