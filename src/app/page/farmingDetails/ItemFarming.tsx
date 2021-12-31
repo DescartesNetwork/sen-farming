@@ -1,7 +1,7 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { utils } from '@senswap/sen-js'
 import { useSelector } from 'react-redux'
-import { useLocation, useHistory } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 
 import { Button, Card, Col, Collapse, Modal, Row, Space, Tabs } from 'antd'
 import Content from './content'
@@ -29,7 +29,6 @@ import useMintDecimals from 'app/shared/hooks/useMintDecimals'
 
 const {
   sol: { senAddress, farming },
-  manifest: { appId },
 } = configs
 
 const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
@@ -45,7 +44,6 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
   const {
     wallet: { address: walletAddress },
   } = useWallet()
-  const locationSearch = useLocation().search
   const history = useHistory()
   const [activeKey, setActiveKey] = useState<string>()
   const [visible, setVisible] = useState(false)
@@ -53,18 +51,12 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
   const [loading, setLoading] = useState(false)
   const { owner, state } = farmData || {}
   const isOwner = owner === walletAddress
+  const farmSelected = useSelector((state: AppState) => state.main.search)
   const isFreezeFarm = state === FarmStatus.isFreeze
   const lptDecimal = useMintDecimals(farmData.mint_stake)
 
-  const query = useMemo(
-    () => new URLSearchParams(locationSearch),
-    [locationSearch],
-  )
-
   const onActive = () => {
     if (activeKey) return setActiveKey(undefined)
-    query.set('farmAddress', farmAddress)
-    history.push(`/app/${appId}?` + query.toString())
     return setActiveKey(farmAddress)
   }
 
@@ -89,10 +81,9 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
   }
 
   useEffect(() => {
-    const farmSelected = query.get('farmAddress')
     if (!farmSelected || farmSelected !== farmAddress) return
     setActiveKey(farmSelected)
-  }, [farmAddress, query])
+  }, [farmAddress, farmSelected])
 
   let amountLptShared = '0'
   if (data) {
@@ -228,6 +219,7 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
       </Col>
       <Modal
         onCancel={() => setVisible(false)}
+        closeIcon={<IonIcon name="close" />}
         footer={null}
         title={null}
         visible={visible}
