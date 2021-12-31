@@ -18,10 +18,9 @@ const Page = () => {
   const dispatch = useDispatch<AppDispatch>()
 
   useEffect(() => {
-    const poolAddress =
-      new URLSearchParams(locationSearch).get('poolAddress') || ''
-    if (account.isAddress(poolAddress)) {
-      dispatch(setSearch({ search: poolAddress }))
+    const search = new URLSearchParams(locationSearch).get('search') || ''
+    if (account.isAddress(search)) {
+      dispatch(setSearch({ search: search }))
     }
   }, [dispatch, locationSearch])
 
