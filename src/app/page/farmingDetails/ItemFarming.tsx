@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { utils } from '@senswap/sen-js'
 import { useSelector } from 'react-redux'
 import { useLocation, useHistory } from 'react-router-dom'
@@ -53,7 +53,7 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
   const [loading, setLoading] = useState(false)
   const { owner, state } = farmData || {}
   const isOwner = owner === walletAddress
-  const isFreeze = state === FarmStatus.isFreeze
+  const isFreezeFarm = state === FarmStatus.isFreeze
 
   const query = useMemo(
     () => new URLSearchParams(locationSearch),
@@ -106,7 +106,7 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
     : 'chevron-down-outline'
 
   const icon = !desktop ? icoMobileCollapse : icoDesktopCollapse
-  const freezeStyle = isFreeze ? { opacity: 0.6 } : {}
+  const freezeStyle = isFreezeFarm ? { opacity: 0.6 } : {}
 
   return (
     <Row style={{ ...freezeStyle }}>
@@ -170,7 +170,7 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
               <Button
                 type="text"
                 icon={<IonIcon name={icon} />}
-                disabled={!isOwner && isFreeze}
+                disabled={!isOwner && isFreezeFarm}
                 onClick={onActive}
               />
             </Col>
@@ -203,7 +203,7 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
                   <Button
                     onClick={() => setVisible(true)}
                     icon={<IonIcon name="add-outline" />}
-                    disabled={isFreeze}
+                    disabled={isFreezeFarm}
                   >
                     Stake
                   </Button>
@@ -212,7 +212,7 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
                     icon={<IonIcon name="leaf-outline" />}
                     loading={loading}
                     onClick={handleHarvest}
-                    disabled={isFreeze || reward === 0}
+                    disabled={isFreezeFarm || reward === 0}
                   >
                     Harvest
                   </Button>
