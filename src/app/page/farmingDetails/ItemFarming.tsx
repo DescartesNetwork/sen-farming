@@ -84,7 +84,7 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
 
   let amountLptShared = '0'
   if (data) {
-    amountLptShared = utils.undecimalize(data?.shares, LPT_DECIMALS)
+    amountLptShared = utils.undecimalize(data.shares, LPT_DECIMALS)
   }
   const desktop = width > 768
   const icoDesktopCollapse = activeKey

@@ -5,7 +5,7 @@ import { account } from '@senswap/sen-js'
 
 import { Tabs } from 'antd'
 import NewFarm from './newFarm'
-import ListFarmings from './listFarming'
+import CommunityFarms from './communityFarms'
 import SentreFarms from './sentreFarms'
 import StakedFarm from './stakedFarm'
 import YourFarms from './yourFamrs'
@@ -29,17 +29,21 @@ const FarmingDetails = () => {
     ;(async () => {
       /** isLoaded: just run only one time, avoid case select many times tab */
       if (!account.isAddress(farmSelected) || isLoaded) return
+      try {
+        const yourFarm = checkYourFarm(farmSelected)
+        if (yourFarm) return setTabActive('your-farms')
 
-      const stakedFarm = await checkStakedFarm(farmSelected)
-      const yourFarm = checkYourFarm(farmSelected)
-      const sentreFarm = checkSentreFarm(farmSelected)
+        const sentreFarm = checkSentreFarm(farmSelected)
+        if (sentreFarm) return setTabActive('sen-farms')
 
-      setTabActive('community-farms')
-      if (stakedFarm) setTabActive('staked-farms')
-      if (sentreFarm) setTabActive('sen-farms')
-      if (yourFarm) setTabActive('your-farms')
+        const stakedFarm = await checkStakedFarm(farmSelected)
+        if (stakedFarm) return setTabActive('staked-farms')
 
-      return setIsLoaded(true)
+        return setTabActive('community-farms')
+      } catch (error) {
+      } finally {
+        setIsLoaded(true)
+      }
     })()
   }, [checkSentreFarm, checkStakedFarm, checkYourFarm, farmSelected, isLoaded])
 
@@ -65,8 +69,8 @@ const FarmingDetails = () => {
       <Tabs.TabPane tab="Your Farms" key="your-farms">
         <YourFarms />
       </Tabs.TabPane>
-      <Tabs.TabPane tab="Community Farns" key="community-farms">
-        <ListFarmings />
+      <Tabs.TabPane tab="Community Farms" key="community-farms">
+        <CommunityFarms />
       </Tabs.TabPane>
     </Tabs>
   )
