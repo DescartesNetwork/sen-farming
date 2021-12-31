@@ -7,6 +7,7 @@ import IonIcon from 'shared/antd/ionicon'
 
 import configs from 'app/configs'
 import { notifyError, notifySuccess } from 'app/helper'
+import { FarmStatus } from 'app/constants/farms'
 
 const {
   sol: { farming },
@@ -54,10 +55,12 @@ const FreezeOrThaw = ({
     }
   }
 
-  const isFreeze = state === 1
-  const btnStyle = isFreeze ? { backgroundColor: '#40A9FF', color: '#fff' } : {}
-  const iconName = isFreeze ? 'snow-outline' : 'sunny-outline'
-  const btnName = isFreeze ? 'Freeze' : 'Thaw'
+  const isActiveFarm = state === FarmStatus.isActive
+  const btnStyle = isActiveFarm
+    ? { backgroundColor: '#40A9FF', color: '#fff' }
+    : {}
+  const iconName = isActiveFarm ? 'snow-outline' : 'sunny-outline'
+  const btnName = isActiveFarm ? 'Freeze' : 'Thaw'
 
   return (
     <Row gutter={[16, 16]}>
@@ -80,7 +83,7 @@ const FreezeOrThaw = ({
           type="primary"
           style={{ ...btnStyle, border: 'unset' }}
           icon={<IonIcon name={iconName} />}
-          onClick={isFreeze ? freeze : thaw}
+          onClick={isActiveFarm ? freeze : thaw}
           block
           disabled={!state}
           loading={loading}
