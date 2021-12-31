@@ -59,11 +59,25 @@ const Management = ({ farmAddress }: { farmAddress: string }) => {
     setVisibleTooltip(false)
   }
 
-  const farmPeriod = Number(period) / 86400
   const farmReward = useMemo(() => {
     if (farmDecimal === 0) return 0
     return utils.undecimalize(reward, farmDecimal)
   }, [farmDecimal, reward])
+
+  const formatPeriod = useMemo(() => {
+    const numPeriod = Number(period)
+    let time = numPeriod / 86400
+    let formatTime = 'days'
+    if (time > 29) {
+      time = time / 30
+      formatTime = time > 1 ? 'months' : 'month'
+    }
+    if (time < 2) {
+      time = time * 24
+      formatTime = time > 1 ? 'hours' : 'hour'
+    }
+    return `${farmReward} ${symbol} / ${Math.floor(time)} ${formatTime}`
+  }, [farmReward, period, symbol])
 
   return (
     <Fragment>
@@ -137,12 +151,7 @@ const Management = ({ farmAddress }: { farmAddress: string }) => {
                   />
                 </Col>
                 <Col span={24}>
-                  <ExtraTypography
-                    label="Reward"
-                    title={`${farmReward} ${symbol}/${farmPeriod} day${
-                      farmPeriod > 1 ? 's' : ''
-                    }`}
-                  />
+                  <ExtraTypography label="Reward" title={formatPeriod} />
                 </Col>
               </Row>
             </Card>
