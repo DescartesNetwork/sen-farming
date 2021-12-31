@@ -10,7 +10,6 @@ import IonIcon from 'shared/antd/ionicon'
 
 import { AppDispatch, AppState } from 'app/model'
 import { setSearch } from 'app/model/main.controller'
-import { account } from '@senswap/sen-js'
 
 const Page = () => {
   const locationSearch = useLocation().search
