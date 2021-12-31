@@ -20,12 +20,12 @@ import { useReward } from 'app/hooks/useReward'
 import { useFarmLiquidity } from 'app/hooks/useFarmLiquidity'
 import { useFarmRoi } from 'app/hooks/useFarmRoi'
 import { AppState } from 'app/model'
-import { LPT_DECIMALS } from 'app/configs/farmstat.config'
 import { notifyError, notifySuccess } from 'app/helper'
 import { MintAvatar, MintSymbol } from 'app/shared/components/mint'
 import configs from 'app/configs'
 import { useFarmPool } from 'app/hooks/useFarmPool'
 import { FarmStatus } from 'app/constants/farms'
+import useMintDecimals from 'app/shared/hooks/useMintDecimals'
 
 const {
   sol: { senAddress, farming },
@@ -54,6 +54,7 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
   const { owner, state } = farmData || {}
   const isOwner = owner === walletAddress
   const isFreezeFarm = state === FarmStatus.isFreeze
+  const lptDecimal = useMintDecimals(farmData.mint_stake)
 
   const query = useMemo(
     () => new URLSearchParams(locationSearch),
@@ -95,7 +96,7 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
 
   let amountLptShared = '0'
   if (data) {
-    amountLptShared = utils.undecimalize(data.shares, LPT_DECIMALS)
+    amountLptShared = utils.undecimalize(data.shares, lptDecimal)
   }
   const desktop = width > 768
   const icoDesktopCollapse = activeKey
