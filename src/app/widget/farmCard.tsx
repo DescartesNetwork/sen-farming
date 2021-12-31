@@ -10,10 +10,10 @@ import IonIcon from 'shared/antd/ionicon'
 import { AppState } from 'app/model'
 import { useReward } from 'app/hooks/useReward'
 import { useDebt } from 'app/hooks/useDebt'
-import { LPT_DECIMALS } from 'app/configs/farmstat.config'
 import { useFarmRoi } from 'app/hooks/useFarmRoi'
 import configs from 'app/configs'
 import { numeric } from 'shared/util'
+import useMintDecimals from 'app/shared/hooks/useMintDecimals'
 
 const {
   manifest: { appId },
@@ -26,6 +26,7 @@ const FarmCard = ({ farmAddress }: { farmAddress: string }) => {
   const locationSearch = useLocation().search
   const { data } = useDebt(farmAddress)
   const { apr } = useFarmRoi(farmAddress)
+  const lptDecimal = useMintDecimals(farmData.mint_stake)
 
   const query = useMemo(
     () => new URLSearchParams(locationSearch),
@@ -39,7 +40,7 @@ const FarmCard = ({ farmAddress }: { farmAddress: string }) => {
 
   let amountLptShared = '0'
   if (data) {
-    amountLptShared = utils.undecimalize(data.shares, LPT_DECIMALS)
+    amountLptShared = utils.undecimalize(data.shares, lptDecimal)
   }
 
   return (

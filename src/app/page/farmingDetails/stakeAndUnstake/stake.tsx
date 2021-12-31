@@ -1,5 +1,6 @@
 import { useCallback, useState } from 'react'
 import { utils } from '@senswap/sen-js'
+import { useSelector } from 'react-redux'
 
 import { Button, Card, Col, Row, Space, Typography } from 'antd'
 import IonIcon from 'shared/antd/ionicon'
@@ -11,8 +12,9 @@ import { numeric } from 'shared/util'
 import { notifyError, notifySuccess } from 'app/helper'
 import { useAccountStake } from 'app/hooks/useAccountStake'
 import configs from 'app/configs'
-import { LPT_DECIMALS } from 'app/configs/farmstat.config'
 import { HarvestValidator } from 'helpers/validateHarvest'
+import { AppState } from 'app/model'
+import useMintDecimals from 'app/shared/hooks/useMintDecimals'
 
 const {
   sol: { senAddress, farming },
@@ -25,6 +27,7 @@ const Stake = ({
   farmAddress: string
   onClose: (visible: boolean) => void
 }) => {
+  const farmData = useSelector((state: AppState) => state.farms?.[farmAddress])
   const {
     wallet: { address: walletAddress },
   } = useWallet()
@@ -34,6 +37,7 @@ const Stake = ({
   const [amount, setAmount] = useState()
   const [disable, setDisable] = useState(true)
   const [isLoading, setIsLoading] = useState(false)
+  const lptDecimal = useMintDecimals(farmData.mint_stake)
 
   const handleStake = async () => {
     setIsLoading(true)
@@ -56,7 +60,7 @@ const Stake = ({
       await harvestValidator.validate(farmAddress)
 
       const { txId } = await farming.stake(
-        utils.decimalize(amount, LPT_DECIMALS),
+        utils.decimalize(amount, lptDecimal),
         accountStake.address,
         senWalletAddr,
         farmAddress,
@@ -79,7 +83,7 @@ const Stake = ({
 
   const available = utils.undecimalize(
     BigInt(accountStake?.data.amount || 0),
-    LPT_DECIMALS,
+    lptDecimal,
   )
   return (
     <Row gutter={[16, 16]}>

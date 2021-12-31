@@ -59,7 +59,7 @@ const Management = ({ farmAddress }: { farmAddress: string }) => {
     setVisibleTooltip(false)
   }
 
-  const farmPeriod = Number(period) / (60 * 60)
+  const farmPeriod = Number(period) / 86400
   const farmReward = useMemo(() => {
     if (farmDecimal === 0) return 0
     return utils.undecimalize(reward, farmDecimal)
@@ -114,7 +114,7 @@ const Management = ({ farmAddress }: { farmAddress: string }) => {
                               type="text"
                               size="small"
                               onClick={onCopy}
-                              icon={<IonIcon name="copy" />}
+                              icon={<IonIcon name="copy-outline" />}
                             />
                           </CopyToClipboard>
                         </Tooltip>
@@ -124,7 +124,7 @@ const Management = ({ farmAddress }: { farmAddress: string }) => {
                           onClick={() =>
                             window.open(explorer(farmAddress), '_blank')
                           }
-                          icon={<IonIcon name="open" />}
+                          icon={<IonIcon name="open-outline" />}
                         />
                       </Space>
                     </Col>
@@ -139,7 +139,9 @@ const Management = ({ farmAddress }: { farmAddress: string }) => {
                 <Col span={24}>
                   <ExtraTypography
                     label="Reward"
-                    title={`${farmReward} ${symbol}/${farmPeriod} hour`}
+                    title={`${farmReward} ${symbol}/${farmPeriod} day${
+                      farmPeriod > 1 ? 's' : ''
+                    }`}
                   />
                 </Col>
               </Row>

@@ -1,4 +1,6 @@
+import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { useLocation } from 'react-router-dom'
 
 import { Row, Col, Input, Card, Button } from 'antd'
 import Banner from './banner'
@@ -10,8 +12,14 @@ import { AppDispatch, AppState } from 'app/model'
 import { setSearch } from 'app/model/main.controller'
 
 const Page = () => {
+  const locationSearch = useLocation().search
   const { search } = useSelector((state: AppState) => state.main)
   const dispatch = useDispatch<AppDispatch>()
+
+  useEffect(() => {
+    const search = new URLSearchParams(locationSearch).get('search') || ''
+    dispatch(setSearch({ search: search }))
+  }, [dispatch, locationSearch])
 
   return (
     <FarmWatcher>
