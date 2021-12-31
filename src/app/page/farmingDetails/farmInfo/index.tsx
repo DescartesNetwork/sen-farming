@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { utils } from '@senswap/sen-js'
 
@@ -17,7 +17,7 @@ const DEFAULT_TOKEN_SYMBOL = 'TOKEN'
 const FarmInfo = ({ farmAddress }: { farmAddress: string }) => {
   const { tokenProvider } = useMint()
   const { pools } = usePool()
-  const { budget } = useBudget(farmAddress)
+  const { budget, symbol } = useBudget(farmAddress)
   const farms = useSelector((state: AppState) => state.farms)
   const [copieAddress, setCopieAddress] = useState('')
 
@@ -25,6 +25,7 @@ const FarmInfo = ({ farmAddress }: { farmAddress: string }) => {
 
   const { mint_stake, period, reward, mint_reward } = farms[farmAddress] || {}
 
+  const farmDecimal = useMintDecimals(mint_stake)
   const lptDecimal = useMintDecimals(mint_stake)
 
   useEffect(() => {
@@ -45,6 +46,26 @@ const FarmInfo = ({ farmAddress }: { farmAddress: string }) => {
     await asyncWait(1500)
     await setCopieAddress('')
   }
+
+  const farmReward = useMemo(() => {
+    if (farmDecimal === 0) return 0
+    return utils.undecimalize(reward, farmDecimal)
+  }, [farmDecimal, reward])
+
+  const formatPeriod = useMemo(() => {
+    const numPeriod = Number(period)
+    let time = numPeriod / 86400
+    let formatTime = 'days'
+    if (time > 29) {
+      time = time / 30
+      formatTime = time > 1 ? 'months' : 'month'
+    }
+    if (time < 2) {
+      time = time * 24
+      formatTime = time > 1 ? 'hours' : 'hour'
+    }
+    return `${farmReward} ${symbol} / ${Math.floor(time)} ${formatTime}`
+  }, [farmReward, period, symbol])
 
   return (
     <Row gutter={[24, 24]}>
@@ -74,7 +95,7 @@ const FarmInfo = ({ farmAddress }: { farmAddress: string }) => {
           <Typography.Text type="secondary">{mintSymbol}</Typography.Text>
           <Typography.Text type="secondary">per</Typography.Text>
           <Typography.Text style={{ wordBreak: 'break-all' }}>
-            {numeric(Number(period) / (60 * 60)).format('0.[0000]')} hours
+            {formatPeriod}
           </Typography.Text>
         </Space>
       </Col>
