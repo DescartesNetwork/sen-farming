@@ -8,9 +8,9 @@ import Address from './address'
 
 import { asyncWait, numeric } from 'shared/util'
 import { AppState } from 'app/model'
-import { LPT_DECIMALS } from 'app/configs/farmstat.config'
 import { useMint, usePool } from 'senhub/providers'
 import { useBudget } from 'app/hooks/useBudget'
+import useMintDecimals from 'app/shared/hooks/useMintDecimals'
 
 const DEFAULT_TOKEN_SYMBOL = 'TOKEN'
 
@@ -24,6 +24,8 @@ const FarmInfo = ({ farmAddress }: { farmAddress: string }) => {
   const [mintSymbol, setMintSymbol] = useState('')
 
   const { mint_stake, period, reward, mint_reward } = farms[farmAddress] || {}
+
+  const lptDecimal = useMintDecimals(mint_stake)
 
   useEffect(() => {
     ;(async () => {
@@ -67,9 +69,7 @@ const FarmInfo = ({ farmAddress }: { farmAddress: string }) => {
         <Space align="baseline">
           <Title title="Rewarding:" />
           <Typography.Text>
-            {numeric(utils.undecimalize(reward, LPT_DECIMALS)).format(
-              '0,0.[00]',
-            )}
+            {numeric(utils.undecimalize(reward, lptDecimal)).format('0,0.[00]')}
           </Typography.Text>
           <Typography.Text type="secondary">{mintSymbol}</Typography.Text>
           <Typography.Text type="secondary">per</Typography.Text>
