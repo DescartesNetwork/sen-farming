@@ -25,7 +25,11 @@ const NewFarm = ({ size = 'small' }: { size?: SizeType }) => {
   return (
     <Row>
       <Col span={24}>
-        <Button onClick={() => setVisible(true)} size={size}>
+        <Button
+          style={{ background: 'transparent' }}
+          onClick={() => setVisible(true)}
+          size={size}
+        >
           New farm
         </Button>
       </Col>
