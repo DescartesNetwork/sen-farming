@@ -167,12 +167,15 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
               </Row>
             </Col>
             <Col>
-              <Button
-                type="text"
-                icon={<IonIcon name={icon} />}
-                disabled={!isOwner && isFreezeFarm}
-                onClick={onActive}
-              />
+              <Space>
+                {isFreezeFarm && <IonIcon name="snow-outline" />}
+                <Button
+                  type="text"
+                  icon={<IonIcon name={icon} />}
+                  disabled={!isOwner && isFreezeFarm}
+                  onClick={onActive}
+                />
+              </Space>
             </Col>
           </Row>
         </Card>
