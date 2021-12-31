@@ -53,7 +53,7 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
   const isOwner = owner === walletAddress
   const farmSelected = useSelector((state: AppState) => state.main.search)
   const isFreezeFarm = state === FarmStatus.isFreeze
-  const lptDecimal = useMintDecimals(farmData.mint_stake)
+  const lptDecimal = useMintDecimals(farmData?.mint_stake)
 
   const onActive = () => {
     if (activeKey) return setActiveKey(undefined)
@@ -119,7 +119,7 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
               <Row gutter={[16, 16]} align="middle">
                 <Col xs={24} md={5}>
                   <Space>
-                    <MintAvatar mintAddress={farmData.mint_stake} size={24} />
+                    <MintAvatar mintAddress={farmData?.mint_stake} size={24} />
                     <MintSymbol mintAddress={farmAddress} />
                     <Button
                       type="text"
@@ -151,7 +151,7 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
                 </Col>
                 <Col xs={12} md={5}>
                   <Content
-                    mintAddress={farmData.mint_reward}
+                    mintAddress={farmData?.mint_reward}
                     label="Reward"
                     value={numeric(reward).format('0,0.00[00]')}
                   />

@@ -10,6 +10,13 @@ import configs from 'app/configs'
 import { notifyError, notifySuccess } from 'app/helper'
 import useMintDecimals from 'app/shared/hooks/useMintDecimals'
 
+const PERIODS: Record<string, bigint> = {
+  Hour: BigInt(60 * 60),
+  Day: BigInt(24 * 60 * 60),
+  Month: BigInt(30 * 24 * 60 * 60),
+  Year: BigInt(365 * 24 * 60 * 60),
+}
+
 const ConfirmAddFarm = ({
   mintAddress,
   onClose = () => {},
@@ -25,6 +32,7 @@ const ConfirmAddFarm = ({
 
   const [value, setValue] = useState('')
   const [duration, setDuration] = useState('')
+  const [period, setPeriod] = useState('Hour')
   const [loading, setLoading] = useState(false)
   const rewardDecimal = useMintDecimals(senAddress)
   const {
@@ -38,14 +46,13 @@ const ConfirmAddFarm = ({
       })
     setLoading(true)
     const { wallet } = window.sentre
-    if (!wallet) return
+    if (!wallet || !period || !duration) return
     const reward = utils.decimalize(value, rewardDecimal)
-    const period = BigInt(Number(duration) * 86400)
-
+    const calculatePeriod = Number(PERIODS?.[period]) * Number(duration)
     try {
       const { txId } = await farming.initializeFarm(
         reward,
-        period,
+        BigInt(calculatePeriod),
         walletAddress,
         mintAddress,
         senAddress,
@@ -58,6 +65,13 @@ const ConfirmAddFarm = ({
     } finally {
       return setLoading(false)
     }
+  }
+
+  const onPeriod = () => {
+    const keys = Object.keys(PERIODS)
+    const prevIndex = keys.findIndex((key) => key === period)
+    const nextIndex = (prevIndex + 1) % keys.length
+    return setPeriod(keys[nextIndex])
   }
 
   const disabled = !value || !duration || !account.isAddress(mintAddress)
@@ -126,7 +140,7 @@ const ConfirmAddFarm = ({
         <Row gutter={[0, 0]}>
           <Col span={24}>
             <Typography.Text style={{ marginLeft: 12, fontSize: 12 }}>
-              Number of days
+              Number of {period}
             </Typography.Text>
           </Col>
           <Col span={24}>
@@ -135,6 +149,11 @@ const ConfirmAddFarm = ({
               placeholder="0"
               value={duration}
               onValue={setDuration}
+              suffix={
+                <Button type="text" size="small" onClick={onPeriod}>
+                  {period}
+                </Button>
+              }
             />
           </Col>
         </Row>
