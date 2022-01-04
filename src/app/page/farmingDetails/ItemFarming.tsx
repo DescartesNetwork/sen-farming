@@ -48,7 +48,7 @@ const LOW_BUDGET =
 const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
   const farmData = useSelector((state: AppState) => state.farms?.[farmAddress])
   const { data } = useDebt(farmAddress)
-  const reward = useReward(farmAddress)
+  const userReward = useReward(farmAddress)
   const farmPool = useFarmPool(farmAddress)
   const liquidity = useFarmLiquidity(farmAddress)
   const { apr } = useFarmRoi(farmAddress)
@@ -64,18 +64,18 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
   const [visibleInfo, setVisibleInfo] = useState(false)
   const [loading, setLoading] = useState(false)
   const [warning, setWarning] = useState('')
-  const { owner, state } = farmData || {}
+  const { owner, state, reward } = farmData || {}
   const isOwner = owner === walletAddress
   const farmSelected = useSelector((state: AppState) => state.main.search)
   const isFreezeFarm = state === FarmStatus.isFreeze
   const lptDecimal = useMintDecimals(farmData?.mint_stake)
-  const farmDecimal = useMintDecimals(farmData.mint_stake)
+  const farmDecimal = useMintDecimals(farmData?.mint_stake)
   const { budget } = useBudget(farmAddress)
 
   const farmReward = useMemo(() => {
     if (farmDecimal === 0) return 0
-    return utils.undecimalize(farmData.reward, farmDecimal)
-  }, [farmDecimal, farmData.reward])
+    return utils.undecimalize(reward, farmDecimal)
+  }, [farmDecimal, reward])
 
   const onActive = () => {
     if (activeKey) return setActiveKey(undefined)
@@ -176,7 +176,7 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
                   <Content
                     mintAddress={farmData?.mint_reward}
                     label="Reward"
-                    value={numeric(reward).format('0,0.00[00]')}
+                    value={numeric(userReward).format('0,0.00[00]')}
                   />
                 </Col>
               </Row>
@@ -228,17 +228,16 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
                   {isOwner && <Management farmAddress={farmAddress} />}
                   <Button
                     onClick={() => setVisible(true)}
-                    icon={<IonIcon name="add-outline" />}
                     disabled={isFreezeFarm}
                   >
-                    Stake
+                    Stake / Unstake
                   </Button>
                   <Button
                     type="primary"
                     icon={<IonIcon name="leaf-outline" />}
                     loading={loading}
                     onClick={handleHarvest}
-                    disabled={isFreezeFarm || reward === 0}
+                    disabled={isFreezeFarm || userReward === 0}
                   >
                     Harvest
                   </Button>
