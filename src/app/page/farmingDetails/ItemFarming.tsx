@@ -3,7 +3,17 @@ import { utils } from '@senswap/sen-js'
 import { useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 
-import { Button, Card, Col, Collapse, Modal, Row, Space, Tabs } from 'antd'
+import {
+  Button,
+  Card,
+  Col,
+  Collapse,
+  Modal,
+  Row,
+  Space,
+  Tabs,
+  Tooltip,
+} from 'antd'
 import Content from './content'
 import IonIcon from 'shared/antd/ionicon'
 import Unstake from './stakeAndUnstake/unstake'
@@ -26,6 +36,7 @@ import configs from 'app/configs'
 import { useFarmPool } from 'app/hooks/useFarmPool'
 import { FarmStatus } from 'app/constants/farms'
 import useMintDecimals from 'app/shared/hooks/useMintDecimals'
+import { useBudget } from 'app/hooks/useBudget'
 
 const {
   sol: { senAddress, farming },
@@ -35,6 +46,7 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
   const farmData = useSelector((state: AppState) => state.farms?.[farmAddress])
   const { data } = useDebt(farmAddress)
   const reward = useReward(farmAddress)
+  const { budget } = useBudget(farmAddress)
   const farmPool = useFarmPool(farmAddress)
   const liquidity = useFarmLiquidity(farmAddress)
   const { apr } = useFarmRoi(farmAddress)
@@ -125,7 +137,7 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
                       type="text"
                       shape="circle"
                       size="small"
-                      icon={<IonIcon name="alert-circle-outline" />}
+                      icon={<IonIcon name="information-circle-outline" />}
                       onClick={() => setVisibleInfo(true)}
                     />
                   </Space>
@@ -161,6 +173,14 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
             <Col>
               <Space>
                 {isFreezeFarm && <IonIcon name="snow-outline" />}
+                {budget === '0' && (
+                  <Tooltip title="Reward = 0">
+                    <IonIcon
+                      name="alert-circle-outline"
+                      style={{ color: '#D72311' }}
+                    />
+                  </Tooltip>
+                )}
                 <Button
                   type="text"
                   icon={<IonIcon name={icon} />}

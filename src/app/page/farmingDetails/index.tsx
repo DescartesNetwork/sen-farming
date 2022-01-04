@@ -60,7 +60,7 @@ const FarmingDetails = () => {
       onChange={onChange}
       tabBarExtraContent={<NewFarm />}
     >
-      <Tabs.TabPane tab="Sen Farms" key="sen-farms">
+      <Tabs.TabPane tab="Sentre Farms" key="sen-farms">
         <SentreFarms />
       </Tabs.TabPane>
       <Tabs.TabPane tab="Staked Farms" key="staked-farms">
