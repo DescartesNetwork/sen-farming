@@ -8,9 +8,8 @@ import useMintCgk from 'app/shared/hooks/useMintCgk'
 
 export const useBudget = (
   farmAddress: string,
-): { budget: number | string; symbol: string; amount: bigint } => {
+): { budget: number | string; symbol: string } => {
   const [budget, setBudget] = useState('0')
-  const [amount, setAmount] = useState<bigint>(BigInt(0))
   const farmData = useSelector((state: AppState) => state.farms?.[farmAddress])
   const { treasury_stake, treasury_reward, mint_reward, total_shares } =
     farmData || {}
@@ -22,7 +21,6 @@ export const useBudget = (
       try {
         const { splt } = window.sentre
         let { amount } = await splt.getAccountData(treasury_reward)
-        setAmount(amount)
         if (treasury_reward === treasury_stake) amount = amount - total_shares
         const budget = utils.undecimalize(amount, decimal)
         setBudget(budget)
@@ -32,5 +30,5 @@ export const useBudget = (
     })()
   }, [decimal, total_shares, treasury_reward, treasury_stake])
 
-  return { budget, symbol, amount }
+  return { budget, symbol }
 }

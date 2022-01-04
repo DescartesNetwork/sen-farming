@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { utils } from '@senswap/sen-js'
 import { useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
@@ -49,7 +49,6 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
   const farmData = useSelector((state: AppState) => state.farms?.[farmAddress])
   const { data } = useDebt(farmAddress)
   const reward = useReward(farmAddress)
-  const { amount } = useBudget(farmAddress)
   const farmPool = useFarmPool(farmAddress)
   const liquidity = useFarmLiquidity(farmAddress)
   const { apr } = useFarmRoi(farmAddress)
@@ -70,6 +69,13 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
   const farmSelected = useSelector((state: AppState) => state.main.search)
   const isFreezeFarm = state === FarmStatus.isFreeze
   const lptDecimal = useMintDecimals(farmData?.mint_stake)
+  const farmDecimal = useMintDecimals(farmData.mint_stake)
+  const { budget } = useBudget(farmAddress)
+
+  const farmReward = useMemo(() => {
+    if (farmDecimal === 0) return 0
+    return utils.undecimalize(farmData.reward, farmDecimal)
+  }, [farmDecimal, farmData.reward])
 
   const onActive = () => {
     if (activeKey) return setActiveKey(undefined)
@@ -98,9 +104,9 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
 
   useEffect(() => {
     if (!farmSelected || farmSelected !== farmAddress) return
-    if (amount < farmData.reward * BigInt(3)) return setWarning(LOW_BUDGET)
+    if (budget < Number(farmReward) * 3) return setWarning(LOW_BUDGET)
     setActiveKey(farmSelected)
-  }, [amount, farmAddress, farmData.reward, farmSelected])
+  }, [budget, farmAddress, farmReward, farmSelected])
 
   let amountLptShared = '0'
   if (data) {
