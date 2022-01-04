@@ -42,6 +42,9 @@ const {
   sol: { senAddress, farming },
 } = configs
 
+const LOW_BUDGET =
+  'The budget of reward is very low. Please unstake your tokens for safety.'
+
 const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
   const farmData = useSelector((state: AppState) => state.farms?.[farmAddress])
   const { data } = useDebt(farmAddress)
@@ -174,7 +177,7 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
               <Space>
                 {isFreezeFarm && <IonIcon name="snow-outline" />}
                 {budget === '0' && (
-                  <Tooltip title="The budget of reward is very low. Please unstake your tokens for safety.">
+                  <Tooltip title={LOW_BUDGET}>
                     <IonIcon
                       name="alert-circle-outline"
                       style={{ color: '#D72311' }}
