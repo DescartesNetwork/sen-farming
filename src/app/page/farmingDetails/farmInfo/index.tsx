@@ -11,6 +11,7 @@ import { AppState } from 'app/model'
 import { useMint, usePool } from 'senhub/providers'
 import { useBudget } from 'app/hooks/useBudget'
 import useMintDecimals from 'app/shared/hooks/useMintDecimals'
+import { useReward } from 'app/hooks/useReward'
 
 const DEFAULT_TOKEN_SYMBOL = 'TOKEN'
 
@@ -18,6 +19,7 @@ const FarmInfo = ({ farmAddress }: { farmAddress: string }) => {
   const { tokenProvider } = useMint()
   const { pools } = usePool()
   const { budget, symbol } = useBudget(farmAddress)
+  const rewarding = useReward(farmAddress)
   const farms = useSelector((state: AppState) => state.farms)
   const [copieAddress, setCopieAddress] = useState('')
 
@@ -26,7 +28,6 @@ const FarmInfo = ({ farmAddress }: { farmAddress: string }) => {
   const { mint_stake, period, reward, mint_reward } = farms[farmAddress] || {}
 
   const farmDecimal = useMintDecimals(mint_stake)
-  const lptDecimal = useMintDecimals(mint_stake)
 
   useEffect(() => {
     ;(async () => {
@@ -90,7 +91,7 @@ const FarmInfo = ({ farmAddress }: { farmAddress: string }) => {
         <Space align="baseline">
           <Title title="Rewarding:" />
           <Typography.Text>
-            {numeric(utils.undecimalize(reward, lptDecimal)).format('0,0.[00]')}
+            {numeric(rewarding).format('0,0.[00]')}
           </Typography.Text>
           <Typography.Text type="secondary">{mintSymbol}</Typography.Text>
           <Typography.Text type="secondary">per</Typography.Text>

@@ -1,9 +1,19 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { utils } from '@senswap/sen-js'
 import { useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 
-import { Button, Card, Col, Collapse, Modal, Row, Space, Tabs } from 'antd'
+import {
+  Button,
+  Card,
+  Col,
+  Collapse,
+  Modal,
+  Row,
+  Space,
+  Tabs,
+  Tooltip,
+} from 'antd'
 import Content from './content'
 import IonIcon from 'shared/antd/ionicon'
 import Unstake from './stakeAndUnstake/unstake'
@@ -26,15 +36,19 @@ import configs from 'app/configs'
 import { useFarmPool } from 'app/hooks/useFarmPool'
 import { FarmStatus } from 'app/constants/farms'
 import useMintDecimals from 'app/shared/hooks/useMintDecimals'
+import { useBudget } from 'app/hooks/useBudget'
 
 const {
   sol: { senAddress, farming },
 } = configs
 
+const LOW_BUDGET =
+  'The budget of reward is very low. Please unstake your tokens for safety.'
+
 const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
   const farmData = useSelector((state: AppState) => state.farms?.[farmAddress])
   const { data } = useDebt(farmAddress)
-  const reward = useReward(farmAddress)
+  const userReward = useReward(farmAddress)
   const farmPool = useFarmPool(farmAddress)
   const liquidity = useFarmLiquidity(farmAddress)
   const { apr } = useFarmRoi(farmAddress)
@@ -49,11 +63,19 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
   const [visible, setVisible] = useState(false)
   const [visibleInfo, setVisibleInfo] = useState(false)
   const [loading, setLoading] = useState(false)
-  const { owner, state } = farmData || {}
+  const [warning, setWarning] = useState('')
+  const { owner, state, reward } = farmData || {}
   const isOwner = owner === walletAddress
   const farmSelected = useSelector((state: AppState) => state.main.search)
   const isFreezeFarm = state === FarmStatus.isFreeze
   const lptDecimal = useMintDecimals(farmData?.mint_stake)
+  const farmDecimal = useMintDecimals(farmData?.mint_stake)
+  const { budget } = useBudget(farmAddress)
+
+  const farmReward = useMemo(() => {
+    if (farmDecimal === 0) return 0
+    return utils.undecimalize(reward, farmDecimal)
+  }, [farmDecimal, reward])
 
   const onActive = () => {
     if (activeKey) return setActiveKey(undefined)
@@ -82,8 +104,9 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
 
   useEffect(() => {
     if (!farmSelected || farmSelected !== farmAddress) return
+    if (budget < Number(farmReward) * 3) return setWarning(LOW_BUDGET)
     setActiveKey(farmSelected)
-  }, [farmAddress, farmSelected])
+  }, [budget, farmAddress, farmReward, farmSelected])
 
   let amountLptShared = '0'
   if (data) {
@@ -125,7 +148,7 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
                       type="text"
                       shape="circle"
                       size="small"
-                      icon={<IonIcon name="alert-circle-outline" />}
+                      icon={<IonIcon name="information-circle-outline" />}
                       onClick={() => setVisibleInfo(true)}
                     />
                   </Space>
@@ -153,7 +176,7 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
                   <Content
                     mintAddress={farmData?.mint_reward}
                     label="Reward"
-                    value={numeric(reward).format('0,0.00[00]')}
+                    value={numeric(userReward).format('0,0.00[00]')}
                   />
                 </Col>
               </Row>
@@ -161,6 +184,14 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
             <Col>
               <Space>
                 {isFreezeFarm && <IonIcon name="snow-outline" />}
+                {warning && (
+                  <Tooltip title={LOW_BUDGET}>
+                    <IonIcon
+                      name="alert-circle-outline"
+                      style={{ color: '#D72311' }}
+                    />
+                  </Tooltip>
+                )}
                 <Button
                   type="text"
                   icon={<IonIcon name={icon} />}
@@ -197,17 +228,16 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
                   {isOwner && <Management farmAddress={farmAddress} />}
                   <Button
                     onClick={() => setVisible(true)}
-                    icon={<IonIcon name="add-outline" />}
                     disabled={isFreezeFarm}
                   >
-                    Stake
+                    Stake / Unstake
                   </Button>
                   <Button
                     type="primary"
                     icon={<IonIcon name="leaf-outline" />}
                     loading={loading}
                     onClick={handleHarvest}
-                    disabled={isFreezeFarm || reward === 0}
+                    disabled={isFreezeFarm || userReward === 0}
                   >
                     Harvest
                   </Button>

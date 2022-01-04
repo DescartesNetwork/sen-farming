@@ -17,7 +17,8 @@ const Page = () => {
   const dispatch = useDispatch<AppDispatch>()
 
   useEffect(() => {
-    const search = new URLSearchParams(locationSearch).get('search') || ''
+    const search = new URLSearchParams(locationSearch).get('search')
+    if (!search) return
     dispatch(setSearch({ search: search }))
   }, [dispatch, locationSearch])
 
