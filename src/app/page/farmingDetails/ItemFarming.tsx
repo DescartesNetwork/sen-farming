@@ -174,7 +174,7 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
               <Space>
                 {isFreezeFarm && <IonIcon name="snow-outline" />}
                 {budget === '0' && (
-                  <Tooltip title="Reward = 0">
+                  <Tooltip title="The budget of reward is very low. Please unstake your tokens for safety.">
                     <IonIcon
                       name="alert-circle-outline"
                       style={{ color: '#D72311' }}
