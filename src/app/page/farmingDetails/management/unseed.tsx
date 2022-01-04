@@ -11,8 +11,8 @@ import { useWallet } from 'senhub/providers'
 import { AppState } from 'app/model'
 import configs from 'app/configs'
 import { notifyError, notifySuccess } from 'app/helper'
-import useMintDecimals from 'app/shared/hooks/useMintDecimals'
 import useMintCgk from 'app/shared/hooks/useMintCgk'
+import useMintDecimals from 'shared/hooks/useMintDecimals'
 
 const {
   sol: { farming },
@@ -38,7 +38,7 @@ const Unseed = ({
 
   useEffect(() => {
     ;(async () => {
-      if (decimal === 0) return
+      if (!decimal) return
       try {
         const { splt } = window.sentre
         const { amount } = await splt.getAccountData(treasury_reward)
@@ -53,7 +53,7 @@ const Unseed = ({
   const unseed = async () => {
     setLoading(true)
     const { wallet, splt } = window.sentre
-    if (!wallet) return
+    if (!wallet || !decimal) return
     const dstAddress = await splt.deriveAssociatedAddress(
       walletAddress,
       mint_reward,

@@ -10,8 +10,8 @@ import { asyncWait, numeric } from 'shared/util'
 import { AppState } from 'app/model'
 import { useMint, usePool } from 'senhub/providers'
 import { useBudget } from 'app/hooks/useBudget'
-import useMintDecimals from 'app/shared/hooks/useMintDecimals'
 import { useReward } from 'app/hooks/useReward'
+import useMintDecimals from 'shared/hooks/useMintDecimals'
 
 const DEFAULT_TOKEN_SYMBOL = 'TOKEN'
 
@@ -49,7 +49,7 @@ const FarmInfo = ({ farmAddress }: { farmAddress: string }) => {
   }
 
   const farmReward = useMemo(() => {
-    if (farmDecimal === 0) return 0
+    if (!farmDecimal) return 0
     return utils.undecimalize(reward, farmDecimal)
   }, [farmDecimal, reward])
 

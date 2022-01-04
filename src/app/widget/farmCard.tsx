@@ -14,7 +14,7 @@ import { useFarmRoi } from 'app/hooks/useFarmRoi'
 import configs from 'app/configs'
 import { numeric } from 'shared/util'
 import { setSearch } from 'app/model/main.controller'
-import useMintDecimals from 'app/shared/hooks/useMintDecimals'
+import useMintDecimals from 'shared/hooks/useMintDecimals'
 
 const {
   manifest: { appId },
@@ -35,7 +35,7 @@ const FarmCard = ({ farmAddress }: { farmAddress: string }) => {
   }, [dispatch, farmAddress, history])
 
   let amountLptShared = '0'
-  if (data) {
+  if (data && lptDecimal) {
     amountLptShared = utils.undecimalize(data.shares, lptDecimal)
   }
 

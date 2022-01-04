@@ -35,8 +35,8 @@ import { MintAvatar, MintSymbol } from 'app/shared/components/mint'
 import configs from 'app/configs'
 import { useFarmPool } from 'app/hooks/useFarmPool'
 import { FarmStatus } from 'app/constants/farms'
-import useMintDecimals from 'app/shared/hooks/useMintDecimals'
 import { useBudget } from 'app/hooks/useBudget'
+import useMintDecimals from 'shared/hooks/useMintDecimals'
 
 const {
   sol: { senAddress, farming },
@@ -73,7 +73,7 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
   const { budget } = useBudget(farmAddress)
 
   const farmReward = useMemo(() => {
-    if (farmDecimal === 0) return 0
+    if (farmDecimal === 0 || !farmDecimal) return 0
     return utils.undecimalize(reward, farmDecimal)
   }, [farmDecimal, reward])
 
@@ -109,7 +109,7 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
   }, [budget, farmAddress, farmReward, farmSelected])
 
   let amountLptShared = '0'
-  if (data) {
+  if (data && lptDecimal) {
     amountLptShared = utils.undecimalize(data.shares, lptDecimal)
   }
   const desktop = width > 768
