@@ -6,10 +6,16 @@
     "@dnd-kit/sortable": "^5.0.0",
     "@project-serum/sol-wallet-adapter": "^0.2.6",
     "@reduxjs/toolkit": "^1.6.2",
+<<<<<<< HEAD
     "@senswap/react-lazyload": "^3.2.2",
     "@senswap/sen-js": "^1.3.2",
     "@solana/spl-token-registry": "^0.2.459",
     "antd": "^4.17.0-alpha.7",
+=======
+    "@senswap/sen-js": "^1.3.5",
+    "@solana/spl-token-registry": "^0.2.1146",
+    "antd": "^4.18.2",
+>>>>>>> 26b57e4988c91950631ecb1b10e17ce870494172
     "bs58": "^4.0.1",
     "flexsearch": "^0.7.21",
     "iconsax-react": "0.0.7",
