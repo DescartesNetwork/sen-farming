@@ -49,7 +49,7 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
   const farmData = useSelector((state: AppState) => state.farms?.[farmAddress])
   const { data } = useDebt(farmAddress)
   const reward = useReward(farmAddress)
-  const { budget } = useBudget(farmAddress)
+  const { amount } = useBudget(farmAddress)
   const farmPool = useFarmPool(farmAddress)
   const liquidity = useFarmLiquidity(farmAddress)
   const { apr } = useFarmRoi(farmAddress)
@@ -64,6 +64,7 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
   const [visible, setVisible] = useState(false)
   const [visibleInfo, setVisibleInfo] = useState(false)
   const [loading, setLoading] = useState(false)
+  const [warning, setWarning] = useState('')
   const { owner, state } = farmData || {}
   const isOwner = owner === walletAddress
   const farmSelected = useSelector((state: AppState) => state.main.search)
@@ -97,8 +98,9 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
 
   useEffect(() => {
     if (!farmSelected || farmSelected !== farmAddress) return
+    if (amount < farmData.reward * BigInt(3)) return setWarning(LOW_BUDGET)
     setActiveKey(farmSelected)
-  }, [farmAddress, farmSelected])
+  }, [amount, farmAddress, farmData.reward, farmSelected])
 
   let amountLptShared = '0'
   if (data) {
@@ -176,7 +178,7 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
             <Col>
               <Space>
                 {isFreezeFarm && <IonIcon name="snow-outline" />}
-                {budget === '0' && (
+                {warning && (
                   <Tooltip title={LOW_BUDGET}>
                     <IonIcon
                       name="alert-circle-outline"
