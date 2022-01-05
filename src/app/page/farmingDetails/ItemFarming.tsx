@@ -13,6 +13,7 @@ import {
   Space,
   Tabs,
   Tooltip,
+  Typography,
 } from 'antd'
 import Content from './content'
 import IonIcon from 'shared/antd/ionicon'
@@ -108,6 +109,27 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
     setActiveKey(farmSelected)
   }, [budget, farmAddress, farmReward, farmSelected])
 
+  const TooltipApr = () => (
+    <Row gutter={[8, 8]}>
+      <Col span={24}>
+        <Space size={4}>
+          <Typography.Title style={{ color: '#fff' }} level={5}>
+            APR
+          </Typography.Title>
+          <Typography.Text type="secondary">
+            (Annual Percentage Rate)
+          </Typography.Text>
+        </Space>
+      </Col>
+      <Col>
+        <Typography.Text style={{ color: '#E9E9EB' }}>
+          Refers to the simple interest accured from a particular inverstment
+          over a 1 year period.
+        </Typography.Text>
+      </Col>
+    </Row>
+  )
+
   let amountLptShared = '0'
   if (data && lptDecimal) {
     amountLptShared = utils.undecimalize(data.shares, lptDecimal)
@@ -156,7 +178,7 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
                 <Col xs={12} md={4}>
                   <Content
                     label="APR"
-                    tooltip={farmAddress}
+                    tooltip={<TooltipApr />}
                     value={numeric(apr).format('0,0.[00]a%')}
                   />
                 </Col>
