@@ -5,10 +5,10 @@ import { Col, Empty, Row } from 'antd'
 import ItemFarming from './ItemFarming'
 
 import { useSearchFarm } from 'app/hooks/useSearchFarm'
-import { useComunityFarms } from 'app/hooks/listFarm/useCommunityFarms'
+import { useCommunityFarms } from 'app/hooks/listFarm/useCommunityFarms'
 
 const ListFarmings = () => {
-  const { communityFarms } = useComunityFarms()
+  const { communityFarms } = useCommunityFarms()
 
   const farms = useSearchFarm(communityFarms)
   const listFarmAddress = useMemo(() => Object.keys(farms), [farms])

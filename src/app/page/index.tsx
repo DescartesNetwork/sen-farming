@@ -5,7 +5,7 @@ import { useLocation } from 'react-router-dom'
 import { Row, Col, Input, Card, Button } from 'antd'
 import Banner from './banner'
 import FarmingDetails from './farmingDetails'
-import FarmWatcher from 'app/components/watcher'
+import Watcher from 'app/components/watcher'
 import IonIcon from 'shared/antd/ionicon'
 
 import { AppDispatch, AppState } from 'app/model'
@@ -23,7 +23,7 @@ const Page = () => {
   }, [dispatch, locationSearch])
 
   return (
-    <FarmWatcher>
+    <Watcher>
       <Row gutter={[24, 24]} style={{ paddingBottom: 12 }} justify="center">
         <Col xs={24} lg={18}>
           <Banner />
@@ -72,7 +72,7 @@ const Page = () => {
           </Row>
         </Col>
       </Row>
-    </FarmWatcher>
+    </Watcher>
   )
 }
 

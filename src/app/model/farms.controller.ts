@@ -8,16 +8,16 @@ const {
   sol: { farming, senAddress },
 } = config
 
-export type State = Record<string, FarmData>
+export type FarmState = Record<string, FarmData>
 
 const NAME = 'farms'
-const initialState: State = {}
+const initialState: FarmState = {}
 
 /**
  * Actions
  */
 
-export const getFarms = createAsyncThunk<State, void, { state: any }>(
+export const getFarms = createAsyncThunk<FarmState, void, { state: any }>(
   `${NAME}/getFarms`,
   async (_, { getState }) => {
     const { farms } = getState()
@@ -30,7 +30,7 @@ export const getFarms = createAsyncThunk<State, void, { state: any }>(
           { memcmp: { bytes: senAddress, offset: 97 } },
         ],
       })
-    let bulk: State = {}
+    let bulk: FarmState = {}
     value.forEach(({ pubkey, account: { data: buf } }) => {
       const address = pubkey.toBase58()
       const data = farming.parseFarmData(buf)
@@ -41,7 +41,7 @@ export const getFarms = createAsyncThunk<State, void, { state: any }>(
 )
 
 export const getFarm = createAsyncThunk<
-  State,
+  FarmState,
   { address: string },
   { state: any }
 >(`${NAME}/getFarm`, async ({ address }, { getState }) => {
@@ -55,7 +55,7 @@ export const getFarm = createAsyncThunk<
 })
 
 export const upsetFarm = createAsyncThunk<
-  State,
+  FarmState,
   { address: string; data: FarmData },
   { state: any }
 >(`${NAME}/upsetFarm`, async ({ address, data }) => {

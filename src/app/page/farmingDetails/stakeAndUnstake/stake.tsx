@@ -12,7 +12,7 @@ import { numeric } from 'shared/util'
 import { notifyError, notifySuccess } from 'app/helper'
 import { useAccountStake } from 'app/hooks/useAccountStake'
 import configs from 'app/configs'
-import { HarvestValidator } from 'helpers/validateHarvest'
+import { HarvestValidator } from 'app/helper/validateHarvest'
 import { AppState } from 'app/model'
 import useMintDecimals from 'shared/hooks/useMintDecimals'
 

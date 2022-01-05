@@ -18,7 +18,7 @@ const DEFAULT_TOKEN_SYMBOL = 'TOKEN'
 const FarmInfo = ({ farmAddress }: { farmAddress: string }) => {
   const { tokenProvider } = useMint()
   const { pools } = usePool()
-  const { budget, symbol } = useBudget(farmAddress)
+  const { budget, budgetSymbol } = useBudget(farmAddress)
   const rewarding = useReward(farmAddress)
   const farms = useSelector((state: AppState) => state.farms)
   const [copieAddress, setCopieAddress] = useState('')
@@ -65,8 +65,8 @@ const FarmInfo = ({ farmAddress }: { farmAddress: string }) => {
       time = time * 24
       formatTime = time > 1 ? 'hours' : 'hour'
     }
-    return `${farmReward} ${symbol} / ${Math.floor(time)} ${formatTime}`
-  }, [farmReward, period, symbol])
+    return `${farmReward} ${budgetSymbol} / ${Math.floor(time)} ${formatTime}`
+  }, [farmReward, period, budgetSymbol])
 
   return (
     <Row gutter={[24, 24]}>

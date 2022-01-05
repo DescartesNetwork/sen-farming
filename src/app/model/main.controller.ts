@@ -4,12 +4,12 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
  * Store constructor
  */
 
-export type State = {
+export type MainState = {
   search: string
 }
 
 const NAME = 'main'
-const initialState: State = {
+const initialState: MainState = {
   search: '',
 }
 
@@ -18,7 +18,7 @@ const initialState: State = {
  */
 
 export const setSearch = createAsyncThunk<
-  State,
+  MainState,
   { search: string },
   { state: any }
 >(`${NAME}/setSearch`, async ({ search }, { getState }) => {

@@ -7,7 +7,7 @@ import IonIcon from 'shared/antd/ionicon'
 import SearchBar from './searchBar'
 import StakedFarms from './stakedFarms'
 import YourFarms from './yourFamrs'
-import FarmWatcher from 'app/components/watcher'
+import Watcher from 'app/components/watcher'
 
 import { AppDispatch, AppState } from 'app/model'
 import { setSearch } from 'app/model/main.controller'
@@ -37,7 +37,7 @@ const Widget = () => {
         onClick={onToggle}
       />
       <SearchBar isHidden={!search && !isOpenSearch} />
-      <FarmWatcher style={{ height: 336 }}>
+      <Watcher style={{ height: 336 }}>
         <Tabs
           className={!isOpenSearch ? '' : 'hidden-tab'}
           onChange={() =>
@@ -53,7 +53,7 @@ const Widget = () => {
             <YourFarms />
           </Tabs.TabPane>
         </Tabs>
-      </FarmWatcher>
+      </Watcher>
     </Fragment>
   )
 }
