@@ -24,7 +24,7 @@ import Close from './close'
 import { asyncWait, explorer, shortenAddress } from 'shared/util'
 import { AppState } from 'app/model'
 import { useBudget } from 'app/hooks/useBudget'
-import useMintDecimals from 'app/shared/hooks/useMintDecimals'
+import useMintDecimals from 'shared/hooks/useMintDecimals'
 
 const ExtraTypography = ({
   label = '',
@@ -60,7 +60,7 @@ const Management = ({ farmAddress }: { farmAddress: string }) => {
   }
 
   const farmReward = useMemo(() => {
-    if (farmDecimal === 0) return 0
+    if (!farmDecimal) return 0
     return utils.undecimalize(reward, farmDecimal)
   }, [farmDecimal, reward])
 

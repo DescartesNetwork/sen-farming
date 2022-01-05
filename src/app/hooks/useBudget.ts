@@ -3,8 +3,8 @@ import { useSelector } from 'react-redux'
 import { utils } from '@senswap/sen-js'
 
 import { AppState } from 'app/model'
-import useMintDecimals from 'app/shared/hooks/useMintDecimals'
 import useMintCgk from 'app/shared/hooks/useMintCgk'
+import useMintDecimals from 'shared/hooks/useMintDecimals'
 
 export const useBudget = (
   farmAddress: string,
@@ -17,6 +17,7 @@ export const useBudget = (
   const { symbol } = useMintCgk(mint_reward)
 
   useEffect(() => {
+    if (!decimal) return
     ;(async () => {
       try {
         const { splt } = window.sentre
