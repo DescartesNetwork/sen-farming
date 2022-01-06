@@ -25,6 +25,7 @@ export const useCheckActiveTab = () => {
       return setActiveTab('staked-farms')
     if (!!Object.keys(searchedComFarms).length)
       return setActiveTab('community-farms')
+    return setActiveTab('sen-farms')
   }, [
     searchedComFarms,
     searchedSenFarms,
