@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 
 import { useFarmLiquidity } from 'app/hooks/useFarmLiquidity'
@@ -27,6 +27,5 @@ export const useFarmRoi = (farmAddress: string) => {
     calcLiquidity()
   }, [calcLiquidity])
 
-  const apr = useMemo(() => 365 * roi, [roi])
-  return { roi, apr }
+  return { roi, apr: 365 * roi }
 }

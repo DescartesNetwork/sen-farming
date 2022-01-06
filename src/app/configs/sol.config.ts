@@ -11,7 +11,7 @@ type Conf = {
   farmingAddress: string
   senAddress: string
   farming: Farming
-  senOwner: string[]
+  senOwners: string[]
 }
 
 const conf: Record<Net, Conf> = {
@@ -32,7 +32,7 @@ const conf: Record<Net, Conf> = {
         this.node,
       )
     },
-    senOwner: ['GJLqpmDxxrV9xruee2vFvEoTho7VVQHRtuHH8nfoAE54'],
+    senOwners: ['GJLqpmDxxrV9xruee2vFvEoTho7VVQHRtuHH8nfoAE54'],
   },
 
   /**
@@ -52,7 +52,7 @@ const conf: Record<Net, Conf> = {
         this.node,
       )
     },
-    senOwner: ['GJLqpmDxxrV9xruee2vFvEoTho7VVQHRtuHH8nfoAE54'],
+    senOwners: ['GJLqpmDxxrV9xruee2vFvEoTho7VVQHRtuHH8nfoAE54'],
   },
 
   /**
@@ -72,7 +72,7 @@ const conf: Record<Net, Conf> = {
         this.node,
       )
     },
-    senOwner: ['Cs6jYywHTAgdvjxn8xG4VkJJH8DXXy7zbtatzMUWoCMG'],
+    senOwners: ['Cs6jYywHTAgdvjxn8xG4VkJJH8DXXy7zbtatzMUWoCMG'],
   },
 }
 

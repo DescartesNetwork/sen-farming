@@ -25,7 +25,7 @@ import Exit from './stakeAndUnstake/exit'
 
 import { numeric } from 'shared/util'
 import { useUI, useWallet } from 'senhub/providers'
-import { HarvestValidator } from 'helpers/validateHarvest'
+import { HarvestValidator } from 'app/helper/validateHarvest'
 import { useDebt } from 'app/hooks/useDebt'
 import { useReward } from 'app/hooks/useReward'
 import { useFarmLiquidity } from 'app/hooks/useFarmLiquidity'
@@ -34,10 +34,10 @@ import { AppState } from 'app/model'
 import { notifyError, notifySuccess } from 'app/helper'
 import { MintAvatar, MintSymbol } from 'app/shared/components/mint'
 import configs from 'app/configs'
-import { useFarmPool } from 'app/hooks/useFarmPool'
+import { useFarmPool } from 'app/hooks/useCorrespondingPool'
 import { FarmStatus } from 'app/constants/farms'
-import useMintDecimals from 'app/shared/hooks/useMintDecimals'
 import { useBudget } from 'app/hooks/useBudget'
+import useMintDecimals from 'shared/hooks/useMintDecimals'
 
 const {
   sol: { senAddress, farming },
@@ -136,7 +136,7 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
   )
 
   let amountLptShared = '0'
-  if (data) {
+  if (data && lptDecimal) {
     amountLptShared = utils.undecimalize(data.shares, lptDecimal)
   }
   const desktop = width > 768
@@ -163,6 +163,8 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
             position: 'relative',
             zIndex: 1,
           }}
+          hoverable
+          onClick={onActive}
         >
           <Row gutter={[16, 16]} justify="center" align="middle">
             <Col flex="auto">
@@ -176,7 +178,10 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
                       shape="circle"
                       size="small"
                       icon={<IonIcon name="information-circle-outline" />}
-                      onClick={() => setVisibleInfo(true)}
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        setVisibleInfo(true)
+                      }}
                     />
                   </Space>
                 </Col>

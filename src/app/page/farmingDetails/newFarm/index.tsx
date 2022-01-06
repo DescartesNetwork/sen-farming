@@ -6,13 +6,14 @@ import IonIcon from 'shared/antd/ionicon'
 import ConfirmAddFarm from './confirmAddFarm'
 import MintSelection from './mintSelection'
 
-import { NewFarmStep } from 'app/constants/farms'
+// import { NewFarmStep } from 'app/constants/farms'
 import { SizeType } from 'antd/lib/config-provider/SizeContext'
 
 const NewFarm = ({ size = 'small' }: { size?: SizeType }) => {
   const [visible, setVisible] = useState(false)
-  // const [stepNewFarm, setStepNewFarm] =
-  useState<NewFarmStep>('POLICY_AGREEMENT')
+  // const [stepNewFarm, setStepNewFarm] = useState<NewFarmStep>(
+  //   NewFarmStep.POLICY_AGREEMENT,
+  // )
   const [mintAddress, setMintAddress] = useState('')
   const [visibleInputTokenModal, setVisibleInputTokenModal] = useState(false)
 

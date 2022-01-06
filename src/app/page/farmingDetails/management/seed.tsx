@@ -11,7 +11,7 @@ import { useAccount, useWallet } from 'senhub/providers'
 import { AppState } from 'app/model'
 import configs from 'app/configs'
 import { notifyError, notifySuccess } from 'app/helper'
-import useMintDecimals from 'app/shared/hooks/useMintDecimals'
+import useMintDecimals from 'shared/hooks/useMintDecimals'
 
 const {
   sol: { senAddress, farming },
@@ -38,7 +38,7 @@ const Seed = ({
 
   useEffect(() => {
     ;(async () => {
-      if (decimal === 0) return
+      if (!decimal) return
       try {
         const { splt } = window.sentre
         const srcAddress = await splt.deriveAssociatedAddress(

@@ -10,7 +10,7 @@ import useMintCgk from 'app/shared/hooks/useMintCgk'
 import { numeric } from 'shared/util'
 import { MintSymbol } from 'app/shared/components/mint'
 import { AppState } from 'app/model'
-import { useListFarmTvl } from 'app/hooks/listFarm/useListFarmTvl'
+import { useSentreFarmsTvl } from 'app/hooks/listFarm/useSentreFarmsTvl'
 
 const {
   sol: { senAddress },
@@ -22,7 +22,7 @@ const Banner = () => {
   } = useUI()
   const farms = useSelector((state: AppState) => state.farms)
   const senCgk = useMintCgk(senAddress)
-  const tvl = useListFarmTvl()
+  const tvl = useSentreFarmsTvl()
 
   const desktop = width > 768
   const xsSpan = !desktop ? 24 : undefined

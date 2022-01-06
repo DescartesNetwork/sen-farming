@@ -22,7 +22,7 @@ export const useAccountStake = (
     const mintStake = farmData?.mint_stake
     if (!mintStake) return setAccountStake(undefined)
     const { splt } = window.sentre
-    let accountAddr = await splt.deriveAssociatedAddress(
+    const accountAddr = await splt.deriveAssociatedAddress(
       walletAddress,
       farmData.mint_stake,
     )

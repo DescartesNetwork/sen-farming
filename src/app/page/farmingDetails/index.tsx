@@ -14,12 +14,14 @@ import { AppState } from 'app/model'
 import { useStakedFarms } from 'app/hooks/listFarm/useStakedFarms'
 import { useYourFarms } from 'app/hooks/listFarm/useYourFarms'
 import { useSentreFarms } from 'app/hooks/listFarm/useSentreFarms'
+import { useCheckActiveTab } from 'app/hooks/useCheckActiveTab'
 
 const FarmingDetails = () => {
   const farmSelected = useSelector((state: AppState) => state.main.search)
   const { checkStakedFarm } = useStakedFarms()
   const { checkYourFarm } = useYourFarms()
   const { checkSentreFarm } = useSentreFarms()
+  const activeTab = useCheckActiveTab()
 
   const [tabActive, setTabActive] = useState('sen-farms')
   const [isLoaded, setIsLoaded] = useState(false)
@@ -46,6 +48,10 @@ const FarmingDetails = () => {
       }
     })()
   }, [checkSentreFarm, checkStakedFarm, checkYourFarm, farmSelected, isLoaded])
+
+  useEffect(() => {
+    setTabActive(activeTab)
+  }, [activeTab])
 
   const onChange = (key: string) => {
     setTimeout(() => {
