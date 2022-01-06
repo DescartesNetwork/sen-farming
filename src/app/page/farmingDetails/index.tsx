@@ -50,6 +50,9 @@ const FarmingDetails = () => {
   }, [checkSentreFarm, checkStakedFarm, checkYourFarm, farmSelected, isLoaded])
 
   useEffect(() => {
+    setTimeout(() => {
+      forceCheck()
+    }, 500)
     setTabActive(activeTab)
   }, [activeTab])
 
