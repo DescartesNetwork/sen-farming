@@ -158,6 +158,8 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
             position: 'relative',
             zIndex: 1,
           }}
+          hoverable
+          onClick={onActive}
         >
           <Row gutter={[16, 16]} justify="center" align="middle">
             <Col flex="auto">
@@ -171,7 +173,10 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
                       shape="circle"
                       size="small"
                       icon={<IonIcon name="information-circle-outline" />}
-                      onClick={() => setVisibleInfo(true)}
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        setVisibleInfo(true)
+                      }}
                     />
                   </Space>
                 </Col>
