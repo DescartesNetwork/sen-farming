@@ -22,16 +22,16 @@ const FarmWatcher = ({
   style?: CSSProperties
 }) => {
   const dispatch = useDispatch()
-  const [isLoading, setIsLoading] = useState(false)
+  const [loading, setLoading] = useState(false)
 
   const fetchData = useCallback(async () => {
     try {
-      setIsLoading(true)
+      setLoading(true)
       await dispatch(getFarms())
     } catch (er) {
       await notifyError(er)
     } finally {
-      setIsLoading(false)
+      setLoading(false)
     }
   }, [dispatch])
 
@@ -63,7 +63,7 @@ const FarmWatcher = ({
   }, [fetchData, watchData])
 
   return (
-    <Spin spinning={isLoading} style={style}>
+    <Spin spinning={loading} style={style}>
       {children}
     </Spin>
   )

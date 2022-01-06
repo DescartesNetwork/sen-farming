@@ -3,39 +3,35 @@ import { useSelector } from 'react-redux'
 
 import configs from 'app/configs'
 import { AppState } from 'app/model'
-import { State } from 'app/model/farms.controller'
+import { FarmState } from 'app/model/farms.controller'
 
 const {
-  sol: { senOwner },
+  sol: { senOwners },
 } = configs
 
-export const useComunityFarms = () => {
-  const farms = useSelector((state: AppState) => state.farms)
-  const [communityFarms, setCommunityFarms] = useState<State>({})
+export const useCommunityFarms = () => {
+  const { farms } = useSelector((state: AppState) => state)
+  const [communityFarms, setCommunityFarms] = useState<FarmState>({})
 
-  const isCommunityFarm = useCallback(
-    (farmAddress: string) => {
-      const farm = farms[farmAddress]
-      return !senOwner.includes(farm.owner)
-    },
+  const checkCommunityFarm = useCallback(
+    (farmAddress: string) => !senOwners.includes(farms[farmAddress].owner),
     [farms],
   )
 
   const filterCommunityFarms = useCallback(
-    (farms: State) => {
-      const newSentreFarm: State = {}
-      for (const addr in farms) {
-        if (!isCommunityFarm(addr)) continue
-        newSentreFarm[addr] = farms[addr]
-      }
-      setCommunityFarms(newSentreFarm)
+    (farms: FarmState) => {
+      const newCommunityFarms: FarmState = {}
+      for (const farmAddress in farms)
+        if (checkCommunityFarm(farmAddress))
+          newCommunityFarms[farmAddress] = farms[farmAddress]
+      return setCommunityFarms(newCommunityFarms)
     },
-    [isCommunityFarm],
+    [checkCommunityFarm],
   )
 
   useEffect(() => {
     filterCommunityFarms(farms)
   }, [farms, filterCommunityFarms])
 
-  return { communityFarms, filterCommunityFarms, isCommunityFarm }
+  return { communityFarms, filterCommunityFarms, checkCommunityFarm }
 }

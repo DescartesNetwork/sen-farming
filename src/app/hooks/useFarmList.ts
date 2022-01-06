@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux'
 import { AppState } from 'app/model'
 
 export const useFarmList = (): { address: string; data: FarmData }[] => {
-  const farms = useSelector((state: AppState) => state.farms)
+  const { farms } = useSelector((state: AppState) => state)
   const [farmList, setFarmList] = useState<
     { address: string; data: FarmData }[]
   >([])

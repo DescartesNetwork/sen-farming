@@ -8,7 +8,7 @@ import NumericInput from 'shared/antd/numericInput'
 import { useWallet } from 'senhub/providers'
 import configs from 'app/configs'
 import { notifyError, notifySuccess } from 'app/helper'
-import useMintDecimals from 'app/shared/hooks/useMintDecimals'
+import useMintDecimals from 'shared/hooks/useMintDecimals'
 
 const PERIODS: Record<string, bigint> = {
   Hour: BigInt(60 * 60),
@@ -46,7 +46,7 @@ const ConfirmAddFarm = ({
       })
     setLoading(true)
     const { wallet } = window.sentre
-    if (!wallet || !period || !duration) return
+    if (!wallet || !period || !duration || !rewardDecimal) return
     const reward = utils.decimalize(value, rewardDecimal)
     const calculatePeriod = Number(PERIODS?.[period]) * Number(duration)
     try {

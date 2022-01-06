@@ -1,5 +1,6 @@
 import { Button, Space, Tooltip, Typography } from 'antd'
 import { MintAvatar, MintSymbol } from 'app/shared/components/mint'
+import { ReactNode } from 'react'
 import IonIcon from 'shared/antd/ionicon'
 
 const Content = ({
@@ -9,7 +10,7 @@ const Content = ({
   mintAddress,
 }: {
   label?: string
-  tooltip?: string
+  tooltip?: ReactNode
   value?: string
   mintAddress?: string
 }) => {
@@ -26,7 +27,7 @@ const Content = ({
               type="text"
               shape="circle"
               size="small"
-              icon={<IonIcon name="alert-circle-outline" />}
+              icon={<IonIcon name="information-circle-outline" />}
             />
           </Tooltip>
         )}
