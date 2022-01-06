@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { useSentreFarms } from './listFarm/useSentreFarms'
 import { useStakedFarms } from './listFarm/useStakedFarms'
 import { useYourFarms } from './listFarm/useYourFarms'
-import { useComunityFarms } from './listFarm/useCommunityFarms'
+import { useCommunityFarms } from './listFarm/useCommunityFarms'
 import { useSearchFarm } from './useSearchFarm'
 
 export const useCheckActiveTab = () => {
@@ -10,7 +10,7 @@ export const useCheckActiveTab = () => {
   const { sentreFarms } = useSentreFarms()
   const { stakedFarms } = useStakedFarms()
   const { yourFarms } = useYourFarms()
-  const { communityFarms } = useComunityFarms()
+  const { communityFarms } = useCommunityFarms()
 
   const searchedComFarms = useSearchFarm(communityFarms)
   const searchedSenFarms = useSearchFarm(sentreFarms)
