@@ -8,28 +8,29 @@ import useMintDecimals from 'shared/hooks/useMintDecimals'
 
 export const useBudget = (
   farmAddress: string,
-): { budget: number | string; symbol: string } => {
-  const [budget, setBudget] = useState('0')
-  const farmData = useSelector((state: AppState) => state.farms?.[farmAddress])
+): { budget: number; budgetSymbol: string } => {
+  const [budget, setBudget] = useState(0)
+  const {
+    farms: { [farmAddress]: farmData },
+  } = useSelector((state: AppState) => state)
   const { treasury_stake, treasury_reward, mint_reward, total_shares } =
     farmData || {}
-  const decimal = useMintDecimals(mint_reward)
-  const { symbol } = useMintCgk(mint_reward)
+  const decimal = useMintDecimals(mint_reward) || 0
+  const { symbol: budgetSymbol } = useMintCgk(mint_reward)
 
   useEffect(() => {
-    if (!decimal) return
     ;(async () => {
       try {
         const { splt } = window.sentre
         let { amount } = await splt.getAccountData(treasury_reward)
         if (treasury_reward === treasury_stake) amount = amount - total_shares
-        const budget = utils.undecimalize(amount, decimal)
+        const budget = Number(utils.undecimalize(amount, decimal))
         setBudget(budget)
       } catch (er) {
-        setBudget('0')
+        setBudget(0)
       }
     })()
   }, [decimal, total_shares, treasury_reward, treasury_stake])
 
-  return { budget, symbol }
+  return { budget, budgetSymbol }
 }

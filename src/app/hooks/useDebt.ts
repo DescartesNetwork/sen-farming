@@ -14,20 +14,19 @@ const {
 export const useDebt = (
   farmAddress: string,
 ): { address: string; data: DebtData } => {
-  const { wallet } = useWallet()
   const [debtAddress, setDebtAddress] = useState('')
-  const debtData: DebtData = useSelector(
-    (state: AppState) => state.debts[debtAddress],
-  )
+  const {
+    debts: { [debtAddress]: debtData },
+  } = useSelector((state: AppState) => state)
+  const {
+    wallet: { address: walletAddress },
+  } = useWallet()
 
   const fetchDebtAddress = useCallback(async () => {
-    if (!account.isAddress(farmAddress)) return
-    const debtAddr = await farming.deriveDebtAddress(
-      wallet.address,
-      farmAddress,
-    )
-    setDebtAddress(debtAddr)
-  }, [farmAddress, wallet.address])
+    if (!account.isAddress(farmAddress)) return setDebtAddress('')
+    const debtAddr = await farming.deriveDebtAddress(walletAddress, farmAddress)
+    return setDebtAddress(debtAddr)
+  }, [farmAddress, walletAddress])
 
   useEffect(() => {
     fetchDebtAddress()

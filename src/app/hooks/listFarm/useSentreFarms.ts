@@ -3,15 +3,15 @@ import { useSelector } from 'react-redux'
 
 import configs from 'app/configs'
 import { AppState } from 'app/model'
-import { State } from 'app/model/farms.controller'
+import { FarmState } from 'app/model/farms.controller'
 
 const {
-  sol: { senOwner },
+  sol: { senOwners: senOwner },
 } = configs
 
 export const useSentreFarms = () => {
   const farms = useSelector((state: AppState) => state.farms)
-  const [sentreFarms, setSentreFarms] = useState<State>({})
+  const [sentreFarms, setSentreFarms] = useState<FarmState>({})
 
   const checkSentreFarm = useCallback(
     (farmAddress: string) => {
@@ -22,8 +22,8 @@ export const useSentreFarms = () => {
   )
 
   const filterSentreFarms = useCallback(
-    (farms: State) => {
-      const newSentreFarm: State = {}
+    (farms: FarmState) => {
+      const newSentreFarm: FarmState = {}
       for (const addr in farms) {
         if (!checkSentreFarm(addr)) continue
         newSentreFarm[addr] = farms[addr]

@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux'
 
 import { AppState } from 'app/model'
 import { useDebt } from 'app/hooks/useDebt'
-import calculateReward from 'helpers/calculateReward'
+import calculateReward from 'app/helper/calculateReward'
 
 export const useReward = (farmAddress: string): number => {
   const farmData = useSelector((state: AppState) => state.farms[farmAddress])

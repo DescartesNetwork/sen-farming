@@ -1,32 +1,31 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
-import { FarmData } from '@senswap/sen-js'
 
 import { AppState } from 'app/model'
-import { State } from 'app/model/farms.controller'
+import { FarmState } from 'app/model/farms.controller'
 import { usePool, useMint } from 'senhub/providers'
 
 const KEY_SIZE = 3
 
-export const useSearchFarm = (farms: State) => {
+export const useSearchFarm = (farms: FarmState) => {
   const { tokenProvider } = useMint()
   const { pools } = usePool()
   const { search: keyword } = useSelector((state: AppState) => state.main)
-  const [farmFilter, setFarmFilter] = useState<Record<string, FarmData>>({})
+  const [farmFilter, setFarmFilter] = useState<FarmState>({})
 
   const search = useCallback(async () => {
     if (!keyword || !pools || !farms || keyword.length < KEY_SIZE)
       return setFarmFilter(farms)
 
-    const newFarmFilter: Record<string, FarmData> = {}
+    const newFarmFilter: FarmState = {}
     for (const addr in farms) {
       const farm = farms[addr]
       const { mint_stake } = farm
       let check = false
       // search with poolAddress
       for (const poolAddress in pools) {
-        const poolData = pools[poolAddress]
-        if (poolData.mint_lpt === mint_stake && poolAddress === keyword) {
+        const { mint_lpt } = pools[poolAddress]
+        if (mint_lpt === mint_stake && poolAddress === keyword) {
           check = true
           break
         }

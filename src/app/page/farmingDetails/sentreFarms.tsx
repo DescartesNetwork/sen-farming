@@ -9,7 +9,7 @@ import { useSearchFarm } from 'app/hooks/useSearchFarm'
 import { useSentreFarms } from 'app/hooks/listFarm/useSentreFarms'
 
 const {
-  sol: { senOwner },
+  sol: { senOwners },
 } = configs
 
 const SentreFarms = () => {
@@ -19,7 +19,7 @@ const SentreFarms = () => {
 
   const filterFarm = useMemo(() => {
     return listFarmAddress.filter((addr) =>
-      senOwner.includes(farms[addr].owner),
+      senOwners.includes(farms[addr].owner),
     )
   }, [farms, listFarmAddress])
 

@@ -97,7 +97,9 @@ const StepAddFarm = ({
           <Col>
             <Button
               type="primary"
-              onClick={() => setFarmCreatingStep('FARM_CREATING_CONFIRMATION')}
+              onClick={() =>
+                setFarmCreatingStep(NewFarmStep.FARM_CREATING_CONFIRMATION)
+              }
               disabled={disabled}
             >
               Next
