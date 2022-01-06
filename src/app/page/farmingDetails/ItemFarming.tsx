@@ -74,8 +74,8 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
   const { budget } = useBudget(farmAddress)
 
   const farmReward = useMemo(() => {
-    if (farmDecimal === 0) return 0
-    return utils.undecimalize(reward, farmDecimal)
+    if (farmDecimal === 0 || !farmDecimal) return 0
+    return Number(utils.undecimalize(reward, farmDecimal))
   }, [farmDecimal, reward])
 
   const onActive = () => {
@@ -105,9 +105,14 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
 
   useEffect(() => {
     if (!farmSelected || farmSelected !== farmAddress) return
-    if (budget < Number(farmReward) * 3) return setWarning(LOW_BUDGET)
     setActiveKey(farmSelected)
   }, [budget, farmAddress, farmReward, farmSelected])
+
+  useEffect(() => {
+    if (!farmReward) return setWarning(LOW_BUDGET)
+    if (budget < farmReward * 3) return setWarning(LOW_BUDGET)
+    return setWarning('')
+  }, [budget, farmReward])
 
   const TooltipApr = () => (
     <Row gutter={[8, 8]}>
