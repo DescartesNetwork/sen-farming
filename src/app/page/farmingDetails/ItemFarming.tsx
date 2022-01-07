@@ -266,7 +266,6 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
                   </Button>
                   <Button
                     type="primary"
-                    icon={<IonIcon name="leaf-outline" />}
                     loading={loading}
                     onClick={handleHarvest}
                     disabled={isFreezeFarm || userReward === 0}
