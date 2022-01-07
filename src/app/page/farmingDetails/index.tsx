@@ -1,27 +1,29 @@
 import { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { forceCheck } from '@senswap/react-lazyload'
 import { account } from '@senswap/sen-js'
+import { useLocation } from 'react-router-dom'
 
 import { Tabs } from 'antd'
 import NewFarm from './newFarm'
-import CommunityFarms from './communityFarms'
+import AllFarmings from './allFarms'
 import SentreFarms from './sentreFarms'
 import StakedFarm from './stakedFarm'
 import YourFarms from './yourFamrs'
 
-import { AppState } from 'app/model'
+import { AppDispatch, AppState } from 'app/model'
 import { useStakedFarms } from 'app/hooks/listFarm/useStakedFarms'
 import { useYourFarms } from 'app/hooks/listFarm/useYourFarms'
 import { useSentreFarms } from 'app/hooks/listFarm/useSentreFarms'
-import { useCheckActiveTab } from 'app/hooks/useCheckActiveTab'
+import { setSearch } from 'app/model/main.controller'
 
 const FarmingDetails = () => {
+  const locationSearch = useLocation().search
   const farmSelected = useSelector((state: AppState) => state.main.search)
   const { checkStakedFarm } = useStakedFarms()
   const { checkYourFarm } = useYourFarms()
   const { checkSentreFarm } = useSentreFarms()
-  const activeTab = useCheckActiveTab()
+  const dispatch = useDispatch<AppDispatch>()
 
   const [tabActive, setTabActive] = useState('sen-farms')
   const [isLoaded, setIsLoaded] = useState(false)
@@ -50,8 +52,11 @@ const FarmingDetails = () => {
   }, [checkSentreFarm, checkStakedFarm, checkYourFarm, farmSelected, isLoaded])
 
   useEffect(() => {
-    setTabActive(activeTab)
-  }, [activeTab])
+    const searchParams = new URLSearchParams(locationSearch).get('search')
+    if (!searchParams) return
+    dispatch(setSearch({ search: searchParams }))
+    setTabActive('all-farms')
+  }, [dispatch, locationSearch])
 
   const onChange = (key: string) => {
     setTimeout(() => {
@@ -75,8 +80,8 @@ const FarmingDetails = () => {
       <Tabs.TabPane tab="Your Farms" key="your-farms">
         <YourFarms />
       </Tabs.TabPane>
-      <Tabs.TabPane tab="Community Farms" key="community-farms">
-        <CommunityFarms />
+      <Tabs.TabPane tab="All Farms" key="all-farms">
+        <AllFarmings />
       </Tabs.TabPane>
     </Tabs>
   )
