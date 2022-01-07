@@ -8,7 +8,7 @@ import { useSearchFarm } from 'app/hooks/useSearchFarm'
 import { useSelector } from 'react-redux'
 import { AppState } from 'app/model'
 
-const ListFarmings = () => {
+const AllFarmings = () => {
   const { farms } = useSelector((state: AppState) => state)
 
   const searchedFarms = useSearchFarm(farms)
@@ -34,4 +34,4 @@ const ListFarmings = () => {
   )
 }
 
-export default ListFarmings
+export default AllFarmings

@@ -6,7 +6,7 @@ import { useLocation } from 'react-router-dom'
 
 import { Tabs } from 'antd'
 import NewFarm from './newFarm'
-import CommunityFarms from './communityFarms'
+import AllFarmings from './allFarms'
 import SentreFarms from './sentreFarms'
 import StakedFarm from './stakedFarm'
 import YourFarms from './yourFamrs'
@@ -81,7 +81,7 @@ const FarmingDetails = () => {
         <YourFarms />
       </Tabs.TabPane>
       <Tabs.TabPane tab="All Farms" key="all-farms">
-        <CommunityFarms />
+        <AllFarmings />
       </Tabs.TabPane>
     </Tabs>
   )
