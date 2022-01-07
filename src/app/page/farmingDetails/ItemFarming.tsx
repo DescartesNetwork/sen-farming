@@ -219,8 +219,8 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
                 {warning && (
                   <Tooltip title={LOW_BUDGET}>
                     <IonIcon
-                      name="alert-circle-outline"
-                      style={{ color: '#D72311' }}
+                      name="warning-outline"
+                      style={{ color: '#f9575e' }}
                     />
                   </Tooltip>
                 )}
@@ -266,7 +266,6 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
                   </Button>
                   <Button
                     type="primary"
-                    icon={<IonIcon name="leaf-outline" />}
                     loading={loading}
                     onClick={handleHarvest}
                     disabled={isFreezeFarm || userReward === 0}

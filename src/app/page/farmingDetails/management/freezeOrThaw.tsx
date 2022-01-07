@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useSelector } from 'react-redux'
 
-import { Button, Card, Col, Row, Space, Typography } from 'antd'
+import { Button, Col, Row, Space, Typography } from 'antd'
 import { AppState } from 'app/model'
 import IonIcon from 'shared/antd/ionicon'
 
@@ -65,18 +65,13 @@ const FreezeOrThaw = ({
   return (
     <Row gutter={[16, 16]}>
       <Col span={24}>
-        <Card
-          style={{ boxShadow: 'unset', borderRadius: 8 }}
-          bodyStyle={{ padding: 16 }}
-        >
-          <Space align="start">
-            <IonIcon name="information-circle-outline" />
-            <Typography.Text>
-              Freezing a farm will prevent all actions, but "seed" and "unseed",
-              until the farm has been thawed.
-            </Typography.Text>
-          </Space>
-        </Card>
+        <Space className="caption" align="start">
+          <IonIcon name="information-circle-outline" />
+          <Typography.Text type="secondary">
+            Freezing a farm will prevent all actions, but "seed" and "unseed",
+            until the farm has been thawed.
+          </Typography.Text>
+        </Space>
       </Col>
       <Col span={24}>
         <Button

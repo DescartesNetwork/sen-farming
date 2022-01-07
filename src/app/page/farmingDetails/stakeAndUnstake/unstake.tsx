@@ -91,7 +91,10 @@ const Unstake = ({
         </Space>
       </Col>
       <Col span={24}>
-        <Card bodyStyle={{ padding: 12 }} style={{ boxShadow: 'none' }}>
+        <Card
+          bodyStyle={{ padding: 12 }}
+          style={{ boxShadow: 'none', borderRadius: 8 }}
+        >
           <Space style={{ width: '100%' }} direction="vertical">
             <Row>
               <Col flex="auto">
