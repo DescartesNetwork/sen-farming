@@ -31,7 +31,7 @@ const NewFarm = ({ size = 'small' }: { size?: SizeType }) => {
           onClick={() => setVisible(true)}
           size={size}
         >
-          New farm
+          New Farm
         </Button>
       </Col>
       <Modal

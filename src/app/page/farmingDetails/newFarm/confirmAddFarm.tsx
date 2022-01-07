@@ -9,6 +9,7 @@ import { useWallet } from 'senhub/providers'
 import configs from 'app/configs'
 import { notifyError, notifySuccess } from 'app/helper'
 import useMintDecimals from 'shared/hooks/useMintDecimals'
+import IonIcon from 'shared/antd/ionicon'
 
 const PERIODS: Record<string, bigint> = {
   Hour: BigInt(60 * 60),
@@ -82,7 +83,11 @@ const ConfirmAddFarm = ({
         <Typography.Title level={4}>New farm</Typography.Title>
       </Col>
       <Col span={24}>
-        <Card bodyStyle={{ padding: 16 }} bordered={false}>
+        <Card
+          style={{ borderRadius: 8 }}
+          bodyStyle={{ padding: 16 }}
+          bordered={false}
+        >
           <Row gutter={[16, 16]}>
             <Col span={12}>
               <Space direction="vertical">
@@ -100,6 +105,10 @@ const ConfirmAddFarm = ({
                       Select token type
                     </Typography.Text>
                   )}
+                  <IonIcon
+                    name="chevron-forward-outline"
+                    style={{ color: '#7A7B85' }}
+                  />
                 </Space>
               </Space>
             </Col>
@@ -118,10 +127,7 @@ const ConfirmAddFarm = ({
       <Col span={24}>
         <Row gutter={[0, 0]}>
           <Col span={24}>
-            <Typography.Text
-              type="secondary"
-              style={{ marginLeft: 12, fontSize: 12 }}
-            >
+            <Typography.Text type="secondary" className="caption">
               Reward
             </Typography.Text>
           </Col>
@@ -139,7 +145,7 @@ const ConfirmAddFarm = ({
       <Col span={24}>
         <Row gutter={[0, 0]}>
           <Col span={24}>
-            <Typography.Text style={{ marginLeft: 12, fontSize: 12 }}>
+            <Typography.Text type="secondary" className="caption">
               Number of {period}
             </Typography.Text>
           </Col>
@@ -150,7 +156,12 @@ const ConfirmAddFarm = ({
               value={duration}
               onValue={setDuration}
               suffix={
-                <Button type="text" size="small" onClick={onPeriod}>
+                <Button
+                  type="text"
+                  size="small"
+                  icon={<IonIcon name="time-outline" />}
+                  onClick={onPeriod}
+                >
                   {period}
                 </Button>
               }
