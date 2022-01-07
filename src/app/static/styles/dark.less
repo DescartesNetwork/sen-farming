@@ -1,17 +1,20 @@
+.no-shadow {
+  box-shadow: none !important;
+}
+
 // expand card
 .expand-farm-card {
+  &:extend(.no-shadow);
   background-color: #212433 !important;
 }
 // farming card
 .farming-card {
   background-color: #2c2e3d !important;
   &:hover {
-    background-color: #313344 !important;
+    background-color: #242838 !important;
   }
 }
-
-.expand-farm-card,
 .farm-card-widget {
-  box-shadow: none !important;
+  &:extend(.no-shadow);
   background: #2c2e3d !important;
 }
