@@ -5,13 +5,17 @@ import { Col, Empty, Row } from 'antd'
 import ItemFarming from './ItemFarming'
 
 import { useSearchFarm } from 'app/hooks/useSearchFarm'
-import { useCommunityFarms } from 'app/hooks/listFarm/useCommunityFarms'
+import { useSelector } from 'react-redux'
+import { AppState } from 'app/model'
 
-const ListFarmings = () => {
-  const { communityFarms } = useCommunityFarms()
+const AllFarms = () => {
+  const { farms } = useSelector((state: AppState) => state)
 
-  const farms = useSearchFarm(communityFarms)
-  const listFarmAddress = useMemo(() => Object.keys(farms), [farms])
+  const searchedFarms = useSearchFarm(farms)
+  const listFarmAddress = useMemo(
+    () => Object.keys(searchedFarms),
+    [searchedFarms],
+  )
 
   if (!listFarmAddress.length) return <Empty />
 
@@ -30,4 +34,4 @@ const ListFarmings = () => {
   )
 }
 
-export default ListFarmings
+export default AllFarms

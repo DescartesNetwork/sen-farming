@@ -1,29 +1,38 @@
 import { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { forceCheck } from '@senswap/react-lazyload'
 import { account } from '@senswap/sen-js'
+import { useLocation } from 'react-router-dom'
 
 import { Tabs } from 'antd'
 import NewFarm from './newFarm'
-import CommunityFarms from './communityFarms'
+import AllFarmings from './allFarms'
 import SentreFarms from './sentreFarms'
 import StakedFarm from './stakedFarm'
 import YourFarms from './yourFamrs'
 
-import { AppState } from 'app/model'
+import { AppDispatch, AppState } from 'app/model'
 import { useStakedFarms } from 'app/hooks/listFarm/useStakedFarms'
 import { useYourFarms } from 'app/hooks/listFarm/useYourFarms'
 import { useSentreFarms } from 'app/hooks/listFarm/useSentreFarms'
-import { useCheckActiveTab } from 'app/hooks/useCheckActiveTab'
+import { setSearch } from 'app/model/main.controller'
+
+enum FarmingTabs {
+  YourFarms = 'YourFarms',
+  SenFarm = 'SenFarm',
+  StakedFarm = 'StakedFarm',
+  AllFarms = 'AllFarms',
+}
 
 const FarmingDetails = () => {
+  const locationSearch = useLocation().search
   const farmSelected = useSelector((state: AppState) => state.main.search)
   const { checkStakedFarm } = useStakedFarms()
   const { checkYourFarm } = useYourFarms()
   const { checkSentreFarm } = useSentreFarms()
-  const activeTab = useCheckActiveTab()
+  const dispatch = useDispatch<AppDispatch>()
 
-  const [tabActive, setTabActive] = useState('sen-farms')
+  const [tabActive, setTabActive] = useState<FarmingTabs>(FarmingTabs.SenFarm)
   const [isLoaded, setIsLoaded] = useState(false)
 
   // check tab activeKey with farmSelected
@@ -33,15 +42,15 @@ const FarmingDetails = () => {
       if (!account.isAddress(farmSelected) || isLoaded) return
       try {
         const yourFarm = checkYourFarm(farmSelected)
-        if (yourFarm) return setTabActive('your-farms')
+        if (yourFarm) return setTabActive(FarmingTabs.YourFarms)
 
         const sentreFarm = checkSentreFarm(farmSelected)
-        if (sentreFarm) return setTabActive('sen-farms')
+        if (sentreFarm) return setTabActive(FarmingTabs.SenFarm)
 
         const stakedFarm = await checkStakedFarm(farmSelected)
-        if (stakedFarm) return setTabActive('staked-farms')
+        if (stakedFarm) return setTabActive(FarmingTabs.StakedFarm)
 
-        return setTabActive('community-farms')
+        return setTabActive(FarmingTabs.AllFarms)
       } catch (error) {
       } finally {
         setIsLoaded(true)
@@ -50,14 +59,17 @@ const FarmingDetails = () => {
   }, [checkSentreFarm, checkStakedFarm, checkYourFarm, farmSelected, isLoaded])
 
   useEffect(() => {
-    setTabActive(activeTab)
-  }, [activeTab])
+    const searchParams = new URLSearchParams(locationSearch).get('search')
+    if (!searchParams) return
+    dispatch(setSearch({ search: searchParams }))
+    setTabActive(FarmingTabs.AllFarms)
+  }, [dispatch, locationSearch])
 
   const onChange = (key: string) => {
+    setTabActive(key as FarmingTabs)
     setTimeout(() => {
       forceCheck()
     }, 500)
-    setTabActive(key)
   }
 
   return (
@@ -66,17 +78,17 @@ const FarmingDetails = () => {
       onChange={onChange}
       tabBarExtraContent={<NewFarm />}
     >
-      <Tabs.TabPane tab="Sentre Farms" key="sen-farms">
+      <Tabs.TabPane tab="Sentre Farms" key={FarmingTabs.SenFarm}>
         <SentreFarms />
       </Tabs.TabPane>
-      <Tabs.TabPane tab="Staked Farms" key="staked-farms">
+      <Tabs.TabPane tab="Staked Farms" key={FarmingTabs.StakedFarm}>
         <StakedFarm />
       </Tabs.TabPane>
-      <Tabs.TabPane tab="Your Farms" key="your-farms">
+      <Tabs.TabPane tab="Your Farms" key={FarmingTabs.YourFarms}>
         <YourFarms />
       </Tabs.TabPane>
-      <Tabs.TabPane tab="Community Farms" key="community-farms">
-        <CommunityFarms />
+      <Tabs.TabPane tab="All Farms" key={FarmingTabs.AllFarms}>
+        <AllFarmings />
       </Tabs.TabPane>
     </Tabs>
   )

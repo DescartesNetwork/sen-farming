@@ -1,6 +1,5 @@
-import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { useLocation } from 'react-router-dom'
+import { useHistory, useLocation } from 'react-router-dom'
 
 import { Row, Col, Input, Card, Button } from 'antd'
 import Banner from './banner'
@@ -12,15 +11,16 @@ import { AppDispatch, AppState } from 'app/model'
 import { setSearch } from 'app/model/main.controller'
 
 const Page = () => {
-  const locationSearch = useLocation().search
+  const { search: locationSearch, pathname } = useLocation()
   const { search } = useSelector((state: AppState) => state.main)
   const dispatch = useDispatch<AppDispatch>()
+  const history = useHistory()
 
-  useEffect(() => {
+  const handleOnChange = (e: any) => {
     const searchParams = new URLSearchParams(locationSearch).get('search')
-    if (!searchParams) return
-    dispatch(setSearch({ search: searchParams }))
-  }, [dispatch, locationSearch])
+    if (searchParams) history.push(pathname)
+    return dispatch(setSearch({ search: e.target.value }))
+  }
 
   return (
     <Watcher>
@@ -42,9 +42,7 @@ const Page = () => {
                 <Input
                   placeholder="Search by name, address"
                   value={search}
-                  onChange={(e) =>
-                    dispatch(setSearch({ search: e.target.value }))
-                  }
+                  onChange={handleOnChange}
                   prefix={
                     search ? (
                       <Button
