@@ -2,7 +2,7 @@ import { CSSProperties } from 'react'
 import DebtWatcher from './debtWatcher'
 import FarmWatcher from './farmWatcher'
 
-const FarmWatch = ({
+const Watcher = ({
   children,
   style,
 }: {
@@ -16,4 +16,4 @@ const FarmWatch = ({
   )
 }
 
-export default FarmWatch
+export default Watcher

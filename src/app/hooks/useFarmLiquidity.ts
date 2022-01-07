@@ -5,7 +5,9 @@ import { AppState } from 'app/model'
 import { useMintUsd } from './useMintUsd'
 
 export const useFarmLiquidity = (farmAddress: string) => {
-  const farmData = useSelector((state: AppState) => state.farms[farmAddress])
+  const {
+    farms: { [farmAddress]: farmData },
+  } = useSelector((state: AppState) => state)
   const { getTotalValue } = useMintUsd()
   const [liquidity, setLiquidity] = useState(0)
 

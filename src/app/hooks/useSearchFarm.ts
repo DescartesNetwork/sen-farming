@@ -1,57 +1,65 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
-import { FarmData } from '@senswap/sen-js'
 
 import { AppState } from 'app/model'
-import { State } from 'app/model/farms.controller'
+import { FarmState } from 'app/model/farms.controller'
 import { usePool, useMint } from 'senhub/providers'
+import { forceCheck } from '@senswap/react-lazyload'
 
 const KEY_SIZE = 3
 
-export const useSearchFarm = (farms: State) => {
+export const useSearchFarm = (farms: FarmState) => {
   const { tokenProvider } = useMint()
   const { pools } = usePool()
   const { search: keyword } = useSelector((state: AppState) => state.main)
-  const [farmFilter, setFarmFilter] = useState<Record<string, FarmData>>({})
+  const [farmFilter, setFarmFilter] = useState<FarmState>({})
+
+  const findPool = useCallback(
+    (mintLpt: string) =>
+      Object.keys(pools).find((addr) => pools[addr].mint_lpt === mintLpt),
+    [pools],
+  )
 
   const search = useCallback(async () => {
     if (!keyword || !pools || !farms || keyword.length < KEY_SIZE)
       return setFarmFilter(farms)
 
-    const newFarmFilter: Record<string, FarmData> = {}
-    for (const addr in farms) {
-      const farm = farms[addr]
-      const { mint_stake } = farm
-      let check = false
-      // search with poolAddress
-      for (const poolAddress in pools) {
-        const poolData = pools[poolAddress]
-        if (poolData.mint_lpt === mint_stake && poolAddress === keyword) {
-          check = true
-          break
-        }
-      }
+    const newFarmFilter: FarmState = {}
+    const listTokenInfo = await tokenProvider.find(keyword)
+    const listTokenAddress = listTokenInfo.map((info) => info.address)
 
-      // farm address
-      if (addr === keyword) check = true
-      // token
-      const mintStakeInfo = await tokenProvider.findByAddress(mint_stake)
-      if (mintStakeInfo) {
-        // token symbol
-        const tokenName = mintStakeInfo.symbol + mintStakeInfo.name
-        if (tokenName.toLowerCase().includes(keyword.toLowerCase()))
-          check = true
-        // token address
-        if (mintStakeInfo.address === keyword) check = true
+    const listFarmAddress = Object.keys(farms).filter((farmAddress) => {
+      const farmData = farms[farmAddress]
+      const { mint_stake } = farmData
+      // Search with pool
+      const poolAddress = findPool(mint_stake)
+      if (poolAddress) {
+        // Pool address
+        if (poolAddress === keyword) return true
+        // Pool Token
+        const { mint_a, mint_b } = pools[poolAddress]
+        if (
+          listTokenAddress.includes(mint_a) ||
+          listTokenAddress.includes(mint_b)
+        )
+          return true
       }
-      if (check) newFarmFilter[addr] = farm
-    }
+      // Search with farm
+      if (farmAddress === keyword) return true
+      return listTokenAddress.includes(mint_stake)
+    })
 
-    setFarmFilter(newFarmFilter)
-  }, [farms, keyword, pools, tokenProvider])
+    listFarmAddress.map((addr) => (newFarmFilter[addr] = farms[addr]))
+    return setFarmFilter(newFarmFilter)
+  }, [farms, findPool, keyword, pools, tokenProvider])
 
   useEffect(() => {
-    search()
+    search().then(() => {
+      // fix lazyload
+      setTimeout(() => {
+        forceCheck()
+      }, 300)
+    })
   }, [search])
 
   return farmFilter

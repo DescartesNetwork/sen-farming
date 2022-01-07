@@ -12,10 +12,10 @@ const {
  * Store constructor
  */
 
-export type State = Record<string, DebtData>
+export type DebtState = Record<string, DebtData>
 
 const NAME = 'debts'
-const initialState: State = {}
+const initialState: DebtState = {}
 
 /**
  * Actions
@@ -30,7 +30,7 @@ export const getDebts = createAsyncThunk(
       await farming.connection.getProgramAccounts(farming.farmingProgramId, {
         filters: [{ dataSize: 89 }, { memcmp: { bytes: owner, offset: 32 } }],
       })
-    let bulk: State = {}
+    let bulk: DebtState = {}
     value.forEach(({ pubkey, account: { data: buf } }) => {
       const address = pubkey.toBase58()
       const data = farming.parseDebtData(buf)
@@ -41,7 +41,7 @@ export const getDebts = createAsyncThunk(
 )
 
 export const getDebt = createAsyncThunk<
-  State,
+  DebtState,
   { address: string },
   { state: any }
 >(`${NAME}/getDebt`, async ({ address }, { getState }) => {
@@ -54,7 +54,7 @@ export const getDebt = createAsyncThunk<
 })
 
 export const upsetDebt = createAsyncThunk<
-  State,
+  DebtState,
   { address: string; data: DebtData },
   { state: any }
 >(`${NAME}/upsetDebt`, async ({ address, data }) => {

@@ -24,7 +24,7 @@ import Close from './close'
 import { asyncWait, explorer, shortenAddress } from 'shared/util'
 import { AppState } from 'app/model'
 import { useBudget } from 'app/hooks/useBudget'
-import useMintDecimals from 'app/shared/hooks/useMintDecimals'
+import useMintDecimals from 'shared/hooks/useMintDecimals'
 
 const ExtraTypography = ({
   label = '',
@@ -49,7 +49,7 @@ const Management = ({ farmAddress }: { farmAddress: string }) => {
   const farmData = useSelector((state: AppState) => state.farms?.[farmAddress])
   const [visible, setVisible] = useState(false)
   const [visibleTooltip, setVisibleTooltip] = useState(false)
-  const { budget, symbol } = useBudget(farmAddress)
+  const { budget, budgetSymbol } = useBudget(farmAddress)
   const { mint_stake: mintFarmAddress, period, reward } = farmData || {}
   const farmDecimal = useMintDecimals(mintFarmAddress)
 
@@ -60,7 +60,7 @@ const Management = ({ farmAddress }: { farmAddress: string }) => {
   }
 
   const farmReward = useMemo(() => {
-    if (farmDecimal === 0) return 0
+    if (!farmDecimal) return 0
     return utils.undecimalize(reward, farmDecimal)
   }, [farmDecimal, reward])
 
@@ -76,8 +76,8 @@ const Management = ({ farmAddress }: { farmAddress: string }) => {
       time = time * 24
       formatTime = time > 1 ? 'hours' : 'hour'
     }
-    return `${farmReward} ${symbol} / ${Math.floor(time)} ${formatTime}`
-  }, [farmReward, period, symbol])
+    return `${farmReward} ${budgetSymbol} / ${Math.floor(time)} ${formatTime}`
+  }, [farmReward, period, budgetSymbol])
 
   return (
     <Fragment>
@@ -147,7 +147,7 @@ const Management = ({ farmAddress }: { farmAddress: string }) => {
                 <Col span={24}>
                   <ExtraTypography
                     label="Budget"
-                    title={`${budget} ${symbol}`}
+                    title={`${budget} ${budgetSymbol}`}
                   />
                 </Col>
                 <Col span={24}>

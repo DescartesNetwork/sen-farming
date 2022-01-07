@@ -4,18 +4,18 @@ import { useSelector } from 'react-redux'
 import { useWallet } from 'senhub/providers'
 import configs from 'app/configs'
 import { AppState } from 'app/model'
-import { State } from 'app/model/farms.controller'
+import { FarmState } from 'app/model/farms.controller'
 
 const {
   sol: { farming },
 } = configs
 
 export const useStakedFarms = () => {
+  const [stakedFarms, setStakedFarms] = useState<FarmState>({})
+  const { farms, debts } = useSelector((state: AppState) => state)
   const {
     wallet: { address: walletAddress },
   } = useWallet()
-  const { farms, debts } = useSelector((state: AppState) => state)
-  const [stakedFarms, setStakedFarms] = useState<State>({})
 
   const checkStakedFarm = useCallback(
     async (farmAddress: string) => {
@@ -30,12 +30,11 @@ export const useStakedFarms = () => {
   )
 
   const filterStakedFarms = useCallback(
-    async (farms: State) => {
-      const newSentreFarm: State = {}
+    async (farms: FarmState) => {
+      const newSentreFarm: FarmState = {}
       for (const farmAddress in farms) {
         const staked = await checkStakedFarm(farmAddress)
-        if (!staked) continue
-        newSentreFarm[farmAddress] = farms[farmAddress]
+        if (staked) newSentreFarm[farmAddress] = farms[farmAddress]
       }
       setStakedFarms(newSentreFarm)
     },

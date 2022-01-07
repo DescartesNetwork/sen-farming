@@ -3,10 +3,10 @@ import { useCallback, useEffect, useState } from 'react'
 import { useMintUsd } from './../useMintUsd'
 import { useSentreFarms } from './useSentreFarms'
 
-export const useListFarmTvl = () => {
+export const useSentreFarmsTvl = () => {
+  const [tvl, setTvl] = useState(0)
   const { sentreFarms } = useSentreFarms()
   const { getTotalValue } = useMintUsd()
-  const [tvl, setTvl] = useState(0)
 
   const calcTvl = useCallback(async () => {
     let farmsTvl = 0

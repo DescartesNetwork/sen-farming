@@ -10,14 +10,16 @@ import { asyncWait, numeric } from 'shared/util'
 import { AppState } from 'app/model'
 import { useMint, usePool } from 'senhub/providers'
 import { useBudget } from 'app/hooks/useBudget'
-import useMintDecimals from 'app/shared/hooks/useMintDecimals'
+import { useReward } from 'app/hooks/useReward'
+import useMintDecimals from 'shared/hooks/useMintDecimals'
 
 const DEFAULT_TOKEN_SYMBOL = 'TOKEN'
 
 const FarmInfo = ({ farmAddress }: { farmAddress: string }) => {
   const { tokenProvider } = useMint()
   const { pools } = usePool()
-  const { budget, symbol } = useBudget(farmAddress)
+  const { budget, budgetSymbol } = useBudget(farmAddress)
+  const rewarding = useReward(farmAddress)
   const farms = useSelector((state: AppState) => state.farms)
   const [copieAddress, setCopieAddress] = useState('')
 
@@ -26,7 +28,6 @@ const FarmInfo = ({ farmAddress }: { farmAddress: string }) => {
   const { mint_stake, period, reward, mint_reward } = farms[farmAddress] || {}
 
   const farmDecimal = useMintDecimals(mint_stake)
-  const lptDecimal = useMintDecimals(mint_stake)
 
   useEffect(() => {
     ;(async () => {
@@ -48,7 +49,7 @@ const FarmInfo = ({ farmAddress }: { farmAddress: string }) => {
   }
 
   const farmReward = useMemo(() => {
-    if (farmDecimal === 0) return 0
+    if (!farmDecimal) return 0
     return utils.undecimalize(reward, farmDecimal)
   }, [farmDecimal, reward])
 
@@ -64,8 +65,8 @@ const FarmInfo = ({ farmAddress }: { farmAddress: string }) => {
       time = time * 24
       formatTime = time > 1 ? 'hours' : 'hour'
     }
-    return `${farmReward} ${symbol} / ${Math.floor(time)} ${formatTime}`
-  }, [farmReward, period, symbol])
+    return `${farmReward} ${budgetSymbol} / ${Math.floor(time)} ${formatTime}`
+  }, [farmReward, period, budgetSymbol])
 
   return (
     <Row gutter={[24, 24]}>
@@ -90,7 +91,7 @@ const FarmInfo = ({ farmAddress }: { farmAddress: string }) => {
         <Space align="baseline">
           <Title title="Rewarding:" />
           <Typography.Text>
-            {numeric(utils.undecimalize(reward, lptDecimal)).format('0,0.[00]')}
+            {numeric(rewarding).format('0,0.[00]')}
           </Typography.Text>
           <Typography.Text type="secondary">{mintSymbol}</Typography.Text>
           <Typography.Text type="secondary">per</Typography.Text>

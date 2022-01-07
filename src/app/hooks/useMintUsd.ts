@@ -8,13 +8,13 @@ export const useMintUsd = () => {
   const { tokenProvider, getMint } = useMint()
   const { pools } = usePool()
 
-  const getMintUSD = useCallback(
+  const getTokenUsd = useCallback(
     async (mintAddress: string, amount: bigint) => {
       try {
         const tokenInfo = await tokenProvider.findByAddress(mintAddress)
-        if (!tokenInfo) return 0
-        const ticket = tokenInfo.extensions?.coingeckoId
-        if (!ticket) return 0
+        const ticket = tokenInfo?.extensions?.coingeckoId
+        if (!ticket) throw new Error('Cant not find coingeckoId')
+
         const cgkData = await fetchCGK(ticket)
         return (
           Number(utils.undecimalize(amount, tokenInfo.decimals)) * cgkData.price
@@ -26,30 +26,6 @@ export const useMintUsd = () => {
     [tokenProvider],
   )
 
-  const getMintLptUSD = useCallback(
-    async (lptAddress: string, amount: bigint) => {
-      const poolData = Object.values(pools).find(
-        (pool) => pool.mint_lpt === lptAddress,
-      )
-      if (!poolData) return 0
-      const { reserve_a, reserve_b, mint_a, mint_b } = poolData
-      if (reserve_a * reserve_b === BigInt(0)) return 0
-      const {
-        [lptAddress]: { supply },
-      } = await getMint({ address: lptAddress })
-      const { deltaA, deltaB } = Swap.oracle.withdraw(
-        amount,
-        supply,
-        reserve_a,
-        reserve_b,
-      )
-      const balanceA: number = await getMintUSD(mint_a, deltaA)
-      const balanceB: number = await getMintUSD(mint_b, deltaB)
-      return balanceA + balanceB
-    },
-    [getMint, getMintUSD, pools],
-  )
-
   const getTotalValue = useCallback(
     async ({
       mintAddress,
@@ -59,10 +35,35 @@ export const useMintUsd = () => {
       amount: bigint
     }) => {
       const tokenInfo = await tokenProvider.findByAddress(mintAddress)
-      if (!tokenInfo) return getMintLptUSD(mintAddress, amount)
-      return getMintUSD(mintAddress, amount)
+      if (tokenInfo) return getTokenUsd(mintAddress, amount)
+
+      // Get Mint Lpt total value
+      const poolData = Object.values(pools).find(
+        (pool) => pool.mint_lpt === mintAddress,
+      )
+      if (!poolData) return 0
+      const { reserve_a, reserve_b, mint_a, mint_b } = poolData
+      if (reserve_a * reserve_b === BigInt(0)) return 0
+      const {
+        [mintAddress]: { supply },
+      } = await getMint({ address: mintAddress })
+      const { deltaA, deltaB } = Swap.oracle.withdraw(
+        amount,
+        supply,
+        reserve_a,
+        reserve_b,
+      )
+      const balanceA: number = await getTotalValue({
+        mintAddress: mint_a,
+        amount: deltaA,
+      })
+      const balanceB: number = await getTotalValue({
+        mintAddress: mint_b,
+        amount: deltaB,
+      })
+      return balanceA + balanceB
     },
-    [getMintLptUSD, getMintUSD, tokenProvider],
+    [getMint, getTokenUsd, tokenProvider, pools],
   )
   return { getTotalValue }
 }

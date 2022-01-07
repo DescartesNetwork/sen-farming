@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { utils } from '@senswap/sen-js'
 import { useSelector } from 'react-redux'
 
@@ -12,9 +12,9 @@ import { numeric } from 'shared/util'
 import { notifyError, notifySuccess } from 'app/helper'
 import { useAccountStake } from 'app/hooks/useAccountStake'
 import configs from 'app/configs'
-import { HarvestValidator } from 'helpers/validateHarvest'
-import useMintDecimals from 'app/shared/hooks/useMintDecimals'
+import { HarvestValidator } from 'app/helper/validateHarvest'
 import { AppState } from 'app/model'
+import useMintDecimals from 'shared/hooks/useMintDecimals'
 
 const {
   sol: { senAddress, farming },
@@ -43,7 +43,7 @@ const Unstake = ({
     try {
       const { splt, wallet } = window.sentre
       if (!wallet) throw Error('Please connect wallet first')
-      if (!amount || !accountStake) return
+      if (!amount || !accountStake || !lptDecimal) return
       const ammount = utils.decimalize(amount, lptDecimal)
       const senWallet = await splt.deriveAssociatedAddress(
         walletAddress,
@@ -75,7 +75,11 @@ const Unstake = ({
     return await setDisable(false)
   }, [])
 
-  const stakedValue = utils.undecimalize(debtData?.shares, lptDecimal)
+  const stakedValue = useMemo(() => {
+    if (!lptDecimal) return
+    return utils.undecimalize(debtData?.shares, lptDecimal)
+  }, [debtData?.shares, lptDecimal])
+
   return (
     <Row gutter={[16, 16]}>
       <Col span={24}>
