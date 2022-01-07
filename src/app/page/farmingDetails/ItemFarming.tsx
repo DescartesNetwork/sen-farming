@@ -245,7 +245,7 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
                       )
                     }}
                   >
-                    Go pool
+                    To the pool
                     <IonIcon name="chevron-forward-outline" />
                   </Button>
                 )}
