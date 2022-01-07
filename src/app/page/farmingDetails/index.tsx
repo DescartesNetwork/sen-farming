@@ -56,6 +56,9 @@ const FarmingDetails = () => {
     if (!searchParams) return
     dispatch(setSearch({ search: searchParams }))
     setTabActive('all-farms')
+    return () => {
+      dispatch(setSearch({ search: '' }))
+    }
   }, [dispatch, locationSearch])
 
   const onChange = (key: string) => {
