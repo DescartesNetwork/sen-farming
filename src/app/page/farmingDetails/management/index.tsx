@@ -109,7 +109,7 @@ const Management = ({ farmAddress }: { farmAddress: string }) => {
                 <Col span={24}>
                   <Row gutter={[0, 0]}>
                     <Col flex="auto">
-                      <Space size={4} style={{ fontWeight: 600 }}>
+                      <Space size={12} style={{ fontWeight: 600 }}>
                         <MintAvatar mintAddress={mintFarmAddress} size={32} />
                         <MintSymbol mintAddress={mintFarmAddress} />
                       </Space>

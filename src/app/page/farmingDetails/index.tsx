@@ -17,6 +17,13 @@ import { useYourFarms } from 'app/hooks/listFarm/useYourFarms'
 import { useSentreFarms } from 'app/hooks/listFarm/useSentreFarms'
 import { setSearch } from 'app/model/main.controller'
 
+enum FarmingTabs {
+  YourFarms = 'YourFarms',
+  SenFarm = 'SenFarm',
+  StakedFarm = 'StakedFarm',
+  AllFarms = 'AllFarms',
+}
+
 const FarmingDetails = () => {
   const locationSearch = useLocation().search
   const farmSelected = useSelector((state: AppState) => state.main.search)
@@ -25,7 +32,7 @@ const FarmingDetails = () => {
   const { checkSentreFarm } = useSentreFarms()
   const dispatch = useDispatch<AppDispatch>()
 
-  const [tabActive, setTabActive] = useState('sen-farms')
+  const [tabActive, setTabActive] = useState<FarmingTabs>(FarmingTabs.SenFarm)
   const [isLoaded, setIsLoaded] = useState(false)
 
   // check tab activeKey with farmSelected
@@ -35,15 +42,15 @@ const FarmingDetails = () => {
       if (!account.isAddress(farmSelected) || isLoaded) return
       try {
         const yourFarm = checkYourFarm(farmSelected)
-        if (yourFarm) return setTabActive('your-farms')
+        if (yourFarm) return setTabActive(FarmingTabs.YourFarms)
 
         const sentreFarm = checkSentreFarm(farmSelected)
-        if (sentreFarm) return setTabActive('sen-farms')
+        if (sentreFarm) return setTabActive(FarmingTabs.SenFarm)
 
         const stakedFarm = await checkStakedFarm(farmSelected)
-        if (stakedFarm) return setTabActive('staked-farms')
+        if (stakedFarm) return setTabActive(FarmingTabs.StakedFarm)
 
-        return setTabActive('community-farms')
+        return setTabActive(FarmingTabs.AllFarms)
       } catch (error) {
       } finally {
         setIsLoaded(true)
@@ -55,17 +62,17 @@ const FarmingDetails = () => {
     const searchParams = new URLSearchParams(locationSearch).get('search')
     if (!searchParams) return
     dispatch(setSearch({ search: searchParams }))
-    setTabActive('all-farms')
+    setTabActive(FarmingTabs.AllFarms)
     return () => {
       dispatch(setSearch({ search: '' }))
     }
   }, [dispatch, locationSearch])
 
   const onChange = (key: string) => {
+    setTabActive(key as FarmingTabs)
     setTimeout(() => {
       forceCheck()
     }, 500)
-    setTabActive(key)
   }
 
   return (
@@ -74,16 +81,16 @@ const FarmingDetails = () => {
       onChange={onChange}
       tabBarExtraContent={<NewFarm />}
     >
-      <Tabs.TabPane tab="Sentre Farms" key="sen-farms">
+      <Tabs.TabPane tab="Sentre Farms" key={FarmingTabs.SenFarm}>
         <SentreFarms />
       </Tabs.TabPane>
-      <Tabs.TabPane tab="Staked Farms" key="staked-farms">
+      <Tabs.TabPane tab="Staked Farms" key={FarmingTabs.StakedFarm}>
         <StakedFarm />
       </Tabs.TabPane>
-      <Tabs.TabPane tab="Your Farms" key="your-farms">
+      <Tabs.TabPane tab="Your Farms" key={FarmingTabs.YourFarms}>
         <YourFarms />
       </Tabs.TabPane>
-      <Tabs.TabPane tab="All Farms" key="all-farms">
+      <Tabs.TabPane tab="All Farms" key={FarmingTabs.AllFarms}>
         <AllFarmings />
       </Tabs.TabPane>
     </Tabs>
