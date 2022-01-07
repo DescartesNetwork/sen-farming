@@ -46,7 +46,8 @@ export const useSearchFarm = (farms: FarmState) => {
       }
       // Search with farm
       if (farmAddress === keyword) return true
-      return listTokenAddress.includes(mint_stake)
+      // Search with mint stake
+      return listTokenAddress.includes(mint_stake) || mint_stake === keyword
     })
     listFarmAddress
       .sort((a, b) => {
