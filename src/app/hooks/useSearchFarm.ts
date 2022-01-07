@@ -5,11 +5,13 @@ import { AppState } from 'app/model'
 import { FarmState } from 'app/model/farms.controller'
 import { usePool, useMint } from 'senhub/providers'
 import { forceCheck } from '@senswap/react-lazyload'
+import { useSentreFarms } from './listFarm/useSentreFarms'
 
 const KEY_SIZE = 3
 
 export const useSearchFarm = (farms: FarmState) => {
   const { tokenProvider } = useMint()
+  const { sentreFarms } = useSentreFarms()
   const { pools } = usePool()
   const { search: keyword } = useSelector((state: AppState) => state.main)
   const [farmFilter, setFarmFilter] = useState<FarmState>({})
@@ -21,14 +23,12 @@ export const useSearchFarm = (farms: FarmState) => {
   )
 
   const search = useCallback(async () => {
-    if (!keyword || !pools || !farms || keyword.length < KEY_SIZE)
-      return setFarmFilter(farms)
-
     const newFarmFilter: FarmState = {}
     const listTokenInfo = await tokenProvider.find(keyword)
     const listTokenAddress = listTokenInfo.map((info) => info.address)
 
     const listFarmAddress = Object.keys(farms).filter((farmAddress) => {
+      if (!keyword || !pools || !farms || keyword.length < KEY_SIZE) return true
       const farmData = farms[farmAddress]
       const { mint_stake } = farmData
       // Search with pool
@@ -48,17 +48,22 @@ export const useSearchFarm = (farms: FarmState) => {
       if (farmAddress === keyword) return true
       return listTokenAddress.includes(mint_stake)
     })
-
-    listFarmAddress.map((addr) => (newFarmFilter[addr] = farms[addr]))
-    return setFarmFilter(newFarmFilter)
-  }, [farms, findPool, keyword, pools, tokenProvider])
+    listFarmAddress
+      .sort((a, b) => {
+        if (!sentreFarms[a] && sentreFarms[b]) return 1
+        if (sentreFarms[a] && !sentreFarms[b]) return -1
+        return farms[a].total_shares < farms[b].total_shares ? 1 : -1
+      })
+      .map((addr) => (newFarmFilter[addr] = farms[addr]))
+    await setFarmFilter(newFarmFilter)
+  }, [farms, findPool, keyword, pools, sentreFarms, tokenProvider])
 
   useEffect(() => {
     search().then(() => {
       // fix lazyload
       setTimeout(() => {
         forceCheck()
-      }, 300)
+      }, 500)
     })
   }, [search])
 
