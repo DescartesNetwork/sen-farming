@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
-import { Button, Card, Col, Row, Space, Typography } from 'antd'
+import { Button, Col, Row, Space, Typography } from 'antd'
 
 import { AppState } from 'app/model'
 import IonIcon from 'shared/antd/ionicon'
@@ -43,21 +43,12 @@ const Close = ({
   return (
     <Row gutter={[16, 16]}>
       <Col span={24}>
-        <Card
-          style={{ boxShadow: 'unset', borderRadius: 8 }}
-          bodyStyle={{ padding: 16 }}
-        >
-          <Row gutter={[0, 0]}>
-            <Col span={24}>
-              <Space>
-                <IonIcon name="information-circle-outline" />
-                <Typography.Text>
-                  The farm can be closed only all farmers unstaked their tokens!
-                </Typography.Text>
-              </Space>
-            </Col>
-          </Row>
-        </Card>
+        <Space className="caption">
+          <IonIcon name="information-circle-outline" />
+          <Typography.Text type="secondary">
+            The farm can be closed only all farmers unstaked their tokens!
+          </Typography.Text>
+        </Space>
       </Col>
       <Col span={24}>
         <Button
