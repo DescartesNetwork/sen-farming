@@ -97,7 +97,7 @@ const FarmCard = ({ farmAddress }: { farmAddress: string }) => {
               <Row>
                 <Col flex="auto">
                   <Typography.Text type="secondary">
-                    Your stacked LPT
+                    Your staked LPT
                   </Typography.Text>
                 </Col>
                 <Col>
