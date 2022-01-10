@@ -46,7 +46,7 @@ const {
 const LOW_BUDGET =
   'The budget of reward is very low. Please unstake your tokens for safety.'
 
-const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
+const FarmCard = ({ farmAddress }: { farmAddress: string }) => {
   const farmData = useSelector((state: AppState) => state.farms?.[farmAddress])
   const { data } = useDebt(farmAddress)
   const userReward = useReward(farmAddress)
@@ -172,12 +172,16 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
                 <Col xs={24} md={5}>
                   <Space>
                     <MintAvatar mintAddress={farmData?.mint_stake} size={24} />
-                    <MintSymbol mintAddress={farmAddress} />
+                    <MintSymbol mintAddress={farmData?.mint_stake} />
                     <Button
                       type="text"
                       shape="circle"
                       size="small"
-                      icon={<IonIcon name="information-circle-outline" />}
+                      icon={
+                        <Typography.Text type="secondary">
+                          <IonIcon name="information-circle-outline" />
+                        </Typography.Text>
+                      }
                       onClick={(e) => {
                         e.stopPropagation()
                         setVisibleInfo(true)
@@ -311,4 +315,4 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
     </Row>
   )
 }
-export default ItemFarming
+export default FarmCard
