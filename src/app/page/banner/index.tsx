@@ -31,7 +31,7 @@ const Banner = () => {
   const spaceDirection = desktop ? 'vertical' : 'horizontal'
   const iconName = desktop ? 'pause-outline' : 'reorder-two-outline'
 
-  const positiveFarms = useMemo(() => {
+  const activeFarms = useMemo(() => {
     let count = 0
     for (const addr in farms) {
       if (farms[addr].total_shares) {
@@ -58,7 +58,7 @@ const Banner = () => {
             <Col span={xsSpan}>
               <Space direction="vertical" size={spaceSize}>
                 <Typography.Text style={{ color: '#212433' }}>
-                  Total TVL Sen Farms
+                  Total Sentre Farms TVL
                 </Typography.Text>
                 <Typography.Title level={2} style={{ color: '#F9575E' }}>
                   {numeric(tvl).format('0,0.[00]$')}
@@ -73,10 +73,10 @@ const Banner = () => {
             <Col span={xsSpan}>
               <Space direction="vertical" size={spaceSize}>
                 <Typography.Text style={{ color: '#212433' }}>
-                  Positive Farms
+                  Active Farms
                 </Typography.Text>
                 <Typography.Title level={2} style={{ color: '#F9575E' }}>
-                  {positiveFarms}
+                  {activeFarms}
                 </Typography.Title>
               </Space>
             </Col>

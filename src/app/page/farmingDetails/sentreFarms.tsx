@@ -2,7 +2,7 @@ import { useMemo } from 'react'
 import LazyLoad from '@senswap/react-lazyload'
 
 import { Col, Empty, Row } from 'antd'
-import ItemFarming from './ItemFarming'
+import FarmCard from './farmCard'
 
 import configs from 'app/configs'
 import { useSearchFarm } from 'app/hooks/useSearchFarm'
@@ -40,7 +40,7 @@ const SentreFarms = () => {
         return (
           <Col span={24} key={farmAddress + i}>
             <LazyLoad height={84}>
-              <ItemFarming farmAddress={farmAddress} />
+              <FarmCard farmAddress={farmAddress} />
             </LazyLoad>
           </Col>
         )

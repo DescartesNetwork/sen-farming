@@ -9,6 +9,11 @@ import IonIcon from 'shared/antd/ionicon'
 
 import { AppDispatch, AppState } from 'app/model'
 import { setSearch } from 'app/model/main.controller'
+import configs from 'app/configs'
+
+const {
+  route: { farmRoute },
+} = configs
 
 const Page = () => {
   const { search: locationSearch, pathname } = useLocation()
@@ -20,6 +25,11 @@ const Page = () => {
     const searchParams = new URLSearchParams(locationSearch).get('search')
     if (searchParams) history.push(pathname)
     return dispatch(setSearch({ search: e.target.value }))
+  }
+
+  const clearSearch = () => {
+    dispatch(setSearch({ search: '' }))
+    return history.push(farmRoute)
   }
 
   return (
@@ -52,7 +62,7 @@ const Page = () => {
                           height: 'auto',
                           background: 'transparent',
                         }}
-                        onClick={() => dispatch(setSearch({ search: '' }))}
+                        onClick={clearSearch}
                         icon={<IonIcon name="close-outline" />}
                       />
                     ) : (

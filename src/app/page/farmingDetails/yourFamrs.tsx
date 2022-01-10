@@ -1,7 +1,7 @@
 import LazyLoad from '@senswap/react-lazyload'
 
 import { Col, Empty, Row } from 'antd'
-import ItemFarming from './ItemFarming'
+import FarmCard from './farmCard'
 
 import { useSearchFarm } from 'app/hooks/useSearchFarm'
 import { useYourFarms } from 'app/hooks/listFarm/useYourFarms'
@@ -17,7 +17,7 @@ const YourFarms = () => {
         return (
           <Col span={24} key={farmAddress}>
             <LazyLoad height={84}>
-              <ItemFarming farmAddress={farmAddress} />
+              <FarmCard farmAddress={farmAddress} />
             </LazyLoad>
           </Col>
         )
