@@ -27,7 +27,11 @@ const Content = ({
               type="text"
               shape="circle"
               size="small"
-              icon={<IonIcon name="information-circle-outline" />}
+              icon={
+                <Typography.Text type="secondary">
+                  <IonIcon name="information-circle-outline" />
+                </Typography.Text>
+              }
             />
           </Tooltip>
         )}
