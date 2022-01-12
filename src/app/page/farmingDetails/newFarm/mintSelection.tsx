@@ -12,7 +12,7 @@ const MintSelection = ({
   onChange: (value: string) => void
   onHideInputTokenModal?: (visible: boolean) => void
 }) => {
-  const { searchedResult, accountAddresses, onSearch } = useMintSelection()
+  const { searchedAccount, accountAddresses, onSearch } = useMintSelection()
 
   const onClick = (mintAddress: string) => {
     onHideInputTokenModal(false)
@@ -29,7 +29,7 @@ const MintSelection = ({
       </Col>
       <Col span={24}>
         <Row gutter={[16, 16]} style={{ height: 300, overflow: 'auto' }}>
-          {(searchedResult || accountAddresses).map((accountAddress, i) => (
+          {(searchedAccount || accountAddresses).map((accountAddress, i) => (
             <Col span={24} key={accountAddress + i}>
               <LazyLoad height={72} overflow>
                 <AccountCard
