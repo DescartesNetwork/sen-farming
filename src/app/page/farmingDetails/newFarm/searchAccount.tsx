@@ -6,14 +6,12 @@ import IonIcon from 'shared/antd/ionicon'
 const SearchAccount = ({
   onChange,
 }: {
-  onChange: (mintAddresses: string[] | undefined) => void
+  onChange: (mintAddresses: string | undefined) => void
 }) => {
   const [keyword, setKeyword] = useState('')
 
   useEffect(() => {
-    if (!keyword) return
-    const search = [keyword]
-    return onChange(search)
+    return onChange(keyword)
   }, [keyword, onChange])
 
   return (
