@@ -1,6 +1,6 @@
-import { useWallet } from 'senhub/providers'
 import { useCallback, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
+import { useWallet } from '@senhub/providers'
 
 import { AppState } from 'app/model'
 import { FarmState } from 'app/model/farms.controller'

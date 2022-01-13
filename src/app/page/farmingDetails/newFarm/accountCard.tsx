@@ -1,10 +1,10 @@
 import { useMemo } from 'react'
+import { useAccount } from '@senhub/providers'
 
 import { Button, Card, Col, Row, Space, Typography } from 'antd'
-import { MintAvatar } from 'app/shared/components/mint'
+import { MintAvatar, MintName } from 'app/shared/components/mint'
 import IonIcon from 'shared/antd/ionicon'
 
-import { useAccount } from 'senhub/providers'
 import { explorer, openNewTab } from 'shared/util'
 
 const AccountCard = ({
@@ -40,7 +40,10 @@ const AccountCard = ({
       <Row gutter={[8, 8]} wrap={false} align="middle">
         <Col flex="auto">
           <Space direction="vertical" size={0}>
-            <MintAvatar mintAddress={mintAddress} />
+            <Space>
+              <MintAvatar mintAddress={mintAddress} />
+              <MintName mintAddress={mintAddress} />
+            </Space>
             <Space>
               <Space size={4}>
                 <Typography.Text type="secondary" style={{ fontSize: 12 }}>

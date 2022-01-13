@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { utils } from '@senswap/sen-js'
+import { useWallet } from '@senhub/providers'
 
 import { Row, Col, Card, Typography, Space, Button } from 'antd'
 import IonIcon from 'shared/antd/ionicon'
 
 import NumericInput from 'shared/antd/numericInput'
 import { numeric } from 'shared/util'
-import { useWallet } from 'senhub/providers'
 import { AppState } from 'app/model'
 import configs from 'app/configs'
 import { notifyError, notifySuccess } from 'app/helper'
