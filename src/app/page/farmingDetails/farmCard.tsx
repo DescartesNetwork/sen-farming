@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useState } from 'react'
-import { utils } from '@senswap/sen-js'
 import { useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
+import { utils } from '@senswap/sen-js'
+import { useUI, useWallet } from '@senhub/providers'
 
 import {
   Button,
@@ -24,7 +25,6 @@ import Management from './management'
 import Exit from './stakeAndUnstake/exit'
 
 import { numeric } from 'shared/util'
-import { useUI, useWallet } from 'senhub/providers'
 import { HarvestValidator } from 'app/helper/validateHarvest'
 import { useDebt } from 'app/hooks/useDebt'
 import { useReward } from 'app/hooks/useReward'

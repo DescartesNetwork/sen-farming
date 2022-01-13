@@ -1,10 +1,10 @@
 import { useMemo } from 'react'
+import { useAccount } from '@senhub/providers'
 
 import { Button, Card, Col, Row, Space, Typography } from 'antd'
 import { MintAvatar, MintName } from 'app/shared/components/mint'
 import IonIcon from 'shared/antd/ionicon'
 
-import { useAccount } from 'senhub/providers'
 import { explorer, openNewTab } from 'shared/util'
 
 const AccountCard = ({

@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { utils } from '@senswap/sen-js'
+import { useMint, usePool } from '@senhub/providers'
 
 import { Row, Col, Typography, Space } from 'antd'
 import Title from './title'
@@ -8,7 +9,6 @@ import Address from './address'
 
 import { asyncWait, numeric } from 'shared/util'
 import { AppState } from 'app/model'
-import { useMint, usePool } from 'senhub/providers'
 import { useBudget } from 'app/hooks/useBudget'
 import useMintDecimals from 'shared/hooks/useMintDecimals'
 

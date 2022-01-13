@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
+import { useMint } from '@senhub/providers'
 
-import { useMint } from 'senhub/providers'
 import { fetchCGK } from 'shared/util'
 
 const DEFAULT_DATA = {

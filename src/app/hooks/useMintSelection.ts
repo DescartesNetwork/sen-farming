@@ -1,6 +1,5 @@
 import { useCallback, useMemo, useState } from 'react'
-
-import { useAccount, useMint } from 'senhub/providers'
+import { useAccount, useMint } from '@senhub/providers'
 
 const KEYSIZE = 3
 
