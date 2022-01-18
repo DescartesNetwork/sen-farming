@@ -59,7 +59,7 @@ const conf: Record<Net, Conf> = {
    * Production configurations
    */
   mainnet: {
-    node: 'https://api.mainnet-beta.solana.com',
+    node: 'https://solana-api.projectserum.com',
     spltAddress: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
     splataAddress: 'ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL',
     senAddress: 'SENBBKVCM7homnf5RX9zqpf1GFe935hnbU4uVzY1Y6M',
