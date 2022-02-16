@@ -250,7 +250,7 @@ const FarmCard = ({ farmAddress }: { farmAddress: string }) => {
                     style={{ padding: 0, background: 'transparent' }}
                     onClick={() => {
                       history.push(
-                        `/app/sen_lp?poolAddress=${farmPool.address}`,
+                        `/app/sen_lp/details?poolAddress=${farmPool.address}`,
                       )
                     }}
                   >
