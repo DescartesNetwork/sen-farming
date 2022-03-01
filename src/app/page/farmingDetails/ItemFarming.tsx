@@ -68,7 +68,7 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
   const { owner, state, reward } = farmData || {}
   const isOwner = owner === walletAddress
   const farmSelected = useSelector((state: AppState) => state.main.search)
-  const isFreezeFarm = state === FarmStatus.isFreeze
+  const farmFrozen = state === FarmStatus.isFreeze
   const lptDecimal = useMintDecimals(farmData?.mint_stake)
   const farmDecimal = useMintDecimals(farmData?.mint_stake)
   const { budget } = useBudget(farmAddress)
@@ -143,7 +143,7 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
     : 'chevron-down-outline'
 
   const icon = !desktop ? icoMobileCollapse : icoDesktopCollapse
-  const freezeStyle = isFreezeFarm ? { opacity: 0.6 } : {}
+  const freezeStyle = farmFrozen ? { opacity: 0.6 } : {}
 
   return (
     <Row style={{ ...freezeStyle }}>
@@ -210,7 +210,7 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
             </Col>
             <Col>
               <Space>
-                {isFreezeFarm && <IonIcon name="snow-outline" />}
+                {farmFrozen && <IonIcon name="snow-outline" />}
                 {warning && (
                   <Tooltip title={LOW_BUDGET}>
                     <IonIcon
@@ -222,7 +222,7 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
                 <Button
                   type="text"
                   icon={<IonIcon name={icon} />}
-                  disabled={!isOwner && isFreezeFarm}
+                  disabled={!isOwner && farmFrozen}
                   onClick={onActive}
                 />
               </Space>
@@ -255,7 +255,7 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
                   {isOwner && <Management farmAddress={farmAddress} />}
                   <Button
                     onClick={() => setVisible(true)}
-                    disabled={isFreezeFarm}
+                    disabled={farmFrozen}
                   >
                     Stake / Unstake
                   </Button>
@@ -264,7 +264,7 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
                     icon={<IonIcon name="leaf-outline" />}
                     loading={loading}
                     onClick={handleHarvest}
-                    disabled={isFreezeFarm || userReward === 0}
+                    disabled={farmFrozen || userReward === 0}
                   >
                     Harvest
                   </Button>
@@ -281,11 +281,11 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
         title={null}
         visible={visible}
       >
-        <Tabs>
-          <Tabs.TabPane tab="Stake" key="stake">
+        <Tabs defaultActiveKey={farmFrozen ? 'exit' : 'stake'}>
+          <Tabs.TabPane tab="Stake" key="stake" disabled={farmFrozen}>
             <Stake farmAddress={farmAddress} onClose={setVisible} />
           </Tabs.TabPane>
-          <Tabs.TabPane tab="Unstake" key="unstake">
+          <Tabs.TabPane tab="Unstake" key="unstake" disabled={farmFrozen}>
             <Unstake farmAddress={farmAddress} onClose={setVisible} />
           </Tabs.TabPane>
           <Tabs.TabPane tab="Exit" key="exit">
