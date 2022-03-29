@@ -15,7 +15,7 @@ const {
   route: { farmRoute },
 } = configs
 
-const Page = () => {
+const View = () => {
   const { search: locationSearch, pathname } = useLocation()
   const { search } = useSelector((state: AppState) => state.main)
   const dispatch = useDispatch<AppDispatch>()
@@ -84,4 +84,4 @@ const Page = () => {
   )
 }
 
-export default Page
+export default View
