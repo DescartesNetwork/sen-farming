@@ -1,5 +1,5 @@
 import { Col, Row, Typography } from 'antd'
-import LazyLoad from '@senswap/react-lazyload'
+import LazyLoad from '@sentre/react-lazyload'
 import AccountCard from './accountCard'
 import SearchAccount from './searchAccount'
 
