@@ -1,5 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit'
-import { devTools, bigintSerializationMiddleware } from 'shared/devTools'
+import { devTools, bigintSerializationMiddleware } from 'app/model/devTools'
 
 import farms from 'app/model/farms.controller'
 import debts from 'app/model/debts.controller'
