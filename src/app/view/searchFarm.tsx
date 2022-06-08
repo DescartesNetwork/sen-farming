@@ -1,7 +1,7 @@
 import { useState } from 'react'
+import IonIcon from '@sentre/antd-ionicon'
 
 import { Col, Input, Row } from 'antd'
-import IonIcon from 'shared/antd/ionicon'
 
 const SearchFarm = () => {
   const [search, setSearch] = useState('')

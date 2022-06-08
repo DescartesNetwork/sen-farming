@@ -1,9 +1,9 @@
 import { useMemo } from 'react'
 import { useSelector } from 'react-redux'
 import { useUI } from '@senhub/providers'
+import IonIcon from '@sentre/antd-ionicon'
 
 import { Card, Col, Divider, Row, Space, Typography } from 'antd'
-import IonIcon from 'shared/antd/ionicon'
 
 import configs from 'app/configs'
 import useMintCgk from 'app/shared/hooks/useMintCgk'

@@ -1,25 +1,18 @@
 import { useState } from 'react'
 
 import { Button, Col, Modal, Row } from 'antd'
-import IonIcon from 'shared/antd/ionicon'
-// import StepAddFarm from './stepAddFarm'
 import ConfirmAddFarm from './confirmAddFarm'
 import MintSelection from './mintSelection'
-
-// import { NewFarmStep } from 'app/constants/farms'
 import { SizeType } from 'antd/lib/config-provider/SizeContext'
+import IonIcon from '@sentre/antd-ionicon'
 
 const NewFarm = ({ size = 'small' }: { size?: SizeType }) => {
   const [visible, setVisible] = useState(false)
-  // const [stepNewFarm, setStepNewFarm] = useState<NewFarmStep>(
-  //   NewFarmStep.POLICY_AGREEMENT,
-  // )
   const [mintAddress, setMintAddress] = useState('')
   const [visibleInputTokenModal, setVisibleInputTokenModal] = useState(false)
 
   const onClose = () => {
     setVisible(false)
-    // setStepNewFarm('POLICY_AGREEMENT')
     setMintAddress('')
   }
 
@@ -40,16 +33,6 @@ const NewFarm = ({ size = 'small' }: { size?: SizeType }) => {
         footer={false}
         closeIcon={<IonIcon name="close-outline" />}
       >
-        {/* {stepNewFarm === 'POLICY_AGREEMENT' && (
-          <StepAddFarm setFarmCreatingStep={setStepNewFarm} />
-        )}
-        {stepNewFarm === 'FARM_CREATING_CONFIRMATION' && (
-          <ConfirmAddFarm
-            mintAddress={mintAddress}
-            onClose={onClose}
-            setVisibleInputTokenModal={setVisibleInputTokenModal}
-          />
-        )} */}
         <ConfirmAddFarm
           mintAddress={mintAddress}
           onClose={onClose}

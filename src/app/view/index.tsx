@@ -1,16 +1,8 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { useHistory, useLocation } from 'react-router-dom'
-
-<<<<<<< HEAD
-import { Row, Col, Input, Card, Button } from 'antd'
-import Banner from './banner'
-import FarmingDetails from './farmingDetails'
-import Watcher from 'app/components/watcher'
-import IonIcon from 'shared/antd/ionicon'
-=======
-import { Row, Col, Typography, Button, Space } from 'antd'
 import IonIcon from '@sentre/antd-ionicon'
->>>>>>> 60e4311cbdc1517b06dfa9c0a28c3a2b35fcc668
+
+import { Row, Col, Button } from 'antd'
 
 import { AppDispatch, AppState } from 'app/model'
 import { setSearch } from 'app/model/main.controller'

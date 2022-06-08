@@ -1,9 +1,9 @@
 import { CopyToClipboard } from 'react-copy-to-clipboard'
 import { account } from '@senswap/sen-js'
+import IonIcon from '@sentre/antd-ionicon'
 
 import { Row, Col, Typography, Tooltip, Button } from 'antd'
 import Title from './title'
-import IonIcon from 'shared/antd/ionicon'
 
 const Address = ({
   address,

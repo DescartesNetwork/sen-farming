@@ -4,7 +4,7 @@ import { utils } from '@senswap/sen-js'
 import { useWallet } from '@senhub/providers'
 
 import { Row, Col, Card, Typography, Space, Button } from 'antd'
-import IonIcon from 'shared/antd/ionicon'
+import IonIcon from '@sentre/antd-ionicon'
 
 import NumericInput from 'shared/antd/numericInput'
 import { numeric } from 'shared/util'

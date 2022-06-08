@@ -3,9 +3,9 @@ import { useAccount } from '@senhub/providers'
 
 import { Button, Card, Col, Row, Space, Typography } from 'antd'
 import { MintAvatar, MintName } from 'app/shared/components/mint'
-import IonIcon from 'shared/antd/ionicon'
 
 import { explorer, openNewTab } from 'shared/util'
+import IonIcon from '@sentre/antd-ionicon'
 
 const AccountCard = ({
   accountAddress,

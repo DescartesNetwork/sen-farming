@@ -24,11 +24,7 @@
     "react": "^17.0.2",
     "react-copy-to-clipboard": "^5.0.4",
     "react-dom": "^17.0.2",
-<<<<<<< HEAD
-    "react-dynamic-remote-component": "0.0.3",
     "react-fast-compare": "^3.2.0",
-=======
->>>>>>> 60e4311cbdc1517b06dfa9c0a28c3a2b35fcc668
     "react-joyride": "^2.3.2",
     "react-json-view": "^1.21.3",
     "react-query": "^3.39.1",

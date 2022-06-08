@@ -1,7 +1,8 @@
+import { ReactNode } from 'react'
+
 import { Button, Space, Tooltip, Typography } from 'antd'
 import { MintAvatar, MintSymbol } from 'app/shared/components/mint'
-import { ReactNode } from 'react'
-import IonIcon from 'shared/antd/ionicon'
+import IonIcon from '@sentre/antd-ionicon'
 
 const Content = ({
   label = '',
