@@ -1,5 +1,6 @@
+import IonIcon from '@sentre/antd-ionicon'
+
 import { Space, Typography } from 'antd'
-import IonIcon from 'shared/antd/ionicon'
 
 const Title = ({ title }: { title: string }) => {
   return (

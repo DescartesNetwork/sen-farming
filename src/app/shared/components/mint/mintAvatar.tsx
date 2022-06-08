@@ -1,10 +1,10 @@
 import { ReactNode, useMemo } from 'react'
 import { TokenInfo } from '@solana/spl-token-registry'
+import IonIcon from '@sentre/antd-ionicon'
 
 import { Avatar } from 'antd'
 
 import useTokenProvider from '../../hooks/useTokenProvider'
-import IonIcon from 'shared/antd/ionicon'
 
 const MintAvatar = ({
   mintAddress,

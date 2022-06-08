@@ -14,12 +14,12 @@ import {
   Button,
   Tooltip,
 } from 'antd'
-import IonIcon from 'shared/antd/ionicon'
 import { MintAvatar, MintSymbol } from 'app/shared/components/mint'
 import Seed from './seed'
 import Unseed from './unseed'
 import FreezeOrThaw from './freezeOrThaw'
 import Close from './close'
+import IonIcon from '@sentre/antd-ionicon'
 
 import { asyncWait, explorer, shortenAddress } from 'shared/util'
 import { AppState } from 'app/model'

@@ -1,10 +1,10 @@
 import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import IonIcon from '@sentre/antd-ionicon'
 
 import { Button, Col, Row, Space, Typography } from 'antd'
 
 import { AppState } from 'app/model'
-import IonIcon from 'shared/antd/ionicon'
 import configs from 'app/configs'
 import { notifyError, notifySuccess } from 'app/helper'
 import { deleteFarm } from 'app/model/farms.controller'

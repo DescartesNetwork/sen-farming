@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import LazyLoad from '@senswap/react-lazyload'
+import LazyLoad from '@sentre/react-lazyload'
 
 import { Col, Empty, Row } from 'antd'
 import FarmCard from './farmCard'

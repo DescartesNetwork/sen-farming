@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { forceCheck } from '@senswap/react-lazyload'
+import { forceCheck } from '@sentre/react-lazyload'
 import { account } from '@senswap/sen-js'
 import { useLocation } from 'react-router-dom'
 

@@ -4,13 +4,13 @@ import { account, utils } from '@senswap/sen-js'
 import { useWallet } from '@senhub/providers'
 
 import { Button, Card, Col, Row, Space, Typography } from 'antd'
-import IonIcon from 'shared/antd/ionicon'
 import NumericInput from 'shared/antd/numericInput'
 
 import configs from 'app/configs'
 import { notifyError, notifySuccess } from 'app/helper'
 import { useDebt } from 'app/hooks/useDebt'
 import { AppState } from 'app/model'
+import IonIcon from '@sentre/antd-ionicon'
 
 const {
   sol: { senAddress, farming },

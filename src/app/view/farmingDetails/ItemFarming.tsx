@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 import { utils } from '@senswap/sen-js'
 import { useUI, useWallet } from '@senhub/providers'
+import IonIcon from '@sentre/antd-ionicon'
 
 import {
   Button,
@@ -17,7 +18,6 @@ import {
   Typography,
 } from 'antd'
 import Content from './content'
-import IonIcon from 'shared/antd/ionicon'
 import Unstake from './stakeAndUnstake/unstake'
 import Stake from './stakeAndUnstake/stake'
 import FarmInfo from './farmInfo'
