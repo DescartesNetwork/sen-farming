@@ -1,11 +1,10 @@
-import { Net } from '@sentre/senhub'
+import { Net, rpc } from '@sentre/senhub'
 import { Farming } from '@senswap/sen-js'
 
 /**
  * Contructor
  */
 type Conf = {
-  node: string
   spltAddress: string
   splataAddress: string
   farmingAddress: string
@@ -19,7 +18,6 @@ const conf: Record<Net, Conf> = {
    * Development configurations
    */
   devnet: {
-    node: 'https://api.devnet.solana.com',
     spltAddress: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
     splataAddress: 'ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL',
     senAddress: '5YwUkPdXLoujGkZuo9B4LsLKj3hdkDcfP4derpspifSJ',
@@ -29,7 +27,7 @@ const conf: Record<Net, Conf> = {
         this.farmingAddress,
         this.spltAddress,
         this.splataAddress,
-        this.node,
+        rpc,
       )
     },
     senOwners: ['GJLqpmDxxrV9xruee2vFvEoTho7VVQHRtuHH8nfoAE54'],
@@ -39,7 +37,6 @@ const conf: Record<Net, Conf> = {
    * Staging configurations
    */
   testnet: {
-    node: 'https://api.testnet.solana.com',
     spltAddress: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
     splataAddress: 'ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL',
     senAddress: '5YwUkPdXLoujGkZuo9B4LsLKj3hdkDcfP4derpspifSJ',
@@ -49,7 +46,7 @@ const conf: Record<Net, Conf> = {
         this.farmingAddress,
         this.spltAddress,
         this.splataAddress,
-        this.node,
+        rpc,
       )
     },
     senOwners: ['GJLqpmDxxrV9xruee2vFvEoTho7VVQHRtuHH8nfoAE54'],
@@ -59,7 +56,6 @@ const conf: Record<Net, Conf> = {
    * Production configurations
    */
   mainnet: {
-    node: 'https://ssc-dao.genesysgo.net',
     spltAddress: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
     splataAddress: 'ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL',
     senAddress: 'SENBBKVCM7homnf5RX9zqpf1GFe935hnbU4uVzY1Y6M',
@@ -69,7 +65,7 @@ const conf: Record<Net, Conf> = {
         this.farmingAddress,
         this.spltAddress,
         this.splataAddress,
-        this.node,
+        rpc,
       )
     },
     senOwners: ['Cs6jYywHTAgdvjxn8xG4VkJJH8DXXy7zbtatzMUWoCMG'],
