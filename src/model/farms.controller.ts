@@ -3,6 +3,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { account, FarmData } from '@senswap/sen-js'
 
 import config from '../configs'
+import { parseFarmData } from 'helper/idlParser'
 
 const {
   sol: { farming, senAddress },
@@ -33,7 +34,7 @@ export const getFarms = createAsyncThunk<FarmState, void, { state: any }>(
     let bulk: FarmState = {}
     value.forEach(({ pubkey, account: { data: buf } }) => {
       const address = pubkey.toBase58()
-      const data = farming.parseFarmData(buf)
+      const data = parseFarmData(buf)
       bulk[address] = data
     })
     return bulk

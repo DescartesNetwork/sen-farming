@@ -3,6 +3,7 @@ import { PublicKey, AccountInfo } from '@solana/web3.js'
 import { account, DebtData } from '@senswap/sen-js'
 
 import config from 'configs'
+import { parseDebtData } from 'helper/idlParser'
 
 const {
   sol: { farming },
@@ -33,7 +34,7 @@ export const getDebts = createAsyncThunk(
     let bulk: DebtState = {}
     value.forEach(({ pubkey, account: { data: buf } }) => {
       const address = pubkey.toBase58()
-      const data = farming.parseDebtData(buf)
+      const data = parseDebtData(buf)
       return (bulk[address] = data)
     })
     return bulk
