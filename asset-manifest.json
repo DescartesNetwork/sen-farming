@@ -1,6 +1,6 @@
 {
   "files": {
-    "main.js": "/static/js/main.95fc9cdc.js",
+    "main.js": "/static/js/main.ea06bf88.js",
     "sen_farming.js": "/index.js",
     "static/js/src_bootstrap_tsx.0092ad48.chunk.js": "/static/js/src_bootstrap_tsx.0092ad48.chunk.js",
     "static/js/vendors-node_modules_reduxjs_toolkit_dist_redux-toolkit_esm_js.b96560d7.chunk.js": "/static/js/vendors-node_modules_reduxjs_toolkit_dist_redux-toolkit_esm_js.b96560d7.chunk.js",
@@ -9,7 +9,7 @@
     "static/js/node_modules_prop-types_index_js-node_modules_react-router-dom_esm_react-router-dom_js.db7a8f53.chunk.js": "/static/js/node_modules_prop-types_index_js-node_modules_react-router-dom_esm_react-router-dom_js.db7a8f53.chunk.js",
     "static/js/node_modules_react_index_js.f1e5e921.chunk.js": "/static/js/node_modules_react_index_js.f1e5e921.chunk.js",
     "static/css/src_bootstrap_app_tsx.24914aac.chunk.css": "/static/css/src_bootstrap_app_tsx.24914aac.chunk.css",
-    "static/js/src_bootstrap_app_tsx.6e6adc8e.chunk.js": "/static/js/src_bootstrap_app_tsx.6e6adc8e.chunk.js",
+    "static/js/src_bootstrap_app_tsx.1a747a05.chunk.js": "/static/js/src_bootstrap_app_tsx.1a747a05.chunk.js",
     "static/js/vendors-node_modules_react-dom_index_js.285753b8.chunk.js": "/static/js/vendors-node_modules_react-dom_index_js.285753b8.chunk.js",
     "static/js/_18f2-_0b7d-_25ed-_8131-_3fc0-_e4dd-_7bec-_ec71-_df0e-_887c-_c738-_9820-_7d1a-_b254-_ed1b-_d1-147343.3c05dc06.chunk.js": "/static/js/_18f2-_0b7d-_25ed-_8131-_3fc0-_e4dd-_7bec-_ec71-_df0e-_887c-_c738-_9820-_7d1a-_b254-_ed1b-_d1-147343.3c05dc06.chunk.js",
     "static/js/node_modules_web-vitals_dist_web-vitals_js.1dad2c98.chunk.js": "/static/js/node_modules_web-vitals_dist_web-vitals_js.1dad2c98.chunk.js",
@@ -65,7 +65,7 @@
     "static/media/icon-telegram.svg": "/static/media/icon-telegram.2450489f40d03000fe65fc1c6f238d85.svg",
     "static/media/README.md": "/static/media/README.dd3222bdab290f263138.md",
     "static.app.tsx": "/sen_farming-asset-senhub.json",
-    "main.95fc9cdc.js.map": "/static/js/main.95fc9cdc.js.map",
+    "main.ea06bf88.js.map": "/static/js/main.ea06bf88.js.map",
     "index.js.map": "/index.js.map",
     "src_bootstrap_tsx.0092ad48.chunk.js.map": "/static/js/src_bootstrap_tsx.0092ad48.chunk.js.map",
     "vendors-node_modules_reduxjs_toolkit_dist_redux-toolkit_esm_js.b96560d7.chunk.js.map": "/static/js/vendors-node_modules_reduxjs_toolkit_dist_redux-toolkit_esm_js.b96560d7.chunk.js.map",
@@ -74,7 +74,7 @@
     "node_modules_prop-types_index_js-node_modules_react-router-dom_esm_react-router-dom_js.db7a8f53.chunk.js.map": "/static/js/node_modules_prop-types_index_js-node_modules_react-router-dom_esm_react-router-dom_js.db7a8f53.chunk.js.map",
     "node_modules_react_index_js.f1e5e921.chunk.js.map": "/static/js/node_modules_react_index_js.f1e5e921.chunk.js.map",
     "src_bootstrap_app_tsx.24914aac.chunk.css.map": "/static/css/src_bootstrap_app_tsx.24914aac.chunk.css.map",
-    "src_bootstrap_app_tsx.6e6adc8e.chunk.js.map": "/static/js/src_bootstrap_app_tsx.6e6adc8e.chunk.js.map",
+    "src_bootstrap_app_tsx.1a747a05.chunk.js.map": "/static/js/src_bootstrap_app_tsx.1a747a05.chunk.js.map",
     "vendors-node_modules_react-dom_index_js.285753b8.chunk.js.map": "/static/js/vendors-node_modules_react-dom_index_js.285753b8.chunk.js.map",
     "node_modules_web-vitals_dist_web-vitals_js.1dad2c98.chunk.js.map": "/static/js/node_modules_web-vitals_dist_web-vitals_js.1dad2c98.chunk.js.map",
     "node_modules_react-router-dom_esm_react-router-dom_js.13add579.chunk.js.map": "/static/js/node_modules_react-router-dom_esm_react-router-dom_js.13add579.chunk.js.map",
@@ -86,6 +86,6 @@
     "vendors-node_modules_react-redux_es_index_js.783ee40e.chunk.js.map": "/static/js/vendors-node_modules_react-redux_es_index_js.783ee40e.chunk.js.map"
   },
   "entrypoints": [
-    "static/js/main.95fc9cdc.js"
+    "static/js/main.ea06bf88.js"
   ]
 }
