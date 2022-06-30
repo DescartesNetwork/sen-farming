@@ -23,6 +23,6 @@ module.exports = {
     },
   },
   exposes: {
-    './bootstrap': 'bootstrap.app',
+    './bootstrap': 'app/bootstrap.app',
   },
 }
