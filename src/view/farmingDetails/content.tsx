@@ -1,7 +1,7 @@
 import { ReactNode } from 'react'
 
 import { Button, Space, Tooltip, Typography } from 'antd'
-import { MintAvatar, MintSymbol } from 'app/components/mint'
+import { MintAvatar, MintSymbol } from 'components/mint'
 import IonIcon from '@sentre/antd-ionicon'
 
 const Content = ({

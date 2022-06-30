@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 import { Swap, utils } from '@senswap/sen-js'
-import { useMint, usePool } from '@senhub/providers'
+import { useMint, usePool } from '@sentre/senhub'
 
 import { fetchCGK } from 'shared/util'
 

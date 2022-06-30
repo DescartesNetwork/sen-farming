@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { useSelector } from 'react-redux'
-import { useUI } from '@senhub/providers'
+import { useUI } from '@sentre/senhub'
 import IonIcon from '@sentre/antd-ionicon'
 
 import { Card, Col, Divider, Row, Space, Typography } from 'antd'
@@ -61,7 +61,7 @@ const Banner = () => {
                   Total Sentre Farms TVL
                 </Typography.Text>
                 <Typography.Title level={2} style={{ color: '#F9575E' }}>
-                  {numeric(tvl).format('0,0.[00]$')}
+                  {util.numeric(tvl).format('0,0.[00]$')}
                 </Typography.Title>
               </Space>
             </Col>
@@ -92,7 +92,7 @@ const Banner = () => {
                 </Typography.Title>
                 <IonIcon style={{ color: '#212433' }} name={iconName} />
                 <Typography.Title level={4} style={{ color: '#F9575E' }}>
-                  {numeric(senCgk.price).format('0,0.[0000]$')}
+                  {util.numeric(senCgk.price).format('0,0.[0000]$')}
                 </Typography.Title>
               </Space>
             </Col>

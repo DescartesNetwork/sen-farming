@@ -1,7 +1,7 @@
 import { useCallback, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { account } from '@senswap/sen-js'
-import { useWallet } from '@senhub/providers'
+import { useWallet } from '@sentre/senhub'
 
 import configs from 'configs'
 import { getDebts, upsetDebt } from 'model/debts.controller'

@@ -1,7 +1,7 @@
 import { useCallback, useMemo, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { utils } from '@senswap/sen-js'
-import { useWallet } from '@senhub/providers'
+import { useWallet } from '@sentre/senhub'
 
 import { Button, Card, Col, Row, Space, Typography } from 'antd'
 import NumericInput from 'shared/antd/numericInput'
@@ -104,7 +104,7 @@ const Unstake = ({
                 <Space size={6}>
                   <Typography.Text type="secondary">Available:</Typography.Text>
                   <Typography.Text>
-                    {numeric(stakedValue).format('0,0.[00]')}
+                    {util.numeric(stakedValue).format('0,0.[00]')}
                   </Typography.Text>
                   <Typography.Text type="secondary">LPT</Typography.Text>
                 </Space>

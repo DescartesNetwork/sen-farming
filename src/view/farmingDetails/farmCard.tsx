@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 import { utils } from '@senswap/sen-js'
-import { useUI, useWallet } from '@senhub/providers'
+import { useUI, useWallet } from '@sentre/senhub'
 import IonIcon from '@sentre/antd-ionicon'
 
 import {
@@ -193,26 +193,26 @@ const FarmCard = ({ farmAddress }: { farmAddress: string }) => {
                   <Content
                     label="APR"
                     tooltip={<TooltipApr />}
-                    value={numeric(apr).format('0,0.[00]a%')}
+                    value={util.numeric(apr).format('0,0.[00]a%')}
                   />
                 </Col>
                 <Col xs={12} md={5}>
                   <Content
                     label="Liquidity"
-                    value={numeric(liquidity).format('0,0.00[00]a$')}
+                    value={util.numeric(liquidity).format('0,0.00[00]a$')}
                   />
                 </Col>
                 <Col xs={12} md={5}>
                   <Content
                     label="Your staked LPT"
-                    value={numeric(amountLptShared).format('0,0.00[00]')}
+                    value={util.numeric(amountLptShared).format('0,0.00[00]')}
                   />
                 </Col>
                 <Col xs={12} md={5}>
                   <Content
                     mintAddress={farmData?.mint_reward}
                     label="Reward"
-                    value={numeric(userReward).format('0,0.00[00]')}
+                    value={util.numeric(userReward).format('0,0.00[00]')}
                   />
                 </Col>
               </Row>

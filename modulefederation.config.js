@@ -16,7 +16,7 @@ module.exports = {
       singleton: true,
       requiredVersion: senhubVersion,
     },
-    '@senhub/providers': {
+    '@sentre/senhub': {
       import: 'os/providers',
       singleton: true,
       requiredVersion: senhubVersion,

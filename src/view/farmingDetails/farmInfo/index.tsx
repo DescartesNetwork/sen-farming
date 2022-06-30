@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { utils } from '@senswap/sen-js'
-import { useMint, usePool } from '@senhub/providers'
+import { useMint, usePool } from '@sentre/senhub'
 
 import { Row, Col, Typography, Space } from 'antd'
 import Title from './title'
@@ -97,7 +97,7 @@ const FarmInfo = ({ farmAddress }: { farmAddress: string }) => {
         <Space align="baseline">
           <Title title="Budget:" />
           <Typography.Text style={{ wordBreak: 'break-all' }}>
-            {numeric(budget).format('0,0.[00]')}
+            {util.numeric(budget).format('0,0.[00]')}
           </Typography.Text>
           <Typography.Text type="secondary">{mintSymbol}</Typography.Text>
         </Space>

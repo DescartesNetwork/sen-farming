@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { utils } from '@senswap/sen-js'
-import { useWallet } from '@senhub/providers'
+import { useWallet } from '@sentre/senhub'
 
 import { Row, Col, Card, Typography, Space, Button } from 'antd'
 import IonIcon from '@sentre/antd-ionicon'
@@ -98,7 +98,7 @@ const Unseed = ({
                       Available:
                     </Typography.Text>
                     <Typography.Text>
-                      {numeric(balance).format('0,0.[00]')}
+                      {util.numeric(balance).format('0,0.[00]')}
                     </Typography.Text>
                     <Typography.Text type="secondary">{symbol}</Typography.Text>
                   </Space>

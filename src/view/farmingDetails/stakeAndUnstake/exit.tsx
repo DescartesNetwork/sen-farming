@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useSelector } from 'react-redux'
 import { account, utils } from '@senswap/sen-js'
-import { useWallet } from '@senhub/providers'
+import { useWallet } from '@sentre/senhub'
 
 import { Button, Card, Col, Row, Space, Typography } from 'antd'
 import NumericInput from 'shared/antd/numericInput'

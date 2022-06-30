@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { forceCheck } from '@sentre/react-lazyload'
-import { usePool, useMint } from '@senhub/providers'
+import { usePool, useMint } from '@sentre/senhub'
 
 import { AppState } from 'model'
 import { FarmState } from 'model/farms.controller'

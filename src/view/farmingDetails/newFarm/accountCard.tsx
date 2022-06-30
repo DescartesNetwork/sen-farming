@@ -1,10 +1,9 @@
 import { useMemo } from 'react'
-import { useAccount } from '@senhub/providers'
+import { useAccount, util } from '@sentre/senhub'
 
 import { Button, Card, Col, Row, Space, Typography } from 'antd'
-import { MintAvatar, MintName } from 'app/components/mint'
+import { MintAvatar, MintName } from 'components/mint'
 
-import { explorer, openNewTab } from 'shared/util'
 import IonIcon from '@sentre/antd-ionicon'
 
 const AccountCard = ({
@@ -56,7 +55,7 @@ const AccountCard = ({
                 size="small"
                 onClick={(e: React.MouseEvent) => {
                   e.stopPropagation()
-                  openNewTab(explorer(accountAddress))
+                  util.openNewTab(util.explorer(accountAddress))
                 }}
                 icon={<IonIcon name="open-outline" />}
               />

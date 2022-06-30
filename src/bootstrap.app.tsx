@@ -5,7 +5,7 @@ import {
   PoolProvider,
   MintProvider,
   AccountProvider,
-} from '@senhub/providers'
+} from '@sentre/senhub'
 
 import View from 'view'
 

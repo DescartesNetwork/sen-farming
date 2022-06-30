@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
-import { useWallet } from '@senhub/providers'
+import { useWallet } from '@sentre/senhub'
 
 import configs from 'configs'
 import { AppState } from 'model'

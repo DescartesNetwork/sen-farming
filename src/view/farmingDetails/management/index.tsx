@@ -136,7 +136,7 @@ const Management = ({ farmAddress }: { farmAddress: string }) => {
                           type="text"
                           size="small"
                           onClick={() =>
-                            window.open(explorer(farmAddress), '_blank')
+                            window.open(util.explorer(farmAddress), '_blank')
                           }
                           icon={<IonIcon name="open-outline" />}
                         />
