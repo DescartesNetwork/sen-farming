@@ -7,7 +7,7 @@ import { Row, Col, Typography, Space } from 'antd'
 import Title from './title'
 import Address from './address'
 
-import { asyncWait, numeric } from 'shared/util'
+import { util } from '@sentre/senhub'
 import { AppState } from 'model'
 import { useBudget } from 'hooks/useBudget'
 import useMintDecimals from 'shared/hooks/useMintDecimals'
@@ -42,7 +42,7 @@ const FarmInfo = ({ farmAddress }: { farmAddress: string }) => {
   const onCopy = async (copieAddress: string | undefined) => {
     if (!copieAddress) return
     await setCopieAddress(copieAddress)
-    await asyncWait(1500)
+    await util.asyncWait(1500)
     await setCopieAddress('')
   }
 

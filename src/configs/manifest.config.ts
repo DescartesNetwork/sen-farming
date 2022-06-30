@@ -1,4 +1,4 @@
-import { Env } from 'shared/runtime'
+import { Env } from '@sentre/senhub'
 
 if (
   typeof process.env.REACT_APP_ID !== 'string' ||

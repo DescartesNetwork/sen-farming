@@ -1,17 +1,16 @@
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { utils } from '@senswap/sen-js'
-import { useWallet } from '@sentre/senhub'
+import { useWallet, util } from '@sentre/senhub'
 
 import { Row, Col, Card, Typography, Space, Button } from 'antd'
 import IonIcon from '@sentre/antd-ionicon'
 
 import NumericInput from 'shared/antd/numericInput'
-import { numeric } from 'shared/util'
 import { AppState } from 'model'
 import configs from 'configs'
 import { notifyError, notifySuccess } from 'helper'
-import useMintCgk from 'hooks/listFarm/useMintCgk'
+import useMintCgk from 'hooks/useMintCgk'
 import useMintDecimals from 'shared/hooks/useMintDecimals'
 
 const {

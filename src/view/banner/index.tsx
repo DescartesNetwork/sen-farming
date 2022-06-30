@@ -1,13 +1,12 @@
 import { useMemo } from 'react'
 import { useSelector } from 'react-redux'
-import { useUI } from '@sentre/senhub'
+import { useUI, util } from '@sentre/senhub'
 import IonIcon from '@sentre/antd-ionicon'
 
 import { Card, Col, Divider, Row, Space, Typography } from 'antd'
 
 import configs from 'configs'
-import useMintCgk from 'hooks/listFarm/useMintCgk'
-import { numeric } from 'shared/util'
+import useMintCgk from 'hooks/useMintCgk'
 import { MintSymbol } from 'components/mint'
 import { AppState } from 'model'
 import { useSentreFarmsTvl } from 'hooks/listFarm/useSentreFarmsTvl'

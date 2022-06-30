@@ -55,7 +55,7 @@ const AccountCard = ({
                 size="small"
                 onClick={(e: React.MouseEvent) => {
                   e.stopPropagation()
-                  util.openNewTab(util.explorer(accountAddress))
+                  window.open(util.explorer(accountAddress))
                 }}
                 icon={<IonIcon name="open-outline" />}
               />

@@ -1,4 +1,4 @@
-import { Env } from 'shared/runtime'
+import { Env } from '@sentre/senhub'
 
 /**
  * Contructor

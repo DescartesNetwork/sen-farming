@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useMint } from '@sentre/senhub'
 
-import { fetchCGK } from 'shared/util'
+import { util } from '@sentre/senhub'
 
 const DEFAULT_DATA = {
   address: '',
@@ -22,7 +22,7 @@ const useMintCgk = (mintAddress: string): CgkData => {
     try {
       const token = await tokenProvider.findByAddress(mintAddress)
       const ticket = token?.extensions?.coingeckoId
-      const cgkData = await fetchCGK(ticket)
+      const cgkData = await util.fetchCGK(ticket)
       return setCgkData(cgkData)
     } catch (error) {
       return setCgkData(DEFAULT_DATA)

@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 import { utils } from '@senswap/sen-js'
-import { useUI, useWallet } from '@sentre/senhub'
+import { useUI, useWallet, util } from '@sentre/senhub'
 import IonIcon from '@sentre/antd-ionicon'
 
 import {
@@ -24,7 +24,6 @@ import FarmInfo from './farmInfo'
 import Management from './management'
 import Exit from './stakeAndUnstake/exit'
 
-import { numeric } from 'shared/util'
 import { HarvestValidator } from 'helper/validateHarvest'
 import { useDebt } from 'hooks/useDebt'
 import { useReward } from 'hooks/useReward'

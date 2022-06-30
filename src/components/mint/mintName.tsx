@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 
 import useTokenProvider from 'hooks/useTokenProvider'
-import { shortenAddress } from 'shared/util'
+import { util } from '@sentre/senhub'
 
 const MintName = ({
   mintAddress,
@@ -16,11 +16,11 @@ const MintName = ({
 
   const names = useMemo(() => {
     let names = tokens.map((token) => {
-      if (!token) return shortenAddress(mintAddress)
+      if (!token) return util.shortenAddress(mintAddress)
       const { name, address, symbol } = token
       if (tokens.length === 1 && name) return name
       if (symbol) return symbol
-      return shortenAddress(address)
+      return util.shortenAddress(address)
     })
     if (isReverse) names.reverse()
     names.join(separator)

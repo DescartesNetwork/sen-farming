@@ -2,7 +2,7 @@ import { useCallback } from 'react'
 import { Swap, utils } from '@senswap/sen-js'
 import { useMint, usePool } from '@sentre/senhub'
 
-import { fetchCGK } from 'shared/util'
+import { util } from '@sentre/senhub'
 
 export const useMintUsd = () => {
   const { tokenProvider, getMint } = useMint()
@@ -15,7 +15,7 @@ export const useMintUsd = () => {
         const ticket = tokenInfo?.extensions?.coingeckoId
         if (!ticket) throw new Error('Cant not find coingeckoId')
 
-        const cgkData = await fetchCGK(ticket)
+        const cgkData = await util.fetchCGK(ticket)
         return (
           Number(utils.undecimalize(amount, tokenInfo.decimals)) * cgkData.price
         )

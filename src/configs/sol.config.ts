@@ -1,4 +1,4 @@
-import { Net } from 'shared/runtime'
+import { Net } from '@sentre/senhub'
 import { Farming } from '@senswap/sen-js'
 
 /**

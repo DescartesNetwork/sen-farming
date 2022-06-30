@@ -1,4 +1,4 @@
-import { env, net } from 'shared/runtime'
+import { env, net } from '@sentre/senhub'
 import manifest from './manifest.config'
 import sol from './sol.config'
 import route from './route.config'

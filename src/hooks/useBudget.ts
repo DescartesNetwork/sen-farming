@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux'
 import { utils } from '@senswap/sen-js'
 
 import { AppState } from 'model'
-import useMintCgk from 'hooks/listFarm/useMintCgk'
+import useMintCgk from 'hooks/useMintCgk'
 import useMintDecimals from 'shared/hooks/useMintDecimals'
 
 export const useBudget = (

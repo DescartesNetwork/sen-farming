@@ -1,4 +1,4 @@
-import { explorer } from 'shared/util'
+import { util } from '@sentre/senhub'
 
 export const notifySuccess = (content: string, txId: string) => {
   return window.notify({

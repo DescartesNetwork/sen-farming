@@ -21,7 +21,7 @@ import FreezeOrThaw from './freezeOrThaw'
 import Close from './close'
 import IonIcon from '@sentre/antd-ionicon'
 
-import { asyncWait, explorer, shortenAddress } from 'shared/util'
+import { util } from '@sentre/senhub'
 import { AppState } from 'model'
 import { useBudget } from 'hooks/useBudget'
 import useMintDecimals from 'shared/hooks/useMintDecimals'
@@ -55,7 +55,7 @@ const Management = ({ farmAddress }: { farmAddress: string }) => {
 
   const onCopy = async () => {
     setVisibleTooltip(true)
-    await asyncWait(1500)
+    await util.asyncWait(1500)
     setVisibleTooltip(false)
   }
 
@@ -120,7 +120,7 @@ const Management = ({ farmAddress }: { farmAddress: string }) => {
                           type="secondary"
                           style={{ fontSize: 12 }}
                         >
-                          {shortenAddress(farmAddress)}
+                          {util.shortenAddress(farmAddress)}
                         </Typography.Text>
                         <Tooltip visible={visibleTooltip} title="Copied">
                           <CopyToClipboard text={farmAddress}>
