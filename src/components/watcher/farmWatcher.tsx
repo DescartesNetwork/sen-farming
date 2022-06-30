@@ -6,6 +6,7 @@ import { Spin } from 'antd'
 import { notifyError } from 'helper'
 import { getFarms, upsetFarm } from 'model/farms.controller'
 import configs from 'configs'
+import { AppDispatch } from 'model'
 
 const {
   sol: { farming, senAddress },
@@ -21,13 +22,13 @@ const FarmWatcher = ({
   children: JSX.Element
   style?: CSSProperties
 }) => {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch<AppDispatch>()
   const [loading, setLoading] = useState(false)
 
   const fetchData = useCallback(async () => {
     try {
       setLoading(true)
-      await dispatch(getFarms())
+      await dispatch(getFarms()).unwrap()
     } catch (er) {
       await notifyError(er)
     } finally {
