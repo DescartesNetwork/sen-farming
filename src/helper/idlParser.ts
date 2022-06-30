@@ -217,7 +217,6 @@ export const parseDebtData = (buf: Buffer): DebtData => {
     'debt',
     Buffer.concat([discriminator, buf]),
   )
-
   return {
     farm: debtData.farm.toString(),
     owner: debtData.owner.toString(),
