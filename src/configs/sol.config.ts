@@ -1,5 +1,5 @@
 import { Net, rpc } from '@sentre/senhub'
-import { Farming } from '@senswap/sen-js'
+import Farming from 'helper/farming'
 
 /**
  * Contructor
