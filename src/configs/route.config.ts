@@ -16,13 +16,6 @@ const config: Record<Env, Config> = {
   },
 
   /**
-   * Staging configurations
-   */
-  staging: {
-    farmRoute: '/app/sen_farming',
-  },
-
-  /**
    * Production configurations
    */
   production: {

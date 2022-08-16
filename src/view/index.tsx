@@ -1,15 +1,15 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { useHistory, useLocation } from 'react-router-dom'
+import { useAppRoute } from '@sentre/senhub'
+
+import { Row, Col, Button, Card, Input, Alert, Typography } from 'antd'
 import IonIcon from '@sentre/antd-ionicon'
-
-import { Row, Col, Button, Card, Input } from 'antd'
-
-import { AppDispatch, AppState } from 'model'
-import configs from 'configs'
 import Banner from './banner'
 import FarmingDetails from './farmingDetails'
-
 import Watcher from 'components/watcher'
+
+import configs from 'configs'
+import { AppDispatch, AppState } from 'model'
 import { setSearch } from 'model/main.controller'
 
 const {
@@ -21,6 +21,7 @@ const View = () => {
   const { search } = useSelector((state: AppState) => state.main)
   const dispatch = useDispatch<AppDispatch>()
   const history = useHistory()
+  const { to } = useAppRoute()
 
   const handleOnChange = (e: any) => {
     const searchParams = new URLSearchParams(locationSearch).get('search')
@@ -36,6 +37,31 @@ const View = () => {
   return (
     <Watcher>
       <Row gutter={[24, 24]} style={{ paddingBottom: 12 }} justify="center">
+        <Col xs={24} lg={18}>
+          <Alert
+            type="info"
+            message={
+              <Typography.Title level={5}>
+                Sen Farming V2 is launched ✅ Explorer Now ✨
+              </Typography.Title>
+            }
+            description={
+              <Typography.Text type="secondary">
+                Sentre's farms now are active on the{' '}
+                <strong>Sen Farming v2</strong> with more advantages and juicy
+                APY. <strong>Click here to jump to Sen Farming V2!</strong>
+              </Typography.Text>
+            }
+            onClick={() =>
+              to('/app/sen_farming_v2?autoInstall=true', {
+                absolutePath: true,
+                newWindow: true,
+              })
+            }
+            style={{ cursor: 'pointer' }}
+            showIcon
+          />
+        </Col>
         <Col xs={24} lg={18}>
           <Banner />
         </Col>
