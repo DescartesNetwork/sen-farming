@@ -1,7 +1,7 @@
 import { useCallback, useMemo, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { utils } from '@senswap/sen-js'
-import { useWallet, util } from '@sentre/senhub'
+import { useWalletAddress, util } from '@sentre/senhub'
 
 import { Button, Card, Col, Row, Space, Typography } from 'antd'
 import NumericInput from 'shared/antd/numericInput'
@@ -27,9 +27,7 @@ const Unstake = ({
   onClose: (visible: boolean) => void
 }) => {
   const farmData = useSelector((state: AppState) => state.farms?.[farmAddress])
-  const {
-    wallet: { address: walletAddress },
-  } = useWallet()
+  const walletAddress = useWalletAddress()
   const { data: debtData } = useDebt(farmAddress)
   const accountStake = useAccountStake(farmAddress)
   const [amount, setAmount] = useState()

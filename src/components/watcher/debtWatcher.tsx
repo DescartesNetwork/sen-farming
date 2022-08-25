@@ -1,7 +1,7 @@
 import { useCallback, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { account } from '@senswap/sen-js'
-import { useWallet } from '@sentre/senhub'
+import { useWalletAddress, useWalletBalance } from '@sentre/senhub'
 
 import configs from 'configs'
 import { getDebts, upsetDebt } from 'model/debts.controller'
@@ -18,9 +18,8 @@ let prevLamports: bigint = BigInt(0)
 
 const DebtWatcher = ({ children }: { children: JSX.Element }) => {
   const dispatch = useDispatch<AppDispatch>()
-  const {
-    wallet: { address: walletAddress, lamports },
-  } = useWallet()
+  const walletAddress = useWalletAddress()
+  const lamports = useWalletBalance()
 
   // First-time fetching
   const fetchData = useCallback(async () => {

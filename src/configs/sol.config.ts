@@ -5,6 +5,7 @@ import Farming from 'helper/farming'
  * Contructor
  */
 type Conf = {
+  taxmanAddress: string
   spltAddress: string
   splataAddress: string
   farmingAddress: string
@@ -18,6 +19,7 @@ const conf: Record<Net, Conf> = {
    * Development configurations
    */
   devnet: {
+    taxmanAddress: '8UaZw2jDhJzv5V53569JbCd3bD4BnyCfBH3sjwgajGS9',
     spltAddress: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
     splataAddress: 'ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL',
     senAddress: '5YwUkPdXLoujGkZuo9B4LsLKj3hdkDcfP4derpspifSJ',
@@ -37,6 +39,7 @@ const conf: Record<Net, Conf> = {
    * Staging configurations
    */
   testnet: {
+    taxmanAddress: '',
     spltAddress: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
     splataAddress: 'ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL',
     senAddress: '5YwUkPdXLoujGkZuo9B4LsLKj3hdkDcfP4derpspifSJ',
@@ -56,6 +59,7 @@ const conf: Record<Net, Conf> = {
    * Production configurations
    */
   mainnet: {
+    taxmanAddress: '9doo2HZQEmh2NgfT3Yx12M89aoBheycYqH1eaR5gKb3e',
     spltAddress: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
     splataAddress: 'ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL',
     senAddress: 'SENBBKVCM7homnf5RX9zqpf1GFe935hnbU4uVzY1Y6M',

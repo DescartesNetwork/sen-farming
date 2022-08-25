@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { utils } from '@senswap/sen-js'
-import { useAccount, useWallet, util } from '@sentre/senhub'
+import { useAccount, useWalletAddress, util } from '@sentre/senhub'
 
 import { Button, Card, Col, Row, Space, Typography } from 'antd'
 import NumericInput from 'shared/antd/numericInput'
@@ -24,9 +24,7 @@ const Seed = ({
   onChange?: (txId: string) => void
 }) => {
   const { accounts } = useAccount()
-  const {
-    wallet: { address: walletAddress },
-  } = useWallet()
+  const walletAddress = useWalletAddress()
   const farms = useSelector((state: AppState) => state.farms)
   const [value, setValue] = useState('')
   const [balance, setBalance] = useState('0')

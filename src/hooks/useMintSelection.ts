@@ -1,12 +1,11 @@
 import { useCallback, useMemo, useState } from 'react'
-import { useAccount, useMint } from '@sentre/senhub'
+import { useAccount, tokenProvider } from '@sentre/senhub'
 
 const KEYSIZE = 3
 
 export const useMintSelection = () => {
   const [searchedAccount, setSearchedAccount] = useState<string[]>()
   const { accounts } = useAccount()
-  const { tokenProvider } = useMint()
 
   const accountAddresses = useMemo(() => Object.keys(accounts), [accounts])
   const onSearch = useCallback(
@@ -23,7 +22,7 @@ export const useMintSelection = () => {
       })
       return setSearchedAccount(searchedAccount)
     },
-    [accountAddresses, accounts, tokenProvider],
+    [accountAddresses, accounts],
   )
 
   return {

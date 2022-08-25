@@ -1,12 +1,13 @@
 import { useCallback } from 'react'
 import { Swap, utils } from '@senswap/sen-js'
-import { useMint, usePool } from '@sentre/senhub'
+import { tokenProvider, useGetMintData } from '@sentre/senhub'
 
 import { util } from '@sentre/senhub'
+import { usePool } from './usePool'
 
 export const useMintUsd = () => {
-  const { tokenProvider, getMint } = useMint()
   const { pools } = usePool()
+  const getMint = useGetMintData()
 
   const getTokenUsd = useCallback(
     async (mintAddress: string, amount: bigint) => {
@@ -23,7 +24,7 @@ export const useMintUsd = () => {
         return 0
       }
     },
-    [tokenProvider],
+    [],
   )
 
   const getTotalValue = useCallback(
@@ -44,9 +45,10 @@ export const useMintUsd = () => {
       if (!poolData) return 0
       const { reserve_a, reserve_b, mint_a, mint_b } = poolData
       if (reserve_a * reserve_b === BigInt(0)) return 0
-      const {
-        [mintAddress]: { supply },
-      } = await getMint({ address: mintAddress })
+
+      const mintData = await getMint({ mintAddress })
+      if (!mintData) return 0
+      const { supply } = mintData[mintAddress]
       const { deltaA, deltaB } = Swap.oracle.withdraw(
         amount,
         supply,
@@ -63,7 +65,7 @@ export const useMintUsd = () => {
       })
       return balanceA + balanceB
     },
-    [getMint, getTokenUsd, tokenProvider, pools],
+    [getMint, getTokenUsd, pools],
   )
   return { getTotalValue }
 }
