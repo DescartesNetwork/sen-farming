@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { account, DebtData } from '@senswap/sen-js'
-import { useWallet } from '@sentre/senhub'
+import { useWalletAddress } from '@sentre/senhub'
 
 import configs from 'configs'
 import { AppState } from 'model'
@@ -17,9 +17,7 @@ export const useDebt = (
   const {
     debts: { [debtAddress]: debtData },
   } = useSelector((state: AppState) => state)
-  const {
-    wallet: { address: walletAddress },
-  } = useWallet()
+  const walletAddress = useWalletAddress()
 
   const fetchDebtAddress = useCallback(async () => {
     if (!account.isAddress(farmAddress)) return setDebtAddress('')

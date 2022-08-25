@@ -1,6 +1,7 @@
-import { CSSProperties } from 'react'
+import { CSSProperties, Fragment } from 'react'
 import DebtWatcher from './debtWatcher'
 import FarmWatcher from './farmWatcher'
+import PoolWatcher from './pool.watcher'
 
 const Watcher = ({
   children,
@@ -10,9 +11,12 @@ const Watcher = ({
   style?: CSSProperties
 }) => {
   return (
-    <FarmWatcher style={style}>
-      <DebtWatcher>{children}</DebtWatcher>
-    </FarmWatcher>
+    <Fragment>
+      <FarmWatcher style={style}>
+        <DebtWatcher>{children}</DebtWatcher>
+      </FarmWatcher>
+      <PoolWatcher />
+    </Fragment>
   )
 }
 

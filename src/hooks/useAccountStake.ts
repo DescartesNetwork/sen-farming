@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import isEqual from 'react-fast-compare'
 import { AccountData } from '@senswap/sen-js'
-import { useAccount, useWallet } from '@sentre/senhub'
+import { useAccount, useWalletAddress } from '@sentre/senhub'
 
 import { AppState } from 'model'
 
@@ -10,9 +10,7 @@ export const useAccountStake = (
   farmAddress: string,
 ): { address: string; data: AccountData } | undefined => {
   const { accounts } = useAccount()
-  const {
-    wallet: { address: walletAddress },
-  } = useWallet()
+  const walletAddress = useWalletAddress()
   const farmData = useSelector((state: AppState) => state.farms[farmAddress])
   const [accountStake, setAccountStake] = useState<{
     address: string
