@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 import { utils } from '@senswap/sen-js'
-import { useUI, useWalletAddress, util } from '@sentre/senhub'
+import { useWalletAddress, useWidth, util } from '@sentre/senhub'
 import IonIcon from '@sentre/antd-ionicon'
 
 import {
@@ -52,9 +52,7 @@ const ItemFarming = ({ farmAddress }: { farmAddress: string }) => {
   const farmPool = useFarmPool(farmAddress)
   const liquidity = useFarmLiquidity(farmAddress)
   const { apr } = useFarmRoi(farmAddress)
-  const {
-    ui: { width },
-  } = useUI()
+  const width = useWidth()
   const walletAddress = useWalletAddress()
   const history = useHistory()
   const [activeKey, setActiveKey] = useState<string>()

@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { useSelector } from 'react-redux'
-import { useUI, util } from '@sentre/senhub'
+import { useWidth, util } from '@sentre/senhub'
 import IonIcon from '@sentre/antd-ionicon'
 
 import { Card, Col, Divider, Row, Space, Typography } from 'antd'
@@ -16,9 +16,7 @@ const {
 } = configs
 
 const Banner = () => {
-  const {
-    ui: { width },
-  } = useUI()
+  const width = useWidth()
   const farms = useSelector((state: AppState) => state.farms)
   const senCgk = useMintCgk(senAddress)
   const tvl = useSentreFarmsTvl()
