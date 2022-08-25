@@ -1,8 +1,9 @@
 import { useCallback } from 'react'
 import { Swap, utils } from '@senswap/sen-js'
-import { tokenProvider, useGetMintData, usePool } from '@sentre/senhub'
+import { tokenProvider, useGetMintData } from '@sentre/senhub'
 
 import { util } from '@sentre/senhub'
+import { usePool } from './usePool'
 
 export const useMintUsd = () => {
   const { pools } = usePool()

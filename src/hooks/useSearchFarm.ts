@@ -1,10 +1,11 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { forceCheck } from '@sentre/react-lazyload'
-import { usePool, tokenProvider } from '@sentre/senhub'
+import { tokenProvider } from '@sentre/senhub'
 
 import { AppState } from 'model'
 import { FarmState } from 'model/farms.controller'
+import { usePool } from './usePool'
 import { useSentreFarms } from './listFarm/useSentreFarms'
 
 const KEY_SIZE = 3

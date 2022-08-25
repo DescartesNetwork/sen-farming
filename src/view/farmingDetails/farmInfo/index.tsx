@@ -1,14 +1,14 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { utils } from '@senswap/sen-js'
-import { tokenProvider, usePool } from '@sentre/senhub'
+import { tokenProvider, util } from '@sentre/senhub'
 
 import { Row, Col, Typography, Space } from 'antd'
 import Title from './title'
 import Address from './address'
 
-import { util } from '@sentre/senhub'
 import { AppState } from 'model'
+import { usePool } from 'hooks/usePool'
 import { useBudget } from 'hooks/useBudget'
 import useMintDecimals from 'shared/hooks/useMintDecimals'
 

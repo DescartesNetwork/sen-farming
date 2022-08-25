@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { account } from '@senswap/sen-js'
-import { tokenProvider, usePool } from '@sentre/senhub'
+import { tokenProvider } from '@sentre/senhub'
+import { usePool } from 'hooks/usePool'
 
 const DEFAULT_NAME = 'Unknown Token'
 
