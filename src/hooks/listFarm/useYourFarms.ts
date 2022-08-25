@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
-import { useWallet } from '@sentre/senhub'
+import { useWalletAddress } from '@sentre/senhub'
 
 import { AppState } from 'model'
 import { FarmState } from 'model/farms.controller'
@@ -8,9 +8,7 @@ import { FarmState } from 'model/farms.controller'
 export const useYourFarms = () => {
   const [yourFarms, setYourFarms] = useState<FarmState>({})
   const farms = useSelector((state: AppState) => state.farms)
-  const {
-    wallet: { address: walletAddress },
-  } = useWallet()
+  const walletAddress = useWalletAddress()
 
   const checkYourFarm = useCallback(
     (address: string) => farms[address].owner === walletAddress,

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { utils } from '@senswap/sen-js'
-import { useWallet, util } from '@sentre/senhub'
+import { useWalletAddress, util } from '@sentre/senhub'
 
 import { Row, Col, Card, Typography, Space, Button } from 'antd'
 import IonIcon from '@sentre/antd-ionicon'
@@ -24,9 +24,7 @@ const Unseed = ({
   farmAddress: string
   onChange?: (txId: string) => void
 }) => {
-  const {
-    wallet: { address: walletAddress },
-  } = useWallet()
+  const walletAddress = useWalletAddress()
   const farms = useSelector((state: AppState) => state.farms)
   const [value, setValue] = useState('')
   const [balance, setBalance] = useState('0')

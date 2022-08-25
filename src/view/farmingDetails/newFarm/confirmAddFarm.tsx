@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { account, utils } from '@senswap/sen-js'
-import { useWallet } from '@sentre/senhub'
+import { useWalletAddress } from '@sentre/senhub'
 
 import { Button, Card, Col, Row, Space, Typography } from 'antd'
 import { MintAvatar, MintSymbol } from 'components/mint'
@@ -36,9 +36,7 @@ const ConfirmAddFarm = ({
   const [period, setPeriod] = useState('Hour')
   const [loading, setLoading] = useState(false)
   const rewardDecimal = useMintDecimals(senAddress)
-  const {
-    wallet: { address: walletAddress },
-  } = useWallet()
+  const walletAddress = useWalletAddress()
 
   const newFarm = async () => {
     if (!account.isAddress(mintAddress))
