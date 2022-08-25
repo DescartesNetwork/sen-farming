@@ -3,6 +3,5 @@ import { useSelector } from 'react-redux'
 
 export const usePool = () => {
   const pools = useSelector((state: AppState) => state.pools)
-  console.log('pools: ', pools)
   return { pools }
 }
