@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { forceCheck } from '@sentre/react-lazyload'
-import { usePool, useMint } from '@sentre/senhub'
+import { usePool, tokenProvider } from '@sentre/senhub'
 
 import { AppState } from 'model'
 import { FarmState } from 'model/farms.controller'
@@ -10,7 +10,6 @@ import { useSentreFarms } from './listFarm/useSentreFarms'
 const KEY_SIZE = 3
 
 export const useSearchFarm = (farms: FarmState) => {
-  const { tokenProvider } = useMint()
   const { sentreFarms } = useSentreFarms()
   const { pools } = usePool()
   const { search: keyword } = useSelector((state: AppState) => state.main)
@@ -57,7 +56,7 @@ export const useSearchFarm = (farms: FarmState) => {
       })
       .map((addr) => (newFarmFilter[addr] = farms[addr]))
     await setFarmFilter(newFarmFilter)
-  }, [farms, findPool, keyword, pools, sentreFarms, tokenProvider])
+  }, [farms, findPool, keyword, pools, sentreFarms])
 
   useEffect(() => {
     search().then(() => {

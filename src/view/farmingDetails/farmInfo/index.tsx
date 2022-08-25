@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { utils } from '@senswap/sen-js'
-import { useMint, usePool } from '@sentre/senhub'
+import { tokenProvider, usePool } from '@sentre/senhub'
 
 import { Row, Col, Typography, Space } from 'antd'
 import Title from './title'
@@ -15,7 +15,6 @@ import useMintDecimals from 'shared/hooks/useMintDecimals'
 const DEFAULT_TOKEN_SYMBOL = 'TOKEN'
 
 const FarmInfo = ({ farmAddress }: { farmAddress: string }) => {
-  const { tokenProvider } = useMint()
   const { pools } = usePool()
   const { budget, budgetSymbol } = useBudget(farmAddress)
   const farms = useSelector((state: AppState) => state.farms)
@@ -32,7 +31,7 @@ const FarmInfo = ({ farmAddress }: { farmAddress: string }) => {
       const { symbol } = (await tokenProvider.findByAddress(mint_reward)) || {}
       setMintSymbol(symbol || DEFAULT_TOKEN_SYMBOL)
     })()
-  }, [mint_reward, tokenProvider])
+  }, [mint_reward])
 
   const poolAddress = Object.keys(pools).find((poolAddress) => {
     const { mint_lpt } = pools[poolAddress]
