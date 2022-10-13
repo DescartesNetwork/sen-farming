@@ -44,8 +44,8 @@ const ConfirmAddFarm = ({
         message: `Invalid mint address: ${mintAddress}`,
       })
     setLoading(true)
-    const { wallet } = window.sentre
-    if (!wallet || !period || !duration || !rewardDecimal) return
+    const { solana } = window.sentre
+    if (!solana || !period || !duration || !rewardDecimal) return
     const reward = utils.decimalize(value, rewardDecimal)
     const calculatePeriod = Number(PERIODS?.[period]) * Number(duration)
     try {
@@ -55,7 +55,7 @@ const ConfirmAddFarm = ({
         walletAddress,
         mintAddress,
         senAddress,
-        wallet,
+        solana,
       )
       onClose()
       return notifySuccess('Create a new farm', txId)

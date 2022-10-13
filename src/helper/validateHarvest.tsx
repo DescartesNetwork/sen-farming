@@ -1,4 +1,5 @@
 import { account, utils } from '@senswap/sen-js'
+import { splt } from '@sentre/senhub'
 
 import calculateReward from './calculateReward'
 
@@ -11,12 +12,12 @@ const {
 } = configs
 export class HarvestValidator {
   private async checkSeedBalance(farmAddress: string) {
-    const { splt, wallet } = window.sentre
-    if (!wallet) throw new Error('Please connect wallet first!')
+    const { solana } = window.sentre
+    if (!solana) throw new Error('Please connect wallet first!')
 
     const farmData = store.getState().farms[farmAddress]
 
-    const walletAddress = await wallet.getAddress()
+    const walletAddress = await solana.getAddress()
     if (!account.isAddress(walletAddress))
       throw new Error(FARMING_ERRORS.WALLET_ADDRESS_INVALID)
 

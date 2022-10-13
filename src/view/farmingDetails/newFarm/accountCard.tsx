@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { useAccount, util } from '@sentre/senhub'
+import { useAccounts, util } from '@sentre/senhub'
 
 import { Button, Card, Col, Row, Space, Typography } from 'antd'
 import { MintAvatar, MintName } from 'components/mint'
@@ -14,10 +14,8 @@ const AccountCard = ({
   onClick: (mintAddress: string) => void
 }) => {
   const {
-    accounts: {
-      [accountAddress]: { mint: mintAddress },
-    },
-  } = useAccount()
+    [accountAddress]: { mint: mintAddress },
+  } = useAccounts()
 
   const shortenAddress = useMemo(() => {
     const size = 4

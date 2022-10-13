@@ -26,11 +26,11 @@ const Close = ({
   const dispatch = useDispatch()
 
   const close = async () => {
-    const { wallet } = window.sentre
-    if (!wallet) return
+    const { solana } = window.sentre
+    if (!solana) return
     setLoading(true)
     try {
-      const { txId } = await farming.closeFarm(farmAddress, wallet)
+      const { txId } = await farming.closeFarm(farmAddress, solana)
       onChange(txId)
       dispatch(deleteFarm({ farmAddress }))
       return notifySuccess('Close the farm', txId)

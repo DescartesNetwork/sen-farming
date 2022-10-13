@@ -2,14 +2,14 @@ import { useCallback, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import isEqual from 'react-fast-compare'
 import { AccountData } from '@senswap/sen-js'
-import { useAccount, useWalletAddress } from '@sentre/senhub'
+import { useAccounts, useWalletAddress, splt } from '@sentre/senhub'
 
 import { AppState } from 'model'
 
 export const useAccountStake = (
   farmAddress: string,
 ): { address: string; data: AccountData } | undefined => {
-  const { accounts } = useAccount()
+  const accounts = useAccounts()
   const walletAddress = useWalletAddress()
   const farmData = useSelector((state: AppState) => state.farms[farmAddress])
   const [accountStake, setAccountStake] = useState<{
@@ -20,7 +20,6 @@ export const useAccountStake = (
   const findAccountStake = useCallback(async () => {
     const mintStake = farmData?.mint_stake
     if (!mintStake) return setAccountStake(undefined)
-    const { splt } = window.sentre
     const accountAddr = await splt.deriveAssociatedAddress(
       walletAddress,
       farmData.mint_stake,

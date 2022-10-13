@@ -1,7 +1,7 @@
 import { useCallback, useMemo, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { utils } from '@senswap/sen-js'
-import { useAccount, useWalletAddress, util } from '@sentre/senhub'
+import { useAccounts, useWalletAddress, util, splt } from '@sentre/senhub'
 
 import { Button, Card, Col, Row, Space, Typography } from 'antd'
 import NumericInput from 'shared/antd/numericInput'
@@ -28,7 +28,7 @@ const Stake = ({
 }) => {
   const farmData = useSelector((state: AppState) => state.farms?.[farmAddress])
   const walletAddress = useWalletAddress()
-  const { accounts } = useAccount()
+  const accounts = useAccounts()
   const { data: debtData } = useDebt(farmAddress)
   const accountStake = useAccountStake(farmAddress)
   const [amount, setAmount] = useState()
@@ -39,8 +39,8 @@ const Stake = ({
   const handleStake = async () => {
     setIsLoading(true)
     try {
-      const { splt, wallet } = window.sentre
-      if (!wallet) throw Error('Please connect wallet first')
+      const { solana } = window.sentre
+      if (!solana) throw Error('Please connect wallet first')
       if (!amount || !accountStake || !lptDecimal) return
 
       const senWalletAddr = await splt.deriveAssociatedAddress(
@@ -48,9 +48,9 @@ const Stake = ({
         senAddress,
       )
       if (debtData?.shares === undefined)
-        await farming.initializeAccounts(farmAddress, walletAddress, wallet)
+        await farming.initializeAccounts(farmAddress, walletAddress, solana)
       if (!accounts[senWalletAddr])
-        await splt.initializeAccount(senAddress, walletAddress, wallet)
+        await splt.initializeAccount(senAddress, walletAddress, solana)
 
       // Validate farming seed balance
       const harvestValidator = new HarvestValidator()
@@ -61,7 +61,7 @@ const Stake = ({
         accountStake.address,
         senWalletAddr,
         farmAddress,
-        wallet,
+        solana,
       )
       onClose(false)
       return notifySuccess('Staked', txId)

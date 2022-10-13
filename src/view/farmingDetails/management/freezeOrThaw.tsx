@@ -26,11 +26,11 @@ const FreezeOrThaw = ({
   const { state } = farms?.[farmAddress] || {}
 
   const freeze = async () => {
-    const { wallet } = window.sentre
-    if (!wallet) return
+    const { solana } = window.sentre
+    if (!solana) return
     setLoading(true)
     try {
-      const { txId } = await farming.freeze(farmAddress, wallet)
+      const { txId } = await farming.freeze(farmAddress, solana)
       onChange(txId)
       return notifySuccess('Freeze the farm', txId)
     } catch (er) {
@@ -41,11 +41,11 @@ const FreezeOrThaw = ({
   }
 
   const thaw = async () => {
-    const { wallet } = window.sentre
-    if (!wallet) return
+    const { solana } = window.sentre
+    if (!solana) return
     setLoading(true)
     try {
-      const { txId } = await farming.thaw(farmAddress, wallet)
+      const { txId } = await farming.thaw(farmAddress, solana)
       onChange(txId)
       return notifySuccess('Thaw the farm', txId)
     } catch (er) {

@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 import { utils } from '@senswap/sen-js'
-import { useWalletAddress, useWidth, util } from '@sentre/senhub'
+import { useWalletAddress, useWidth, util, splt } from '@sentre/senhub'
 import IonIcon from '@sentre/antd-ionicon'
 
 import {
@@ -80,16 +80,16 @@ const FarmCard = ({ farmAddress }: { farmAddress: string }) => {
 
   const handleHarvest = async () => {
     setLoading(true)
-    const { splt, wallet } = window.sentre
+    const { solana } = window.sentre
     const senWallet = await splt.deriveAssociatedAddress(
       walletAddress,
       senAddress,
     )
     try {
-      if (!wallet) throw new Error('please connect wallet first!')
+      if (!solana) throw new Error('please connect wallet first!')
       const harvestValidator = new HarvestValidator()
       await harvestValidator.validate(farmAddress)
-      const { txId } = await farming.harvest(farmAddress, senWallet, wallet)
+      const { txId } = await farming.harvest(farmAddress, senWallet, solana)
       return notifySuccess('Harvest', txId)
     } catch (er) {
       return notifyError(er)

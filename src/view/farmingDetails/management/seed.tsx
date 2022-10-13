@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { utils } from '@senswap/sen-js'
-import { useAccount, useWalletAddress, util } from '@sentre/senhub'
+import { useAccounts, useWalletAddress, util, splt } from '@sentre/senhub'
 
 import { Button, Card, Col, Row, Space, Typography } from 'antd'
 import NumericInput from 'shared/antd/numericInput'
@@ -23,7 +23,7 @@ const Seed = ({
   farmAddress: string
   onChange?: (txId: string) => void
 }) => {
-  const { accounts } = useAccount()
+  const accounts = useAccounts()
   const walletAddress = useWalletAddress()
   const farms = useSelector((state: AppState) => state.farms)
   const [value, setValue] = useState('')
@@ -37,7 +37,6 @@ const Seed = ({
     ;(async () => {
       if (!decimal) return
       try {
-        const { splt } = window.sentre
         const srcAddress = await splt.deriveAssociatedAddress(
           walletAddress,
           mint_reward,
@@ -53,8 +52,8 @@ const Seed = ({
 
   const seed = async () => {
     setLoading(true)
-    const { wallet, splt } = window.sentre
-    if (!wallet) return
+    const { solana } = window.sentre
+    if (!solana) return
     const srcAddress = await splt.deriveAssociatedAddress(
       walletAddress,
       senAddress,
@@ -65,7 +64,7 @@ const Seed = ({
         amount,
         farmAddress,
         srcAddress,
-        wallet,
+        solana,
       )
       onChange(txId)
       return notifySuccess('Seed', txId)

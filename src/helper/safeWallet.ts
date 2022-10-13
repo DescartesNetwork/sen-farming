@@ -12,7 +12,7 @@ class SafeWallet {
   }
 
   private get _wallet(): WalletInterface {
-    return window.sentre?.wallet
+    return window.sentre?.solana
   }
 
   private _init = async () => {
