@@ -1,7 +1,7 @@
 import { useCallback, useMemo, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { utils } from '@senswap/sen-js'
-import { useWalletAddress, util } from '@sentre/senhub'
+import { useWalletAddress, util, splt } from '@sentre/senhub'
 
 import { Button, Card, Col, Row, Space, Typography } from 'antd'
 import NumericInput from 'shared/antd/numericInput'
@@ -38,8 +38,9 @@ const Unstake = ({
   const handleUnstake = async () => {
     setIsLoading(true)
     try {
-      const { splt, wallet } = window.sentre
-      if (!wallet) throw Error('Please connect wallet first')
+      const { solana } = window.sentre
+
+      if (!solana) throw Error('Please connect wallet first')
       if (!amount || !accountStake || !lptDecimal) return
       const ammount = utils.decimalize(amount, lptDecimal)
       const senWallet = await splt.deriveAssociatedAddress(
@@ -55,7 +56,7 @@ const Unstake = ({
         accountStake.address,
         senWallet,
         farmAddress,
-        wallet,
+        solana,
       )
       onClose(false)
       return notifySuccess('Unstaked', txId)

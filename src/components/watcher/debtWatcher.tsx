@@ -54,7 +54,7 @@ const DebtWatcher = ({ children }: { children: JSX.Element }) => {
     if (prevLamports && lamports > prevLamports) {
       dispatch(getDebts({ owner: walletAddress }))
     }
-    prevLamports = lamports
+    prevLamports = BigInt(lamports)
   }, [dispatch, walletAddress, lamports])
 
   useEffect(() => {

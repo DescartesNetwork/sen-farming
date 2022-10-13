@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { utils } from '@senswap/sen-js'
+import { splt } from '@sentre/senhub'
 
 import { AppState } from 'model'
 import useMintCgk from 'hooks/useMintCgk'
@@ -21,7 +22,6 @@ export const useBudget = (
   const fetchBudgetData = useCallback(async () => {
     if (decimal === undefined) return setBudget(0)
     try {
-      const { splt } = window.sentre
       let { amount } = await splt.getAccountData(treasury_reward)
       if (treasury_reward === treasury_stake) amount = amount - total_shares
       const budget = Number(utils.undecimalize(amount, decimal))

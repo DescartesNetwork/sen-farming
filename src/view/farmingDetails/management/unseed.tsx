@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { utils } from '@senswap/sen-js'
-import { useWalletAddress, util } from '@sentre/senhub'
+import { useWalletAddress, util, splt } from '@sentre/senhub'
 
 import { Row, Col, Card, Typography, Space, Button } from 'antd'
 import IonIcon from '@sentre/antd-ionicon'
@@ -37,7 +37,6 @@ const Unseed = ({
     ;(async () => {
       if (!decimal) return
       try {
-        const { splt } = window.sentre
         const { amount } = await splt.getAccountData(treasury_reward)
         if (!amount) return setBalance('0')
         return setBalance(utils.undecimalize(amount, decimal))
@@ -49,8 +48,8 @@ const Unseed = ({
 
   const unseed = async () => {
     setLoading(true)
-    const { wallet, splt } = window.sentre
-    if (!wallet || !decimal) return
+    const { solana } = window.sentre
+    if (!solana || !decimal) return
     const dstAddress = await splt.deriveAssociatedAddress(
       walletAddress,
       mint_reward,
@@ -61,7 +60,7 @@ const Unseed = ({
         amount,
         farmAddress,
         dstAddress,
-        wallet,
+        solana,
       )
       onChange(txId)
       return notifySuccess('Unseed', txId)

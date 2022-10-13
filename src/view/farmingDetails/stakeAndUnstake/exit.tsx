@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useSelector } from 'react-redux'
 import { account, utils } from '@senswap/sen-js'
-import { useWalletAddress } from '@sentre/senhub'
+import { useWalletAddress, splt } from '@sentre/senhub'
 
 import { Button, Card, Col, Row, Space, Typography } from 'antd'
 import NumericInput from 'shared/antd/numericInput'
@@ -30,9 +30,9 @@ const Exit = ({
 
   const handleExit = async () => {
     setIsLoading(true)
-    const { splt, wallet } = window.sentre
+    const { solana } = window.sentre
     const { mint_stake } = farmData
-    if (!wallet || !account.isAddress(mint_stake)) return
+    if (!solana || !account.isAddress(mint_stake)) return
     const senWallet = await splt.deriveAssociatedAddress(
       walletAddress,
       senAddress,
@@ -47,7 +47,7 @@ const Exit = ({
         lptWalletAddress,
         senWallet,
         farmAddress,
-        wallet,
+        solana,
       )
       onClose(false)
       return notifySuccess('Exit', txId)
